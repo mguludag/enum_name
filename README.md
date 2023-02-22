@@ -12,6 +12,8 @@ C++11 supported converting (scoped)enum values to string names.
 
 #define MIN_ENUM_VALUE -1
 
+#include "enum_name.hpp"
+
 
 enum class rgb_color { red, green, blue, unknown = -1};
 

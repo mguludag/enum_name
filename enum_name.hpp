@@ -62,20 +62,17 @@ private:
 
 using string_view = basic_string_view<char>;
 
-#ifndef MIN_ENUM_VALUE
-#define MIN_ENUM_VALUE 0
-#endif
 template <typename Enum, Enum ...>
 struct enum_sequence{};
 
-template <typename Enum, int N, int ... Next>
-struct enum_sequence_helper : enum_sequence_helper<Enum, N-1, N-1, Next...>{};
+template <typename Enum, int Min, int Max, int ... Next>
+struct enum_sequence_helper : enum_sequence_helper<Enum, Min, Max-1, Max-1, Next...>{};
 
-template <typename Enum, int ... Next>
-struct enum_sequence_helper<Enum, MIN_ENUM_VALUE, Next ... >{ using type = enum_sequence<Enum, static_cast<Enum>(Next) ... >; };
+template <typename Enum, int Min, int ... Next>
+struct enum_sequence_helper<Enum, Min, Min, Next ... >{ using type = enum_sequence<Enum, static_cast<Enum>(Next) ... >; };
 
-template <typename Enum, int N>
-using make_enum_sequence = typename enum_sequence_helper<Enum, N>::type;
+template <typename Enum, int Min, int Max>
+using make_enum_sequence = typename enum_sequence_helper<Enum, Min, Max>::type;
 
 struct enum_type
 {
@@ -116,20 +113,21 @@ private:
 };
 
 template <typename Enum, Enum... Is>
-CNSTXPR inline auto __for_each_enum_impl(Enum e, detail::enum_sequence<Enum, Is...>) -> std::string {
+CNSTXPR inline auto __for_each_enum_impl(Enum e, int Min, detail::enum_sequence<Enum, Is...>) -> detail::string_view {
     using expander = detail::string_view[];
     const expander x{"", enum_type::template name<Enum, Is>(e)...};
-    const auto str = detail::string_view(x[abs(MIN_ENUM_VALUE) + static_cast<int>(e) + 1]);
-    return std::string(str.data(), str.size());
+    const auto str = detail::string_view(x[abs(Min) + static_cast<int>(e) + 1]);
+    return detail::string_view(str.data(), str.size());
 }
 } // namespace detail
 } // namespace mgutility
 
 namespace mgutility{
-template <int max = 256, typename Enum>
-CNSTXPR inline auto enum_name(Enum e) -> std::string {
-    static_assert(MIN_ENUM_VALUE < max - 1, "max value must be higher than (MIN_ENUM_VALUE + 1)!");
-    return __for_each_enum_impl(e, mgutility::detail::make_enum_sequence<Enum, max>());
+template <int Min = 0, int Max = 256, typename Enum>
+inline auto enum_name(Enum e) -> std::string {
+    static_assert(Min < Max - 1, "Max must be higher than (Min + 1)!");
+    auto str = __for_each_enum_impl(e, Min, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
+    return std::string(str.data(), str.size());
 }
 } // namespace mgutility
 

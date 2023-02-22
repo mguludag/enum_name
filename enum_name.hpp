@@ -25,6 +25,8 @@
 #define CNSTXPR
 #elif __CPLUSPLUS > 201103L
 #define CNSTXPR constexpr
+#elif __CPLUSPLUS < 201103L
+#error "Standards older than C++11 is not supported!"
 #endif
 
 

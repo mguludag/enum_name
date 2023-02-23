@@ -172,7 +172,7 @@ private:
 
     static constexpr int idxenumval[]
 #if defined(_MSC_VER)
-    {97, 1, 8, 2};
+    {88, 1, 8, 2};
 #elif defined(__clang__)
     {75, 6, 1, 1};
 #elif defined(__GNUC__)

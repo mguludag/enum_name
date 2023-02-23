@@ -67,6 +67,67 @@ private:
 };
 
 using string_view = basic_string_view<char>;
+    
+#if __CPLUSPLUS > 201103L
+template <typename Char, size_t N>
+class basic_static_string
+{
+public:
+    constexpr inline basic_static_string(const Char* str = nullptr) noexcept : size_(strlen(str)) {
+        std::fill_n(&data_[0], size_ + 1, '\0');
+        std::copy_n(str, size_, &data_[0]);
+    }
+    constexpr inline basic_static_string(const Char* str, size_t len) noexcept : size_(len) {
+        std::fill_n(&data_[0], size_ + 1, '\0');
+        std::copy_n(str, size_, &data_[0]);
+    }
+    constexpr inline basic_static_string(const basic_static_string& other) : size_(other.size_) {
+        std::fill_n(&data_[0], size_ + 1, '\0');
+        std::copy_n(&other.data_[0], size_, &data_[0]);
+    }
+    constexpr inline basic_static_string(basic_static_string&& other) noexcept : size_(std::move(other.size_)) {
+        std::fill_n(&data_[0], size_ + 1, '\0');
+        std::move(&other.data_[0], &other.data_[0] + size_, &data_[0]);
+    }
+    constexpr inline basic_static_string<Char, N>& operator=(const basic_static_string& other) {
+        data_ = other.data_;
+        size_ = other.size_;
+        return *this;
+    }
+    constexpr inline basic_static_string<Char, N>& operator=(basic_static_string&& other) noexcept {
+        data_ = std::move(other.data_);
+        size_ = std::move(other.size_);
+        return *this;
+    }
+    constexpr inline size_t size() const noexcept { return size_; }
+    constexpr inline const Char* data() const noexcept { return data_; }
+    constexpr inline const Char* c_str() const noexcept { return data_; }
+    constexpr inline basic_static_string<Char, N> substr(size_t len, size_t begin = 0) noexcept { 
+        return basic_static_string<Char, N>(&data_[begin], len); 
+    }
+    constexpr inline basic_static_string<Char, N> substr(size_t len, size_t begin = 0) const noexcept { 
+        return basic_static_string<Char, N>(&data_[begin], len);
+    }
+
+    inline operator std::string(){
+        return std::string(&data_[0], size_);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const basic_static_string<Char, N>& sv){
+        for(auto i = 0; i < sv.size_; ++i){
+            os << sv.data_[i];
+        }
+        return os;
+    }
+
+private:
+    size_t size_;
+    Char data_[N]; 
+};
+
+template <size_t N = 128>
+using static_string = basic_static_string<char, N>;
+#endif
 
 template <typename Enum, Enum ...>
 struct enum_sequence{};
@@ -129,12 +190,21 @@ CNSTXPR inline auto __for_each_enum_impl(Enum e, int Min, detail::enum_sequence<
 
 namespace mgutility{
 template <int Min = 0, int Max = 256, typename Enum>
+#if __CPLUSPLUS == 201103L
 inline auto enum_name(Enum e) -> std::string {
     static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
     static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
     const auto str = __for_each_enum_impl(e, Min, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
     return std::string(str.data(), str.size());
 }
+#elif __CPLUSPLUS > 201103L
+constexpr inline auto enum_name(Enum e) -> detail::static_string<128> {
+    static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
+    static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
+    auto str = __for_each_enum_impl(e, Min, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
+    return detail::static_string<128>(str.data(), str.size());
+}
+#endif
 } // namespace mgutility
 
 #endif // MGUTILITY_ENUM_NAME_HPP

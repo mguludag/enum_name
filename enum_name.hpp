@@ -119,7 +119,7 @@ CNSTXPR inline auto __for_each_enum_impl(Enum e, int Min, detail::enum_sequence<
     using expander = detail::string_view[];
     const expander x{"", enum_type::template name<Enum, Is>(e)...};
     const auto str = detail::string_view(x[abs(Min) + static_cast<int>(e) + 1]);
-    return detail::string_view(str.data(), str.size());
+    return str;
 }
 } // namespace detail
 } // namespace mgutility

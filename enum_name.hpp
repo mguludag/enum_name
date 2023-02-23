@@ -38,24 +38,24 @@ template <typename Char = char>
 class basic_string_view
 {
 public:
-    constexpr basic_string_view(const Char* str = nullptr) : str_(str), size_(strlen(str)) {}
-    constexpr basic_string_view(const Char* str, size_t len) : str_(str), size_(len) {}
-    constexpr basic_string_view(const basic_string_view& other) : str_(other.str_), size_(other.size_) {}
-    CNSTXPR basic_string_view<Char>& operator=(const basic_string_view& other) {
+    constexpr inline basic_string_view(const Char* str = nullptr) noexcept : str_(str), size_(strlen(str)) {}
+    constexpr inline basic_string_view(const Char* str, size_t len) noexcept : str_(str), size_(len) {}
+    constexpr inline basic_string_view(const basic_string_view& other) noexcept : str_(other.str_), size_(other.size_) {}
+    CNSTXPR inline basic_string_view<Char>& operator=(const basic_string_view& other) noexcept {
         str_ = other.str_;
         size_ = other.size_;
         return *this;
     }
-    constexpr size_t size() const { return size_; }
-    constexpr const Char* data() const { return str_; }
-    CNSTXPR basic_string_view<Char> substr(size_t len, size_t begin = 0) { 
+    constexpr inline size_t size() const noexcept { return size_; }
+    constexpr inline const Char* data() const noexcept { return str_; }
+    CNSTXPR inline basic_string_view<Char> substr(size_t len, size_t begin = 0) noexcept { 
         return basic_string_view<Char>(str_ + begin, len); 
     }
-    CNSTXPR basic_string_view<Char> substr(size_t len, size_t begin = 0) const { 
+    CNSTXPR inline basic_string_view<Char> substr(size_t len, size_t begin = 0) const noexcept { 
         return basic_string_view<Char>(str_ + begin, len); 
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const basic_string_view<Char>& sv){
+    friend inline std::ostream& operator<<(std::ostream& os, const basic_string_view<Char>& sv){
         for(auto i = 0; i < sv.size_; ++i){
             os << sv.str_[i];
         }
@@ -82,7 +82,7 @@ public:
         std::fill_n(&data_[0], size_ + 1, '\0');
         std::copy_n(str, size_, &data_[0]);
     }
-    constexpr inline basic_static_string(const basic_static_string& other) : size_(other.size_) {
+    constexpr inline basic_static_string(const basic_static_string& other) noexcept : size_(other.size_) {
         std::fill_n(&data_[0], size_ + 1, '\0');
         std::copy_n(&other.data_[0], size_, &data_[0]);
     }
@@ -90,7 +90,7 @@ public:
         std::fill_n(&data_[0], size_ + 1, '\0');
         std::move(&other.data_[0], &other.data_[0] + size_, &data_[0]);
     }
-    constexpr inline basic_static_string<Char, N>& operator=(const basic_static_string& other) {
+    constexpr inline basic_static_string<Char, N>& operator=(const basic_static_string& other) noexcept {
         data_ = other.data_;
         size_ = other.size_;
         return *this;
@@ -114,7 +114,7 @@ public:
         return std::string(&data_[0], size_);
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const basic_static_string<Char, N>& sv){
+    friend inline std::ostream& operator<<(std::ostream& os, const basic_static_string<Char, N>& sv){
         for(auto i = 0; i < sv.size_; ++i){
             os << sv.data_[i];
         }
@@ -148,14 +148,14 @@ struct enum_type
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
     template <typename Enum, Enum e>
-    CNSTXPR static inline auto name(Enum) -> detail::string_view {
+    CNSTXPR static inline auto name(Enum) noexcept -> detail::string_view {
         const auto s = enum_type::name<Enum>().size();
         const auto str = detail::string_view(__PRETTY_FUNCTION__);
         return str.substr(str.size() - idxenumval[0] - idxenumval[1] - idxenumval[2] - (s * idxenumval[3]), idxenumval[0] + idxenumval[1] + s); 
     }
 
     template <typename Enum>
-    CNSTXPR static inline auto name() -> detail::string_view { 
+    CNSTXPR static inline auto name() noexcept -> detail::string_view { 
         const auto str = detail::string_view(__PRETTY_FUNCTION__);
         return str.substr(str.size() - idxenumname[0] - idxenumname[1], idxenumname[0]); 
     }
@@ -181,7 +181,7 @@ private:
 };
 
 template <typename Enum, Enum... Is>
-CNSTXPR inline auto __for_each_enum_impl(Enum e, int Min, detail::enum_sequence<Enum, Is...>) -> detail::string_view {
+CNSTXPR inline auto __for_each_enum_impl(Enum e, int Min, detail::enum_sequence<Enum, Is...>) noexcept -> detail::string_view {
     using expander = detail::string_view[];
     const expander x{"", enum_type::template name<Enum, Is>(e)...};
     return detail::string_view(x[abs(Min) + static_cast<int>(e) + 1]);
@@ -199,7 +199,7 @@ inline auto enum_name(Enum e) -> std::string {
     return std::string(str.data(), str.size());
 }
 #elif __CPLUSPLUS > 201103L
-constexpr inline auto enum_name(Enum e) -> detail::static_string<128> {
+constexpr inline auto enum_name(Enum e) noexcept -> detail::static_string<128> {
     static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
     static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
     auto str = __for_each_enum_impl(e, Min, mgutility::detail::make_enum_sequence<Enum, Min, Max>());

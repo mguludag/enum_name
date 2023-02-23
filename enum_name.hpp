@@ -1,6 +1,7 @@
 #ifndef MGUTILITY_ENUM_NAME_HPP
 #define MGUTILITY_ENUM_NAME_HPP
 
+#include <algorithm>
 #include <cstring>
 #include <string>
 #include <type_traits>

@@ -6,7 +6,7 @@ Converting (scoped)enum values to string names written in C++>=11.
 * GCC > 8
 * MSVC > 2015
 
-## Usage ([try it!](https://godbolt.org/z/x717sK7s8))
+## Usage ([try it!](https://godbolt.org/z/Kvvqjxd1v))
 ```C++
 #include <cstdio>
 #include <enum_name.hpp>

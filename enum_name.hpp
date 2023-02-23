@@ -3,6 +3,7 @@
 
 #include <cstring>
 #include <string>
+#include <type_traits>
 
 #if defined(_MSC_VER) && _MSC_VER < 1910
 #error "Requires MSVC 2017 or newer!"
@@ -82,7 +83,7 @@ struct enum_type
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
     template <typename Enum, Enum e>
-    CNSTXPR static inline auto name(Enum v) -> detail::string_view {
+    CNSTXPR static inline auto name(Enum) -> detail::string_view {
         const auto s = enum_type::name<Enum>().size();
         auto str = detail::string_view(__PRETTY_FUNCTION__);
         return str.substr(str.size() - idxenumval[0] - idxenumval[1] - idxenumval[2] - (s * idxenumval[3]), idxenumval[0] + idxenumval[1] + s); 
@@ -118,8 +119,7 @@ template <typename Enum, Enum... Is>
 CNSTXPR inline auto __for_each_enum_impl(Enum e, int Min, detail::enum_sequence<Enum, Is...>) -> detail::string_view {
     using expander = detail::string_view[];
     const expander x{"", enum_type::template name<Enum, Is>(e)...};
-    const auto str = detail::string_view(x[abs(Min) + static_cast<int>(e) + 1]);
-    return str;
+    return detail::string_view(x[abs(Min) + static_cast<int>(e) + 1]);
 }
 } // namespace detail
 } // namespace mgutility
@@ -127,8 +127,9 @@ CNSTXPR inline auto __for_each_enum_impl(Enum e, int Min, detail::enum_sequence<
 namespace mgutility{
 template <int Min = 0, int Max = 256, typename Enum>
 inline auto enum_name(Enum e) -> std::string {
-    static_assert(Min < Max - 1, "Max must be higher than (Min + 1)!");
-    auto str = __for_each_enum_impl(e, Min, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
+    static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
+    static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
+    const auto str = __for_each_enum_impl(e, Min, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
     return std::string(str.data(), str.size());
 }
 } // namespace mgutility

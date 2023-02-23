@@ -50,6 +50,9 @@ public:
     CNSTXPR basic_string_view<Char> substr(size_t len, size_t begin = 0) { 
         return basic_string_view<Char>(str_ + begin, len); 
     }
+    CNSTXPR basic_string_view<Char> substr(size_t len, size_t begin = 0) const { 
+        return basic_string_view<Char>(str_ + begin, len); 
+    }
 
     friend std::ostream& operator<<(std::ostream& os, const basic_string_view<Char>& sv){
         for(auto i = 0; i < sv.size_; ++i){
@@ -85,13 +88,13 @@ struct enum_type
     template <typename Enum, Enum e>
     CNSTXPR static inline auto name(Enum) -> detail::string_view {
         const auto s = enum_type::name<Enum>().size();
-        auto str = detail::string_view(__PRETTY_FUNCTION__);
+        const auto str = detail::string_view(__PRETTY_FUNCTION__);
         return str.substr(str.size() - idxenumval[0] - idxenumval[1] - idxenumval[2] - (s * idxenumval[3]), idxenumval[0] + idxenumval[1] + s); 
     }
 
     template <typename Enum>
     CNSTXPR static inline auto name() -> detail::string_view { 
-        auto str = detail::string_view(__PRETTY_FUNCTION__);
+        const auto str = detail::string_view(__PRETTY_FUNCTION__);
         return str.substr(str.size() - idxenumname[0] - idxenumname[1], idxenumname[0]); 
     }
 

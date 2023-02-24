@@ -176,7 +176,7 @@ private:
 #elif defined(__clang__)
     {75, 6, 1, 1};
 #elif defined(__GNUC__)
-    {92, 11, 78, 1};
+    {82, 11, 78, 1};
 #endif
 };
 

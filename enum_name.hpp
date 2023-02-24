@@ -176,7 +176,13 @@ private:
 #elif defined(__clang__)
     {75, 6, 1, 1};
 #elif defined(__GNUC__)
-    {92, 11, 78, 1};
+    {82 +
+#if __CPLUSPLUS == 201103L
+     10,
+#else
+     0,
+#endif
+    11, 78, 1};
 #endif
 };
 

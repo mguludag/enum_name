@@ -148,7 +148,7 @@ struct enum_type
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
     template <typename Enum, Enum e>
-    CNSTXPR static inline auto name(Enum) noexcept -> detail::string_view {
+    static inline auto name(Enum) noexcept -> detail::string_view {
         const auto s = enum_type::name<Enum>().size();
         const auto str = detail::string_view(__PRETTY_FUNCTION__);
         return str.substr(str.size() - idxenumval[0] - idxenumval[1] - idxenumval[2] - (s * idxenumval[3]), idxenumval[0] + idxenumval[1] + s); 

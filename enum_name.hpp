@@ -167,7 +167,7 @@ private:
 #elif defined(__clang__)
     {71, 1};
 #elif defined(__GNUC__)
-    {78, 78};
+    {88, 78};
 #endif
 
     static constexpr int idxenumval[]
@@ -176,7 +176,7 @@ private:
 #elif defined(__clang__)
     {75, 6, 1, 1};
 #elif defined(__GNUC__)
-    {82, 11, 78, 1};
+    {92, 11, 78, 1};
 #endif
 };
 

@@ -76,11 +76,11 @@ class basic_static_string
 public:
     constexpr inline basic_static_string(const Char* str = nullptr) noexcept : size_(strlen(str)) {
         std::fill_n(&data_[0], size_ + 1, '\0');
-        std::copy_n(str, size_, &data_[0]);
+        std::copy_n(str, size_ + 1, &data_[0]);
     }
     constexpr inline basic_static_string(const Char* str, size_t len) noexcept : size_(len) {
         std::fill_n(&data_[0], size_ + 1, '\0');
-        std::copy_n(str, size_, &data_[0]);
+        std::copy_n(str, size_ + 1, &data_[0]);
     }
     constexpr inline basic_static_string(const basic_static_string& other) noexcept : size_(other.size_) {
         std::fill_n(&data_[0], size_ + 1, '\0');

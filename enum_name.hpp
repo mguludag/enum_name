@@ -205,11 +205,11 @@ inline auto enum_name(Enum e) -> std::string {
     return std::string(str.data(), str.size());
 }
 #elif __CPLUSPLUS > 201103L
-constexpr inline auto enum_name(Enum e) noexcept -> detail::static_string<128> {
+constexpr inline auto enum_name(Enum e) noexcept -> detail::static_string<256> {
     static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
     static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
     auto str = __for_each_enum_impl(e, Min, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
-    return detail::static_string<128>(str.data(), str.size());
+    return detail::static_string<256>(str.data(), str.size());
 }
 #endif
 } // namespace mgutility

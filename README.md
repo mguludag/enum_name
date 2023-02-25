@@ -14,6 +14,11 @@ Converting (scoped)enum values to string names written in C++>=11.
 * Changing enum range with template parameter <sub>(default range: `[0, 256)`)</sub> on each call or with your special function for types
 * Supports `operator<<` for direct using with ostream objects
 
+## Limitations
+* Compiler versions
+* Wider range can increase compile time so user responsible to adjusting for enum's range
+* Enums in templated classes/structs and if its template parameter is templated type <sub>example: `std::string`</sub> some compilers/versions can produce longer names for it.
+
 
 ## Usage ([try it!](https://godbolt.org/z/Kvvqjxd1v))
 ```C++

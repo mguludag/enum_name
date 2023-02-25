@@ -6,6 +6,15 @@ Converting (scoped)enum values to string names written in C++>=11.
 * GCC > 8
 * MSVC > 2015
 
+## Features
+* Supports `enum` and `enum class`
+* Supports enums in namespaces, classes or structs even templated or not
+* Supports C++11 using `std::string`
+* Supports compile-time as much as possible using with C++14 and later
+* Changing enum range with template parameter <sub>(default range: `[0, 256)`)</sub> on each call or with your special function for types
+* Supports `operator<<` for direct using with ostream objects
+
+
 ## Usage ([try it!](https://godbolt.org/z/Kvvqjxd1v))
 ```C++
 #include <cstdio>

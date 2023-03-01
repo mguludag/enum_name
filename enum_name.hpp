@@ -166,6 +166,8 @@ struct enum_sequence_helper<Enum, Min, Min, Next ... >{ using type = enum_sequen
 template <typename Enum, int Min, int Max>
 using make_enum_sequence = typename enum_sequence_helper<Enum, Min, Max>::type;
 
+
+
 struct enum_type
 {
 #if defined(_MSC_VER)
@@ -174,8 +176,15 @@ struct enum_type
     template <typename Enum, Enum e>
     static inline auto name(Enum) noexcept -> detail::string_view {
         const auto s = enum_type::name<Enum>().size();
-        const auto str = detail::string_view(__PRETTY_FUNCTION__);
+        auto str = detail::string_view(__PRETTY_FUNCTION__);
         return str.substr(str.size() - idxenumval[0] - idxenumval[1] - idxenumval[2] - (s * idxenumval[3]), idxenumval[0] + idxenumval[1] + s); 
+    }
+
+    template <typename Enum, Enum e>
+    static inline auto name_simple(Enum) noexcept -> detail::string_view {
+        const auto s = enum_type::name<Enum>().size();
+        auto name_ = enum_type::template name<Enum, e>(e);
+        return name_.substr(name_.size() - s - idxenumname[2], s + idxenumname[2]);
     }
 
     template <typename Enum>
@@ -187,16 +196,22 @@ struct enum_type
 private:
     static constexpr int idxenumname[] // {begin, size-end}
 #if defined(_MSC_VER)
-    {97, 7};
+    {97, 16, 2};
 #elif defined(__clang__)
-    {71, 1};
+    {71, 1, 1};
 #elif defined(__GNUC__)
-    {88, 78};
+    {88 +
+#if __CPLUSPLUS == 201103L
+     0,
+#else
+     10,
+#endif 
+    78, 2};
 #endif
 
     static constexpr int idxenumval[]
 #if defined(_MSC_VER)
-    {88, 1, 8, 2};
+    {97, 1, 17, 2};
 #elif defined(__clang__)
     {75, 6, 1, 1};
 #elif defined(__GNUC__)
@@ -204,7 +219,7 @@ private:
 #if __CPLUSPLUS == 201103L
      10,
 #else
-     0,
+     10,
 #endif
     11, 78, 1};
 #endif
@@ -214,6 +229,12 @@ template <typename Enum, Enum... Is>
 CNSTXPR inline auto __for_each_enum_impl(Enum e, int Min, detail::enum_sequence<Enum, Is...>) noexcept -> detail::string_view {
     using expander = detail::string_view[];
     const expander x{"", enum_type::template name<Enum, Is>(e)...};
+    return detail::string_view(x[abs(Min) + static_cast<int>(e) + 1]);
+}
+template <typename Enum, Enum... Is>
+CNSTXPR inline auto __for_each_enum_impl_simple(Enum e, int Min, detail::enum_sequence<Enum, Is...>) noexcept -> detail::string_view {
+    using expander = detail::string_view[];
+    const expander x{"", enum_type::template name_simple<Enum, Is>(e)...};
     return detail::string_view(x[abs(Min) + static_cast<int>(e) + 1]);
 }
 } // namespace detail
@@ -233,6 +254,23 @@ constexpr inline auto enum_name(Enum e) noexcept -> detail::static_string<256> {
     static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
     static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
     auto str = __for_each_enum_impl(e, Min, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
+    return detail::static_string<256>(str.data(), str.size());
+}
+#endif
+
+template <int Min = 0, int Max = 256, typename Enum>
+#if __CPLUSPLUS == 201103L
+inline auto enum_name_simple(Enum e) -> std::string {
+    static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
+    static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
+    const auto str = __for_each_enum_impl_simple(e, Min, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
+    return std::string(str.data(), str.size());
+}
+#elif __CPLUSPLUS > 201103L
+constexpr inline auto enum_name_simple(Enum e) noexcept -> detail::static_string<256> {
+    static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
+    static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
+    auto str = __for_each_enum_impl_simple(e, Min, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
     return detail::static_string<256>(str.data(), str.size());
 }
 #endif

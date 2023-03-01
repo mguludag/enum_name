@@ -58,6 +58,14 @@
 
 namespace mgutility{
 namespace detail{
+    
+template <typename E>
+struct is_scoped_enum
+{ 
+    static constexpr auto value = std::is_enum<E>::value && 
+            !std::is_convertible<E, typename std::underlying_type<E>::type>::value; 
+};
+    
 template <typename Char = char>
 class basic_string_view
 {
@@ -262,14 +270,14 @@ template <int Min = 0, int Max = 256, typename Enum>
 #if __CPLUSPLUS == 201103L
 inline auto enum_name_simple(Enum e) -> std::string {
     static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
-    static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
+    static_assert(detail::is_scoped_enum<Enum>::value, "Value is not an Scoped Enum type!");
     const auto str = __for_each_enum_impl_simple(e, Min, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
     return std::string(str.data(), str.size());
 }
 #elif __CPLUSPLUS > 201103L
 constexpr inline auto enum_name_simple(Enum e) noexcept -> detail::static_string<256> {
     static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
-    static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
+    static_assert(detail::is_scoped_enum<Enum>::value, "Value is not an Scoped Enum type!");
     auto str = __for_each_enum_impl_simple(e, Min, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
     return detail::static_string<256>(str.data(), str.size());
 }

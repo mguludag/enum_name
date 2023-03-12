@@ -19,7 +19,7 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 * Enums in templated classes/structs and if its template parameter is templated type <sub>example: `std::string`</sub> some compilers/versions can produce longer names for it.
 
 
-## Usage ([try it!](https://godbolt.org/z/xfc79zPxK))
+## Usage ([try it!](https://godbolt.org/z/76jYG3aWh))
 ```C++
 #include <cstdio>
 #include <enum_name.hpp>

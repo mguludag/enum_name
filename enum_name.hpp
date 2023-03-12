@@ -236,6 +236,7 @@ class optional {
     }
     CNSTXPR inline bool has_value() const { return has_value_; }
 
+#if !(defined(__clang__) && __clang_major__ < 11)
     template <typename U = T,
               typename std::enable_if<!std::is_destructible<U>::value,
                                       bool>::type = true>
@@ -243,6 +244,7 @@ class optional {
         T::~T();
         has_value_ = false;
     }
+#endif
     template <typename U = T,
               typename std::enable_if<std::is_destructible<T>::value,
                                       bool>::type = true>

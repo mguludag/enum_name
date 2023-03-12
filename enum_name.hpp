@@ -195,7 +195,7 @@ class optional {
         : value_{other.value_}, has_value_{other.has_value_} {
         other.reset();
     }
-    inline ~optional() { reset(); }
+    inline ~optional() { has_value_ = false; }
     CNSTXPR inline optional& operator=(const optional& other) {
         value_ = other.value_;
         has_value_ = other.has_value_;

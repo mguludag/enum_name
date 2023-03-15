@@ -379,7 +379,7 @@ CNSTXPR inline auto enum_name(Enum e) noexcept -> detail::static_string<512> {
     static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
     auto str = __for_each_enum_impl(
         e, Min, Max, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
-    return detail::static_string<256>(str.data(), str.size());
+    return detail::static_string<512>(str.data(), str.size());
 }
 
 template <typename Enum, int Min = 0, int Max = 256>

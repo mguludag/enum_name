@@ -95,6 +95,12 @@ class basic_string_view {
                                                   size_t len) const noexcept {
         return basic_string_view<Char>(str_ + begin, len);
     }
+    CNSTXPR inline size_t rfind(Char c, size_t offset = 0) const noexcept {
+        for (auto i{size_ - offset - 1}; i != 0; --i) {
+            if (c == str_[i]) return i;
+        }
+        return 0;
+    }
 
     friend inline std::ostream& operator<<(std::ostream& os,
                                            const basic_string_view<Char>& sv) {
@@ -309,55 +315,33 @@ struct enum_type {
 #if defined(_MSC_VER)
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
-    template <typename Enum, Enum e>
-    static inline auto name(Enum) noexcept -> detail::string_view {
-        const auto s = enum_type::name<Enum>().size();
+    template <typename Enum, Enum e,
+              typename std::enable_if<!detail::is_scoped_enum<Enum>::value,
+                                      bool>::type = true>
+    static inline auto name() noexcept -> detail::string_view {
         auto str = detail::string_view(__PRETTY_FUNCTION__);
-        return str.substr(idxenumval[0] + idxenumval[1] + s,
-                          str.size() - idxenumval[0] - idxenumval[1] -
-                              idxenumval[2] - (s * idxenumval[3]));
+        auto offset{lastidxenumname[0] + lastidxenumname[1]};
+        auto index = str.rfind(lastidxenumname[2], offset) + 1;
+        return str.substr(index, str.size() - offset - index);
     }
 
-    template <typename Enum, Enum e>
-    static inline auto name_simple(Enum) noexcept -> detail::string_view {
-        const auto s = enum_type::name<Enum>().size();
-        auto name_ = enum_type::template name<Enum, e>(e);
-        return name_.substr(s + idxenumname[2],
-                            name_.size() - s - idxenumname[2]);
-    }
-
-    template <typename Enum>
-    CNSTXPR static inline auto name() noexcept -> detail::string_view {
-        const auto str = detail::string_view(__PRETTY_FUNCTION__);
-        return str.substr(idxenumname[0],
-                          str.size() - idxenumname[0] - idxenumname[1]);
+    template <typename Enum, Enum e,
+              typename std::enable_if<detail::is_scoped_enum<Enum>::value,
+                                      bool>::type = true>
+    static inline auto name() noexcept -> detail::string_view {
+        auto str = detail::string_view(__PRETTY_FUNCTION__);
+        auto index = str.rfind(lastidxenumname[3], lastidxenumname[0]) + 1;
+        return str.substr(index, str.size() - lastidxenumname[0] - index);
     }
 
    private:
-    static constexpr int idxenumname[]  // {begin, size-end}
+    static constexpr int lastidxenumname[] =
 #if defined(_MSC_VER)
-        {97, 16, 2};
+        {21, 0, ',', ':'};
 #elif defined(__clang__)
-        {71, 1, 1};
+        {1, 0, ' ', ':'};
 #elif defined(__GNUC__)
-    {
-        88 +
-#if __CPLUSPLUS == 201103L
-            0,
-#else
-            10,
-#endif
-            78, 2
-    };
-#endif
-
-    static constexpr int idxenumval[]
-#if defined(_MSC_VER)
-        {97, 1, 17, 2};
-#elif defined(__clang__)
-        {75, 6, 1, 1};
-#elif defined(__GNUC__)
-        {92, 11, 78, 1};
+        {179, 4, ' ', ':'};
 #endif
 };
 
@@ -366,23 +350,7 @@ CNSTXPR inline auto __for_each_to_enum_impl(
     detail::string_view str, int Min,
     detail::enum_sequence<Enum, Is...>) noexcept -> detail::optional<Enum> {
     using expander = detail::string_view[];
-    const expander x{
-        "", enum_type::template name<Enum, Is>(static_cast<Enum>(Is))...};
-
-    for (auto i{1}; i < sizeof...(Is); ++i) {
-        if (fvn_1a(x[i]) == fvn_1a(str))
-            return detail::optional<Enum>{static_cast<Enum>(i + Min - 1)};
-    }
-
-    return detail::nullopt;
-}
-template <typename Enum, Enum... Is>
-CNSTXPR inline auto __for_each_to_enum_impl_simple(
-    detail::string_view str, int Min,
-    detail::enum_sequence<Enum, Is...>) noexcept -> detail::optional<Enum> {
-    using expander = detail::string_view[];
-    const expander x{"", enum_type::template name_simple<Enum, Is>(
-                             static_cast<Enum>(Is))...};
+    const expander x{"", enum_type::template name<Enum, Is>()...};
 
     for (auto i{1}; i < sizeof...(Is); ++i) {
         if (fvn_1a(x[i]) == fvn_1a(str))
@@ -397,15 +365,7 @@ CNSTXPR inline auto __for_each_enum_impl(
     Enum e, int Min, detail::enum_sequence<Enum, Is...>) noexcept
     -> detail::string_view {
     using expander = detail::string_view[];
-    const expander x{"", enum_type::template name<Enum, Is>(e)...};
-    return detail::string_view(x[abs(Min) + static_cast<int>(e) + 1]);
-}
-template <typename Enum, Enum... Is>
-CNSTXPR inline auto __for_each_enum_impl_simple(
-    Enum e, int Min, detail::enum_sequence<Enum, Is...>) noexcept
-    -> detail::string_view {
-    using expander = detail::string_view[];
-    const expander x{"", enum_type::template name_simple<Enum, Is>(e)...};
+    const expander x{"", enum_type::template name<Enum, Is>()...};
     return detail::string_view(x[abs(Min) + static_cast<int>(e) + 1]);
 }
 }  // namespace detail
@@ -421,17 +381,6 @@ CNSTXPR inline auto enum_name(Enum e) noexcept -> detail::static_string<256> {
     return detail::static_string<256>(str.data(), str.size());
 }
 
-template <int Min = 0, int Max = 256, typename Enum>
-CNSTXPR inline auto enum_name_simple(Enum e) noexcept
-    -> detail::static_string<256> {
-    static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
-    static_assert(detail::is_scoped_enum<Enum>::value,
-                  "Value is not an Scoped Enum type!");
-    auto str = __for_each_enum_impl_simple(
-        e, Min, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
-    return detail::static_string<256>(str.data(), str.size());
-}
-
 template <typename Enum, int Min = 0, int Max = 256>
 CNSTXPR inline auto to_enum(detail::string_view str) noexcept
     -> detail::optional<Enum> {
@@ -440,16 +389,6 @@ CNSTXPR inline auto to_enum(detail::string_view str) noexcept
     return __for_each_to_enum_impl(
         str, Min, detail::make_enum_sequence<Enum, Min, Max>());
 }
-
-template <typename Enum, int Min = 0, int Max = 256>
-CNSTXPR inline auto to_enum_simple(detail::string_view str) noexcept
-    -> detail::optional<Enum> {
-    static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
-    static_assert(detail::is_scoped_enum<Enum>::value,
-                  "Value is not an Scoped Enum type!");
-    return __for_each_to_enum_impl_simple(
-        str, Min, detail::make_enum_sequence<Enum, Min, Max>());
-}
 }  // namespace mgutility
 
-#endif // MGUTILITY_ENUM_NAME_HPP
+#endif  // MGUTILITY_ENUM_NAME_HPP

@@ -321,7 +321,7 @@ struct enum_type {
     static inline auto name() noexcept -> detail::string_view {
         auto str = detail::string_view(__PRETTY_FUNCTION__);
         auto offset{lastidxenumname[0] + lastidxenumname[1]};
-        auto index = str.rfind(lastidxenumname[2], offset) + 1;
+        auto index = std::max(str.rfind(lastidxenumname[2], offset), str.rfind(lastidxenumname[3], offset)) + 1;
         return str.substr(index, str.size() - offset - index);
     }
 

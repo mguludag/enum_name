@@ -34,15 +34,14 @@ auto enum_name = [](rgb_color c){ return mgutility::enum_name<-1, 10>(c); };
 int main()
 {
     auto x = rgb_color::blue;
-    auto y = mgutility::to_enum_simple<rgb_color, -1, 3>("green");
+    auto y = mgutility::to_enum<rgb_color, -1, 3>("green");
     
     // default signature: enum_name<min_value = 0, max_value = 256, Enum typename>(Enum&&) 
     // Changing max_value to not too much greater than enum's max value, it will compiles faster
-    puts(mgutility::enum_name<-1, 3>(x).c_str()); // will print "rgb_color::blue" to output
-    puts(mgutility::enum_name_simple<-1, 3>(x).c_str()); // will print "blue" to output
+    puts(mgutility::enum_name<-1, 3>(x).c_str()); // will print "blue" to output
     
     // calling specialized enum ranges function for rgb_color type
-    // will print "rgb_color::green" to output, if y can't convert to rgb_color prınts "rgb_color::unknown"
+    // will print "rgb_color::green" to output, if y can't convert to rgb_color prınts "unknown"
     puts(enum_name(y.value_or(rgb_color::unknown)).c_str()); 
 }
 

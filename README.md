@@ -19,7 +19,7 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 * Enums in templated classes/structs and if its template parameter is templated type <sub>example: `std::string`</sub> some compilers/versions can produce longer names for it.
 
 
-## Usage ([try it!](https://godbolt.org/z/76jYG3aWh))
+## Usage ([try it!](https://godbolt.org/z/a96n84d4b))
 ```C++
 #include <cstdio>
 #include <enum_name.hpp>
@@ -41,7 +41,7 @@ int main()
     puts(mgutility::enum_name<-1, 3>(x).c_str()); // will print "blue" to output
     
     // calling specialized enum ranges function for rgb_color type
-    // will print "rgb_color::green" to output, if y can't convert to rgb_color prınts "unknown"
+    // will print "green" to output, if y can't convert to rgb_color prınts "unknown"
     puts(enum_name(y.value_or(rgb_color::unknown)).c_str()); 
 }
 

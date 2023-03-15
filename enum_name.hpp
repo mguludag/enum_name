@@ -362,11 +362,12 @@ CNSTXPR inline auto __for_each_to_enum_impl(
 
 template <typename Enum, Enum... Is>
 CNSTXPR inline auto __for_each_enum_impl(
-    Enum e, int Min, detail::enum_sequence<Enum, Is...>) noexcept
+    Enum e, int Min, int Max, detail::enum_sequence<Enum, Is...>) noexcept
     -> detail::string_view {
     using expander = detail::string_view[];
     const expander x{"", enum_type::template name<Enum, Is>()...};
-    return detail::string_view(x[abs(Min) + static_cast<int>(e) + 1]);
+    auto index{abs(Min) + static_cast<int>(e) + 1};
+    return detail::string_view(x[index > Max + 1 ? 0 : index]);
 }
 }  // namespace detail
 }  // namespace mgutility
@@ -377,7 +378,7 @@ CNSTXPR inline auto enum_name(Enum e) noexcept -> detail::static_string<256> {
     static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
     static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
     auto str = __for_each_enum_impl(
-        e, Min, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
+        e, Min, Max, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
     return detail::static_string<256>(str.data(), str.size());
 }
 

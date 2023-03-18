@@ -104,7 +104,11 @@ class basic_string_view {
     }
 
     CNSTXPR friend inline bool operator==(basic_string_view<Char> lhs, basic_string_view<Char> rhs) noexcept {
-        return std::strcmp(lhs.str_, rhs.str_) == 0;
+        for(auto i{0}; i < std::min(lhs.size_, rhs.size_); ++i){
+            if(lhs.str_[i] != rhs.str_[i])
+                return false;
+        }
+        return true;
     }
 
     friend inline std::ostream& operator<<(std::ostream& os,

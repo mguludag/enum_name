@@ -83,6 +83,7 @@ class basic_string_view {
         size_ = other.size_;
         return *this;
     }
+    CNSTXPR inline const Char operator[](size_t index) noexcept { return str_[index]; }
     CNSTXPR inline const Char* begin() noexcept { return str_; }
     CNSTXPR inline const Char* end() noexcept { return (str_ + size_); }
     constexpr inline size_t size() const noexcept { return size_; }
@@ -100,6 +101,10 @@ class basic_string_view {
             if (c == str_[i]) return i;
         }
         return 0;
+    }
+
+    CNSTXPR friend inline bool operator==(basic_string_view<Char> lhs, basic_string_view<Char> rhs) noexcept {
+        return std::strcmp(lhs.str_, rhs.str_) == 0;
     }
 
     friend inline std::ostream& operator<<(std::ostream& os,
@@ -122,23 +127,23 @@ class basic_static_string {
    public:
     CNSTXPR inline basic_static_string(const Char* str = nullptr) noexcept
         : size_(strlen(str)) {
-        data_[size_] = '\0';
+        data_[size_] = npos;
         std::copy_n(str, size_, &data_[0]);
     }
     CNSTXPR inline basic_static_string(const Char* str, size_t len) noexcept
-        : size_(len) {
-        data_[size_] = '\0';
+        : size_{len} {
+        data_[size_] = npos;
         std::copy_n(str, size_, &data_[0]);
     }
     CNSTXPR inline basic_static_string(
         const basic_static_string& other) noexcept
         : size_(other.size_) {
-        data_[size_] = '\0';
+        data_[size_] = npos;
         std::copy_n(&other.data_[0], size_, &data_[0]);
     }
     CNSTXPR inline basic_static_string(basic_static_string&& other) noexcept
         : size_(std::move(other.size_)) {
-        data_[size_] = '\0';
+        data_[size_] = npos;
         std::move(&other.data_[0], &other.data_[0] + size_, &data_[0]);
     }
     CNSTXPR inline basic_static_string<Char, N>& operator=(
@@ -179,6 +184,7 @@ class basic_static_string {
     }
 
    private:
+    static constexpr Char npos{'\0'};
     size_t size_;
     Char data_[N];
 };
@@ -286,16 +292,6 @@ inline constexpr auto nullopt{std::nullopt};
 
 #endif
 
-CNSTXPR static inline auto fvn_1a(detail::string_view str) noexcept -> size_t {
-    constexpr auto fnv_prime{0x811C9DC5};
-    size_t hash{0};
-    for (auto& i : str) {
-        hash *= fnv_prime;
-        hash ^= i;
-    }
-    return hash;
-}
-
 template <typename Enum, Enum...>
 struct enum_sequence {};
 
@@ -331,17 +327,18 @@ struct enum_type {
     static inline auto name() noexcept -> detail::string_view {
         auto str = detail::string_view(__PRETTY_FUNCTION__);
         auto index = str.rfind(lastidxenumname[3], lastidxenumname[0]) + 1;
-        return str.substr(index, str.size() - lastidxenumname[0] - index);
+        auto result = str.substr(index, str.size() - lastidxenumname[0] - index);
+        return result.size() > 4 ? result[4] == lastidxenumname[4] ? "" : result : result;
     }
 
    private:
     static constexpr int lastidxenumname[] =
 #if defined(_MSC_VER)
-        {21, 0, ',', ':'};
+        {21, 0, ',', ':', '<'};
 #elif defined(__clang__)
-        {1, 0, ' ', ':'};
+        {1, 0, ' ', ':', '('};
 #elif defined(__GNUC__)
-        {179, 4, ' ', ':'};
+        {179, 4, ' ', ':', '('};
 #endif
 };
 
@@ -353,7 +350,7 @@ CNSTXPR inline auto __for_each_to_enum_impl(
     const expander x{"", enum_type::template name<Enum, Is>()...};
 
     for (auto i{1}; i < sizeof...(Is); ++i) {
-        if (fvn_1a(x[i]) == fvn_1a(str))
+        if (x[i] == str)
             return detail::optional<Enum>{static_cast<Enum>(i + Min - 1)};
     }
 
@@ -374,19 +371,19 @@ CNSTXPR inline auto __for_each_enum_impl(
 
 namespace mgutility {
 template <int Min = 0, int Max = 256, typename Enum>
-CNSTXPR inline auto enum_name(Enum e) noexcept -> detail::static_string<512> {
+CNSTXPR inline auto enum_name(Enum e) noexcept -> detail::static_string<256> {
     static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
     static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
     auto str = __for_each_enum_impl(
         e, Min, Max, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
-    return detail::static_string<512>(str.data(), str.size());
+    return {str.data(), str.size()};
 }
 
 template <typename Enum, int Min = 0, int Max = 256>
 CNSTXPR inline auto to_enum(detail::string_view str) noexcept
     -> detail::optional<Enum> {
     static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
-    static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
+    static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
     return __for_each_to_enum_impl(
         str, Min, detail::make_enum_sequence<Enum, Min, Max>());
 }

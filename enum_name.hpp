@@ -77,9 +77,6 @@ constexpr auto strlen_constexpr(const char* str, size_t sz = 0) noexcept -> size
     return str[sz] == '\0' ? sz : strlen_constexpr(str, ++sz);
 }
 
-constexpr auto strncmp_constexpr(const char* lhs, const char* rhs, size_t sz = 0) noexcept -> bool {
-    return lhs[sz] == rhs[sz] ? true : strncmp_constexpr(lhs, rhs, --sz);
-}
 
 template <typename Char = char>
 class basic_string_view {
@@ -118,7 +115,7 @@ class basic_string_view {
 
     constexpr friend inline bool operator==(
         basic_string_view<Char> lhs, basic_string_view<Char> rhs) noexcept {
-        return (lhs.size_ == rhs.size_) && strncmp_constexpr(lhs.data_, rhs.data_, lhs.size_);
+        return (lhs.size_ == rhs.size_) && std::strncmp(lhs.data_, rhs.data_, lhs.size_) == 0;
     }
     
     inline operator std::string() { return std::string(data_, size_); }

@@ -292,7 +292,7 @@ struct enum_type {
         auto offset{lastidxenumname[0] + lastidxenumname[1]};
         auto index =
             std::max(str.rfind(lastidxenumname[2], str.size() - offset),
-                     str.rfind(lastidxenumname[3], offset)) +
+                     str.rfind(lastidxenumname[3], str.size() - offset)) +
             1;
         return str.substr(index, str.size() - offset - index);
     }

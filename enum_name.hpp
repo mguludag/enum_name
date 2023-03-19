@@ -118,6 +118,9 @@ class basic_string_view {
         }
         return true;
     }
+    
+    inline operator std::string() { return std::string(data_, size_); }
+    inline operator std::string() const { return std::string(data_, size_); }
 
     friend inline std::ostream& operator<<(std::ostream& os,
                                            const basic_string_view<Char>& sv) {

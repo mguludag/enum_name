@@ -16,7 +16,6 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 ## Limitations
 * Compiler versions
 * Wider range can increase compile time so user responsible to adjusting for enum's range
-* Enums in templated classes/structs and if its template parameter is templated type <sub>example: `std::string`</sub> some compilers/versions can produce longer names for it.
 
 
 ## Usage ([try it!](https://godbolt.org/z/Thcv55vn4))

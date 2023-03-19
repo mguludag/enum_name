@@ -21,8 +21,8 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 
 ## Usage ([try it!](https://godbolt.org/z/a96n84d4b))
 ```C++
-#include <cstdio>
-#include <enum_name.hpp>
+#include <iostream>
+#include "enum_name.hpp"
 
 
 enum class rgb_color { red, green, blue, unknown = -1};
@@ -38,11 +38,11 @@ int main()
     
     // default signature: enum_name<min_value = 0, max_value = 256, Enum typename>(Enum&&) 
     // Changing max_value to not too much greater than enum's max value, it will compiles faster
-    puts(mgutility::enum_name<-1, 3>(x).c_str()); // will print "blue" to output
+    std::cout << mgutility::enum_name<-1, 3>(x) << '\n'; // will print "blue" to output
     
     // calling specialized enum ranges function for rgb_color type
     // will print "green" to output, if y can't convert to rgb_color prınts "unknown"
-    puts(enum_name(y.value_or(rgb_color::unknown)).c_str()); 
+    std::cout << enum_name(y.value_or(rgb_color::unknown)) << '\n'; 
 }
 
 ```

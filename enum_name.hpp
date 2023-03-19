@@ -318,7 +318,13 @@ struct enum_type {
 #elif defined(__clang__)
         {1, 0, ' ', ':', '('};
 #elif defined(__GNUC__)
-        {179, 4, ' ', ':', '('};
+        {
+#if MG_ENUM_NAME_CPLUSPLUS < 201703L 
+        179, 
+#else
+        165,
+#endif
+         4, ' ', ':', '('};
 #endif
 };
 

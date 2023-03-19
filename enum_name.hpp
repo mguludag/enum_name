@@ -334,7 +334,7 @@ template <typename Enum, Enum... Is>
 MG_ENUM_NAME_CNSTXPR inline auto __for_each_to_enum_impl(
     detail::string_view str, int Min,
     detail::enum_sequence<Enum, Is...>) noexcept -> detail::optional<Enum> {
-    const std::array<detail::string_view, sizeof...(Is) + 1> arr{"", enum_type::template name<Enum, Is>()...};
+    MG_ENUM_NAME_CNSTXPR std::array<detail::string_view, sizeof...(Is) + 1> arr{"", enum_type::template name<Enum, Is>()...};
     const auto index{std::find(arr.begin() + 1, arr.end(), str)};
     return index == arr.end() ? detail::nullopt : detail::optional<Enum>{static_cast<Enum>(std::distance(arr.begin(), index) + Min - 1)};
 }
@@ -343,14 +343,14 @@ template <typename Enum, Enum... Is>
 MG_ENUM_NAME_CNSTXPR inline auto __for_each_enum_impl(
     Enum e, int Min, int Max, detail::enum_sequence<Enum, Is...>) noexcept
     -> detail::string_view {
-    const std::array<detail::string_view, sizeof...(Is) + 1> arr{"", enum_type::template name<Enum, Is>()...};
+    MG_ENUM_NAME_CNSTXPR std::array<detail::string_view, sizeof...(Is) + 1> arr{"", enum_type::template name<Enum, Is>()...};
     const auto index{std::abs(Min) + static_cast<int>(e) + (Min < 0 ? 1 : 1)};
     return arr[(index < Min || index > arr.size() -1) ? 0 : index];
 }
 template <typename Enum, Enum... Is>
 MG_ENUM_NAME_CNSTXPR inline auto __for_each_enum_vec_impl(int Min, int Max, detail::enum_sequence<Enum, Is...>)
     -> std::vector<std::pair<Enum, detail::string_view>> {
-    const std::array<detail::string_view, sizeof...(Is) + 1> arr{"", enum_type::template name<Enum, Is>()...};
+    MG_ENUM_NAME_CNSTXPR std::array<detail::string_view, sizeof...(Is) + 1> arr{"", enum_type::template name<Enum, Is>()...};
     std::vector<std::pair<Enum, detail::string_view>> vec;
     vec.reserve(sizeof...(Is));
     for(auto i{1}; i < arr.size(); ++i){

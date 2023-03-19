@@ -18,7 +18,7 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 * Wider range can increase compile time so user responsible to adjusting for enum's range
 
 
-## Usage ([try it!](https://godbolt.org/z/Thcv55vn4))
+## Usage ([try it!](https://godbolt.org/z/KbPeq18Ee))
 ```C++
 #include <iostream>
 #include "enum_name.hpp"

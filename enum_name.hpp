@@ -25,10 +25,13 @@
 #ifndef MGUTILITY_ENUM_NAME_HPP
 #define MGUTILITY_ENUM_NAME_HPP
 
+#include <array>
 #include <algorithm>
 #include <cstring>
 #include <string>
 #include <type_traits>
+#include <vector>
+#include <utility>
 
 #if defined(_MSC_VER) && _MSC_VER < 1910
 #error "Requires MSVC 2017 or newer!"
@@ -70,53 +73,52 @@ struct is_scoped_enum {
 
 #if MG_ENUM_NAME_CPLUSPLUS < 201703L
 
+constexpr auto strlen_constexpr(const char* str, size_t sz = 0) noexcept -> size_t{
+    return str[sz] == '\0' ? sz : strlen_constexpr(str, ++sz);
+}
+
+constexpr auto strncmp_constexpr(const char* lhs, const char* rhs, size_t sz = 0) noexcept -> bool {
+    return lhs[sz] == rhs[sz] ? true : strncmp_constexpr(lhs, rhs, --sz);
+}
+
 template <typename Char = char>
 class basic_string_view {
    public:
     constexpr inline basic_string_view(const Char* str) noexcept
-        : data_(str), size_(strlen(str)) {}
+        : data_(str), size_(strlen_constexpr(str)) {}
     constexpr inline basic_string_view(const Char* str, size_t len) noexcept
         : data_(str), size_(len) {}
-    constexpr inline basic_string_view(const basic_string_view& other) noexcept
+    constexpr inline basic_string_view(const basic_string_view& other)
         : data_(other.data_), size_(other.size_) {}
+    constexpr inline basic_string_view(basic_string_view&& other) noexcept
+        : data_(std::move(other.data_)), size_(std::move(other.size_)) {}
     MG_ENUM_NAME_CNSTXPR inline basic_string_view<Char>& operator=(
-        const basic_string_view& other) noexcept {
-        data_ = other.data_;
-        size_ = other.size_;
+        basic_string_view&& other) noexcept {
+        data_ = std::move(other.data_);
+        size_ = std::move(other.size_);
         return *this;
     }
-    MG_ENUM_NAME_CNSTXPR inline const Char operator[](size_t index) noexcept {
+    constexpr inline const Char operator[](size_t index) const noexcept {
         return data_[index];
     }
-    MG_ENUM_NAME_CNSTXPR inline const Char* begin() noexcept { return data_; }
-    MG_ENUM_NAME_CNSTXPR inline const Char* end() noexcept {
+    constexpr inline const Char* begin() const noexcept { return data_; }
+    constexpr inline const Char* end() const noexcept {
         return (data_ + size_);
     }
+    constexpr inline bool empty() const noexcept { return size_ < 1; }
     constexpr inline size_t size() const noexcept { return size_; }
     constexpr inline const Char* data() const noexcept { return data_; }
-    MG_ENUM_NAME_CNSTXPR inline basic_string_view<Char> substr(
-        size_t begin, size_t len) noexcept {
-        return basic_string_view<Char>(data_ + begin, len);
-    }
-    MG_ENUM_NAME_CNSTXPR inline basic_string_view<Char> substr(
+    constexpr inline basic_string_view<Char> substr(
         size_t begin, size_t len) const noexcept {
         return basic_string_view<Char>(data_ + begin, len);
     }
-    MG_ENUM_NAME_CNSTXPR inline size_t rfind(Char c,
-                                             size_t pos = 0) const noexcept {
-        for (auto i{pos}; i != 0; --i) {
-            if (c == data_[i]) return i;
-        }
-        return 0;
+    constexpr inline size_t rfind(Char c, size_t pos = 0) const noexcept {
+        return c == data_[pos] ? pos : rfind(c, --pos);
     }
 
-    MG_ENUM_NAME_CNSTXPR friend inline bool operator==(
+    constexpr friend inline bool operator==(
         basic_string_view<Char> lhs, basic_string_view<Char> rhs) noexcept {
-        if (lhs.size_ != rhs.size_) return false;
-        for (auto i{0}; i < lhs.size_; ++i) {
-            if (lhs.data_[i] != rhs.data_[i]) return false;
-        }
-        return true;
+        return (lhs.size_ == rhs.size_) && strncmp_constexpr(lhs.data_, rhs.data_, lhs.size_);
     }
     
     inline operator std::string() { return std::string(data_, size_); }
@@ -124,15 +126,15 @@ class basic_string_view {
 
     friend inline std::ostream& operator<<(std::ostream& os,
                                            const basic_string_view<Char>& sv) {
-        for (auto i = 0; i < sv.size_; ++i) {
-            os << sv.data_[i];
+        for (auto c : sv) {
+            os << c;
         }
         return os;
     }
 
    private:
-    const Char* data_;
     size_t size_;
+    const Char* data_;
 };
 
 using string_view = basic_string_view<char>;
@@ -180,19 +182,19 @@ class optional {
         other.has_value_ = std::move(has_value_);
         has_value_ = std::move(hval);
     }
-    MG_ENUM_NAME_CNSTXPR inline T& operator*() {
+    MG_ENUM_NAME_CNSTXPR inline T operator*() {
         if (!has_value_) throw detail::bad_optional_access();
         return value_;
     }
-    MG_ENUM_NAME_CNSTXPR inline T& operator*() const {
+    MG_ENUM_NAME_CNSTXPR inline T operator*() const {
         if (!has_value_) throw detail::bad_optional_access();
         return value_;
     }
-    MG_ENUM_NAME_CNSTXPR inline T& value() {
+    MG_ENUM_NAME_CNSTXPR inline T value() {
         if (!has_value_) throw detail::bad_optional_access();
         return value_;
     }
-    MG_ENUM_NAME_CNSTXPR inline T& value() const {
+    MG_ENUM_NAME_CNSTXPR inline T value() const {
         if (!has_value_) throw detail::bad_optional_access();
         return value_;
     }
@@ -292,9 +294,9 @@ struct enum_type {
         auto offset{lastidxenumname[0] + lastidxenumname[1]};
         auto index =
             std::max(str.rfind(lastidxenumname[2], str.size() - offset),
-                     str.rfind(lastidxenumname[3], str.size() - offset)) +
-            1;
-        return str.substr(index, str.size() - offset - index);
+                     str.rfind(lastidxenumname[3], str.size() - offset));
+        auto result = str.substr(index + 1, str.size() - offset - index);
+        return result[0] == '(' ? "" : result;
     }
 
     template <typename Enum, Enum e,
@@ -314,9 +316,9 @@ struct enum_type {
    private:
     static constexpr int lastidxenumname[] =
 #if defined(_MSC_VER)
-        {21, 0, ',', ':', '<'};
+        {22, 0, ',', ':', '<'};
 #elif defined(__clang__)
-        {1, 0, ' ', ':', '('};
+        {1, 1, ' ', ':', '('};
 #elif defined(__GNUC__)
         {
 #if MG_ENUM_NAME_CPLUSPLUS < 201703L 
@@ -324,7 +326,7 @@ struct enum_type {
 #else
         165,
 #endif
-         4, ' ', ':', '('};
+         5, ' ', ':', '('};
 #endif
 };
 
@@ -332,24 +334,32 @@ template <typename Enum, Enum... Is>
 MG_ENUM_NAME_CNSTXPR inline auto __for_each_to_enum_impl(
     detail::string_view str, int Min,
     detail::enum_sequence<Enum, Is...>) noexcept -> detail::optional<Enum> {
-    using expander = detail::string_view[];
-    const expander x{"", enum_type::template name<Enum, Is>()...};
-    for (auto i{1}; i < sizeof...(Is); ++i) {
-        if (x[i] == str)
-            return detail::optional<Enum>{static_cast<Enum>(i + Min - 1)};
-    }
-
-    return detail::nullopt;
+    const std::array<detail::string_view, sizeof...(Is) + 1> arr{"", enum_type::template name<Enum, Is>()...};
+    const auto index{std::find(arr.begin() + 1, arr.end(), str)};
+    return index == arr.end() ? detail::nullopt : detail::optional<Enum>{static_cast<Enum>(std::distance(arr.begin(), index) + Min - 1)};
 }
 
 template <typename Enum, Enum... Is>
 MG_ENUM_NAME_CNSTXPR inline auto __for_each_enum_impl(
     Enum e, int Min, int Max, detail::enum_sequence<Enum, Is...>) noexcept
     -> detail::string_view {
-    using expander = detail::string_view[];
-    const expander x{"", enum_type::template name<Enum, Is>()...};
-    auto index{abs(Min) + static_cast<int>(e) + 1};
-    return detail::string_view(x[index > Max + 1 ? 0 : index]);
+    const std::array<detail::string_view, sizeof...(Is) + 1> arr{"", enum_type::template name<Enum, Is>()...};
+    const auto index{std::abs(Min) + static_cast<int>(e) + (Min < 0 ? 1 : 1)};
+    return arr[(index < Min || index > arr.size() -1) ? 0 : index];
+}
+template <typename Enum, Enum... Is>
+MG_ENUM_NAME_CNSTXPR inline auto __for_each_enum_vec_impl(int Min, int Max, detail::enum_sequence<Enum, Is...>)
+    -> std::vector<std::pair<Enum, detail::string_view>> {
+    const std::array<detail::string_view, sizeof...(Is) + 1> arr{"", enum_type::template name<Enum, Is>()...};
+    std::vector<std::pair<Enum, detail::string_view>> vec;
+    vec.reserve(sizeof...(Is));
+    for(auto i{1}; i < arr.size(); ++i){
+        if(!arr[i].empty()){
+            vec.emplace_back(std::pair<Enum, detail::string_view>{static_cast<Enum>(i + Min - 1), arr[i]});
+        }
+    }
+    vec.shrink_to_fit();
+    return vec;
 }
 }  // namespace detail
 }  // namespace mgutility
@@ -371,6 +381,13 @@ MG_ENUM_NAME_CNSTXPR inline auto to_enum(detail::string_view str) noexcept
     static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
     return __for_each_to_enum_impl(
         str, Min, detail::make_enum_sequence<Enum, Min, Max>());
+}
+template <typename Enum, int Min = -128, int Max = 128>
+MG_ENUM_NAME_CNSTXPR inline auto enum_vec() noexcept
+    -> std::vector<std::pair<Enum, detail::string_view>> {
+    static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
+    static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
+    return __for_each_enum_vec_impl(Min, Max, detail::make_enum_sequence<Enum, Min, Max>());
 }
 }  // namespace mgutility
 

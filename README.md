@@ -12,6 +12,7 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 * Supports compile-time as much as possible using with C++14 and later
 * Changing enum range with template parameter <sub>(default range: `[-128, 128)`)</sub> on each call or with your special function for types
 * Supports `operator<<` for direct using with ostream objects
+* Supports basic `flat_map` when using to_enum with range >= 10 instead of linear search
 
 ## Limitations
 * Compiler versions

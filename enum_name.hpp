@@ -330,7 +330,7 @@ class flat_map {
         return fnv1a(key);
     }
 
-    static constexpr std::uint32_t fnv1a(
+    static MG_ENUM_NAME_CNSTXPR std::uint32_t fnv1a(
         detail::string_view str, std::uint32_t hash = 2166136261u) noexcept {
         for (char c : str) {
             hash ^= static_cast<std::uint32_t>(c);

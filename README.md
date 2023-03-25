@@ -10,7 +10,7 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 * Supports `enum` and `enum class`
 * Supports enums in namespaces, classes or structs even templated or not
 * Supports compile-time as much as possible using with C++14 and later
-* Changing enum range with template parameter <sub>(default range: `[-128, 128)`)</sub> on each call or with your special function for types
+* Changing enum range with template parameter <sub>(default range: `[-128, 128)`)</sub> on each call or with your special function for types or adding specialized enum_range<Enum> struct
 * Supports `operator<<` for direct using with ostream objects
 * Supports basic `flat_map` when using to_enum with range >= 10 instead of linear search
 
@@ -19,7 +19,7 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 * Wider range can increase compile time so user responsible to adjusting for enum's range
 
 
-## Usage ([try it!](https://godbolt.org/z/qo6jKWT3P))
+## Usage ([try it!](https://godbolt.org/z/h6P4von3s))
 ```C++
 #include <iostream>
 #include "enum_name.hpp"
@@ -27,8 +27,18 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 
 enum class rgb_color { red, green, blue, unknown = -1};
 
-// you can specialize enum ranges with overload per enum types
-auto enum_name = [](rgb_color c){ return mgutility::enum_name<-1, 10>(c); };
+// you can specialize enum ranges with overload per enum types (option 1)
+namespace mgutility{
+    template<>
+    struct enum_range<rgb_color>
+    {
+        static constexpr auto min = -1;
+        static constexpr auto max = 3;
+    };
+}
+
+// you can specialize enum ranges with overload per enum types (option 2)
+auto enum_name = [](rgb_color c){ return mgutility::enum_name<-1, 3>(c); };
 
 
 int main()
@@ -41,7 +51,7 @@ int main()
     std::cout << mgutility::enum_name(x) << '\n'; // will print "blue" to output
     
     // calling specialized enum ranges function for rgb_color type
-    // will print "green" to output, if y can't convert to rgb_color prınts "unknown"
+    // will print "green" to output, if y can't convert to rgb_color prints "unknown"
     std::cout << enum_name(y.value_or(rgb_color::unknown)) << '\n'; 
 }
 

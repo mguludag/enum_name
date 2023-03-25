@@ -461,7 +461,23 @@ inline auto __for_each_enum_vec_impl(int Min, int Max,
 }  // namespace mgutility
 
 namespace mgutility {
-template <int Min = -128, int Max = 128, typename Enum>
+template <typename T>
+struct enum_range
+{
+    static constexpr auto min{-128};
+    static constexpr auto max{128};
+};
+
+template <int Min, int Max, typename Enum>
+MG_ENUM_NAME_CNSTXPR inline auto enum_name(Enum e) noexcept
+    -> detail::string_view {
+    static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
+    static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
+    return __for_each_enum_impl(
+        e, Min, Max, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
+}
+    
+template <typename Enum, int Min = enum_range<Enum>::min, int Max = enum_range<Enum>::max>
 MG_ENUM_NAME_CNSTXPR inline auto enum_name(Enum e) noexcept
     -> detail::string_view {
     static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
@@ -470,7 +486,7 @@ MG_ENUM_NAME_CNSTXPR inline auto enum_name(Enum e) noexcept
         e, Min, Max, mgutility::detail::make_enum_sequence<Enum, Min, Max>());
 }
 
-template <typename Enum, int Min = -128, int Max = 128>
+template <typename Enum, int Min = enum_range<Enum>::min, int Max = enum_range<Enum>::max>
 MG_ENUM_NAME_CNSTXPR inline auto to_enum(detail::string_view str) noexcept
     -> detail::optional<Enum> {
     static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
@@ -478,7 +494,7 @@ MG_ENUM_NAME_CNSTXPR inline auto to_enum(detail::string_view str) noexcept
     return __for_each_to_enum_impl(
         str, Min, detail::make_enum_sequence<Enum, Min, Max>());
 }
-template <typename Enum, int Min = -128, int Max = 128>
+template <typename Enum, int Min = enum_range<Enum>::min, int Max = enum_range<Enum>::max>
 MG_ENUM_NAME_CNSTXPR inline auto enum_vec() noexcept
     -> std::vector<std::pair<Enum, detail::string_view>> {
     static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");

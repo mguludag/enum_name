@@ -442,7 +442,7 @@ inline auto __for_each_enum_impl(Enum e, int Min, int Max,
 template <typename Enum, Enum... Is>
 inline auto __for_each_enum_vec_impl(int Min, int Max,
                                      detail::enum_sequence<Enum, Is...>)
-    -> std::vector<std::pair<Enum, detail::string_view>> {
+    -> std::vector<std::pair<detail::string_view,  Enum>> {
     MG_ENUM_NAME_CNSTXPR static std::array<detail::string_view,
                                            sizeof...(Is) + 1>
         arr{"", enum_type::template name<Enum, Is>()...};
@@ -450,8 +450,8 @@ inline auto __for_each_enum_vec_impl(int Min, int Max,
     vec.reserve(sizeof...(Is));
     for (auto i{1}; i < arr.size(); ++i) {
         if (!arr[i].empty()) {
-            vec.emplace_back(std::pair<Enum, detail::string_view>{
-                static_cast<Enum>(i + Min - 1), arr[i]});
+            vec.emplace_back(std::pair<detail::string_view, Enum>{
+                arr[i], static_cast<Enum>(i + Min - 1)});
         }
     }
     vec.shrink_to_fit();
@@ -496,7 +496,7 @@ MG_ENUM_NAME_CNSTXPR inline auto to_enum(detail::string_view str) noexcept
 }
 template <typename Enum, int Min = enum_range<Enum>::min, int Max = enum_range<Enum>::max>
 MG_ENUM_NAME_CNSTXPR inline auto enum_vec() noexcept
-    -> std::vector<std::pair<Enum, detail::string_view>> {
+    -> std::vector<std::pair<detail::string_view, Enum>> {
     static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
     static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
     return __for_each_enum_vec_impl(

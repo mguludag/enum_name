@@ -27,7 +27,7 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 
 enum class rgb_color { red, green, blue, unknown = -1};
 
-// you can specialize enum ranges with overload per enum types (option 1)
+// you can specialize enum ranges with specialize struct per enum types (option 1)
 namespace mgutility{
     template<>
     struct enum_range<rgb_color>

@@ -199,17 +199,17 @@ class optional {
         other.has_value_ = std::move(has_value_);
         has_value_ = std::move(hval);
     }
-    MG_ENUM_NAME_CNSTXPR inline T operator*() {
+    MG_ENUM_NAME_CNSTXPR inline T& operator*() {
         return value_;
     }
-    MG_ENUM_NAME_CNSTXPR inline T operator*() const {
+    MG_ENUM_NAME_CNSTXPR inline T& operator*() const {
         return value_;
     }
-    MG_ENUM_NAME_CNSTXPR inline T value() {
+    MG_ENUM_NAME_CNSTXPR inline T& value() {
         if (!has_value_) throw detail::bad_optional_access();
         return value_;
     }
-    MG_ENUM_NAME_CNSTXPR inline T value() const {
+    MG_ENUM_NAME_CNSTXPR inline T& value() const {
         if (!has_value_) throw detail::bad_optional_access();
         return value_;
     }

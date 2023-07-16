@@ -165,6 +165,8 @@ class optional {
    public:
     MG_ENUM_NAME_CNSTXPR inline optional(nullopt_t&)
         : dummy_{0}, has_value_{false} {}
+    MG_ENUM_NAME_CNSTXPR inline optional()
+        : dummy_{0}, has_value_{false} {}
     template <typename... Args>
     MG_ENUM_NAME_CNSTXPR inline optional(Args&&... args)
         : value_{T{std::forward<Args>(args)...}}, has_value_{true} {}

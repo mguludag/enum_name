@@ -331,11 +331,11 @@ class flat_map {
         return fnv1a(key);
     }
 
-    static MG_ENUM_NAME_CNSTXPR std::uint32_t fnv1a(
-        detail::string_view str, std::uint32_t hash = 2166136261u) noexcept {
+    static MG_ENUM_NAME_CNSTXPR std::uint64_t fnv1a(
+        detail::string_view str, std::uint64_t hash = 14695981039346656037u) noexcept {
         for (char c : str) {
-            hash ^= static_cast<std::uint32_t>(c);
-            hash *= 16777619u;
+            hash ^= static_cast<std::uint64_t>(c);
+            hash *= 1099511628211u;
         }
         return hash;
     }
@@ -406,7 +406,7 @@ struct enum_type {
 };
 
 template <typename Enum, Enum... Is,
-          detail::enable_if_t<sizeof...(Is) < 10, bool> = true>
+          detail::enable_if_t<sizeof...(Is) < 100000, bool> = true>
 inline auto __for_each_to_enum_impl(detail::string_view str, int Min,
                                     detail::enum_sequence<Enum, Is...>) noexcept
     -> detail::optional<Enum> {
@@ -421,7 +421,7 @@ inline auto __for_each_to_enum_impl(detail::string_view str, int Min,
 }
 
 template <typename Enum, Enum... Is,
-          detail::enable_if_t<sizeof...(Is) >= 10, bool> = true>
+          detail::enable_if_t<sizeof...(Is) >= 100000, bool> = true>
 inline auto __for_each_to_enum_impl(detail::string_view str, int Min,
                                     detail::enum_sequence<Enum, Is...>) noexcept
     -> detail::optional<Enum> {

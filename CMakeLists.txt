@@ -14,7 +14,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(DocTest)
 
 add_executable(${PROJECT_NAME} example/main.cpp)
-target_include_directories(${PROJECT_NAME} AFTER PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 enable_testing()
 add_subdirectory(test)

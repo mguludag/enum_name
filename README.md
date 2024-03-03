@@ -50,14 +50,14 @@ auto enum_name = [](rgb_color c){ return mgutility::enum_name<-1, 3>(c); };
 int main()
 {
     auto x = rgb_color::blue;
-    auto y = mgutility::to_enum<rgb_color>("green");
+    auto y = mgutility::to_enum<rgb_color>("greenn");
     
     // default signature: enum_name<min_value = -128, max_value = 128, Enum typename>(Enum&&) 
     // Changing max_value to not too much greater than enum's max value, it will compiles faster
     std::cout << mgutility::enum_name(x) << '\n'; // will print "blue" to output
     
     // calling specialized enum ranges function for rgb_color type
-    // will print "green" to output, if y can't convert to rgb_color prints "unknown"
+    // will print "green" to output, if y can't convert to rgb_color prints "UNKNOWN"
     std::cout << enum_name(y.value_or(rgb_color::unknown)) << '\n'; 
 }
 

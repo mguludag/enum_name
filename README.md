@@ -19,46 +19,54 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 * Wider range can increase compile time so user responsible to adjusting for enum's range
 
 
-## Usage ([try it!](https://godbolt.org/z/8Ye1PhKhs))
+## Usage ([try it!](https://godbolt.org/z/96fqYE1M7))
 ```C++
 #include <iostream>
 #include "enum_name.hpp"
 
+enum class rgb_color { red, green, blue, unknown = -1 };
 
-enum class rgb_color { red, green, blue, unknown = -1};
-
-// you can specialize enum ranges with specialize struct per enum types (option 1)
-namespace mgutility{
-    namespace detail{
-        // specialize rgb_color::unknown to make output "UNKNOWN"
-        template <>
-        constexpr inline auto enum_type::name<rgb_color, rgb_color::unknown>() noexcept -> string_view { return "UNKNOWN"; }
-    }
-
-    template<>
-    struct enum_range<rgb_color>
-    {
-        static constexpr auto min = -1;
-        static constexpr auto max = 3;
-    };
+// you can specialize enum ranges with overload per enum types (option 1)
+namespace mgutility {
+namespace detail {
+// specialize rgb_color::unknown to make output "UNKNOWN"
+template <>
+constexpr inline auto enum_type::name<rgb_color, rgb_color::unknown>() noexcept
+    -> string_view {
+    return "UNKNOWN";
 }
+}  // namespace detail
+
+template <>
+struct enum_range<rgb_color> {
+    static constexpr auto min = -1;
+    static constexpr auto max = 3;
+};
+}  // namespace mgutility
 
 // you can specialize enum ranges with overload per enum types (option 2)
-auto enum_name = [](rgb_color c){ return mgutility::enum_name<-1, 3>(c); };
+auto enum_name = [](rgb_color c) { return mgutility::enum_name<-1, 3>(c); };
 
-
-int main()
-{
+int main() {
     auto x = rgb_color::blue;
     auto y = mgutility::to_enum<rgb_color>("greenn");
-    
-    // default signature: enum_name<min_value = -128, max_value = 128, Enum typename>(Enum&&) 
-    // Changing max_value to not too much greater than enum's max value, it will compiles faster
-    std::cout << mgutility::enum_name(x) << '\n'; // will print "blue" to output
-    
+
+    for (auto&& e : mgutility::enum_for_each<rgb_color>()) {
+        std::cout << e.name << " " << e.to_underlying() << '\n';
+        // enum_pair<Enum> has two data members: name and value
+        // to_underlying() converts into underlying type of enum
+    }
+
+    // default signature: enum_name<min_value = -128, max_value = 128, Enum
+    // typename>(Enum&&) Changing max_value to not too much greater than enum's
+    // max value, it will compiles faster
+    std::cout << mgutility::enum_name(x)
+              << '\n';  // will print "blue" to output
+
     // calling specialized enum ranges function for rgb_color type
-    // will print "green" to output, if y can't convert to rgb_color prints "UNKNOWN"
-    std::cout << enum_name(y.value_or(rgb_color::unknown)) << '\n'; 
+    // will print "green" to output, if y can't convert to rgb_color prints
+    // "UNKNOWN"
+    std::cout << enum_name(y.value_or(rgb_color::unknown)) << '\n';
 }
 
 ```

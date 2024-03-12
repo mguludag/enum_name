@@ -174,6 +174,24 @@ public:
         return (lhs.size_ == rhs.size_) && std::strncmp(lhs.data_, rhs.data_, lhs.size_) == 0;
     }
 
+    constexpr friend inline bool
+    operator==(basic_string_view<Char> lhs, const Char* rhs) noexcept
+    {
+        return (lhs.size_ == strlen_constexpr(rhs)) && std::strncmp(lhs.data_, rhs, lhs.size_) == 0;
+    }
+
+    constexpr friend inline bool
+    operator!=(basic_string_view<Char> lhs, basic_string_view<Char> rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
+
+    constexpr friend inline bool
+    operator!=(basic_string_view<Char> lhs, const Char* rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
+
     inline operator std::string()
     {
         return std::string(data_, size_);

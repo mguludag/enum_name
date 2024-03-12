@@ -13,13 +13,14 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 * Changing enum range with template parameter <sub>(default range: `[-128, 128)`)</sub> on each call or with your special function for types or adding specialized `enum_range<Enum>` struct
 * Supports `operator<<` for direct using with ostream objects
 * Supports custom enum name output by explicit specialization of `constexpr inline auto mgutility::detail::enum_type::name<Enum, EnumValue>() noexcept` function
+* Supports iterate over enum (names and values) with `mgutility::enum_for_each<T>()` class and it is compatible with standard ranges and views
 
 ## Limitations
 * Compiler versions
 * Wider range can increase compile time so user responsible to adjusting for enum's range
 
 
-## Usage ([try it!](https://godbolt.org/z/96fqYE1M7))
+## Usage ([try it!](https://godbolt.org/z/MnfscK7c9))
 ```C++
 #include <iostream>
 #include "enum_name.hpp"
@@ -47,15 +48,37 @@ struct enum_range<rgb_color> {
 // you can specialize enum ranges with overload per enum types (option 2)
 auto enum_name = [](rgb_color c) { return mgutility::enum_name<-1, 3>(c); };
 
+#if defined(__cpp_lib_print)
+#include <print>
+#include <ranges>
+#endif
+
+
 int main() {
     auto x = rgb_color::blue;
     auto y = mgutility::to_enum<rgb_color>("greenn");
 
+#if defined(__cpp_lib_print)
+
+// enum_for_each<T> can usable with views and range algorithms
+auto colors = mgutility::enum_for_each<rgb_color>() |
+                  std::ranges::views::filter(
+                      [](auto &&pair) { return pair.name != "UNKNOWN"; });
+
+    std::ranges::for_each(colors, [](auto &&color) {
+        std::println("{} \t: {}", color.name, color.to_underlying());
+    });
+
+#else
+
     for (auto&& e : mgutility::enum_for_each<rgb_color>()) {
-        std::cout << e.name << " " << e.to_underlying() << '\n';
+        if(e.name != "UNKNOWN"){
+        std::cout << e.name << " \t: " << e.to_underlying() << '\n';
+        }
         // enum_pair<Enum> has two data members: name and value
         // to_underlying() converts into underlying type of enum
     }
+#endif
 
     // default signature: enum_name<min_value = -128, max_value = 128, Enum
     // typename>(Enum&&) Changing max_value to not too much greater than enum's

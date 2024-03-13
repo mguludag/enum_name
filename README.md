@@ -20,7 +20,7 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 * Wider range can increase compile time so user responsible to adjusting for enum's range
 
 
-## Usage ([try it!](https://godbolt.org/z/qfqoK494f))
+## Usage ([try it!](https://godbolt.org/z/dhj87b8Wb))
 ```C++
 #include <iostream>
 #include "enum_name.hpp"
@@ -75,8 +75,7 @@ auto colors = mgutility::enum_for_each<rgb_color>() |
         if(e.second != "UNKNOWN"){
             std::cout << e.second << " \t: " << mgutility::enum_to_underlying(e.first) << '\n';
         }
-        // enum_pair<Enum> has two data members: name and value
-        // to_underlying() converts into underlying type of enum
+        // std::pair<Enum, string_view> {enum_type, name_of_enum}
     }
 #endif
 

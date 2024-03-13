@@ -20,30 +20,26 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 * Wider range can increase compile time so user responsible to adjusting for enum's range
 
 
-## Usage ([try it!](https://godbolt.org/z/dhj87b8Wb))
+## Usage ([try it!](https://godbolt.org/z/YM5EvY1Y5))
 ```C++
 #include <iostream>
 #include "enum_name.hpp"
 
-enum class rgb_color { red, green, blue, unknown = -1 };
+num class rgb_color { red, green, blue, unknown = -1 };
 
-// you can specialize enum ranges with overload per enum types (option 1)
-namespace mgutility {
-namespace detail {
-// specialize rgb_color::unknown to make output "UNKNOWN"
+// specialize rgb_color::unknown to make output "UNKNOWN" instead of "unknown"
 template <>
-constexpr inline auto enum_type::name<rgb_color, rgb_color::unknown>() noexcept
+constexpr inline auto mgutility::detail::enum_type::name<rgb_color, rgb_color::unknown>() noexcept
     -> string_view {
     return "UNKNOWN";
 }
-}  // namespace detail
 
+// you can specialize enum ranges with overload per enum types (option 1)
 template <>
-struct enum_range<rgb_color> {
+struct mgutility::enum_range<rgb_color> {
     static constexpr auto min = -1;
     static constexpr auto max = 3;
 };
-}  // namespace mgutility
 
 // you can specialize enum ranges with overload per enum types (option 2)
 auto enum_name = [](rgb_color c) { return mgutility::enum_name<-1, 3>(c); };

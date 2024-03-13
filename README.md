@@ -10,7 +10,7 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 * Supports `enum` and `enum class`
 * Supports enums in namespaces, classes or structs even templated or not
 * Supports compile-time as much as possible using with C++14 and later
-* Changing enum range with template parameter <sub>(default range: `[-128, 128)`)</sub> on each call or with your special function for types or adding specialized `enum_range<Enum>` struct
+* Changing enum range with template parameter <sub>(default range: `[0, 256)`)</sub> on each call or with your special function for types or adding specialized `enum_range<Enum>` struct
 * Supports and automatically overloaded `operator<<` for Enum types to direct using with ostream objects
 * Supports custom enum name output by explicit specialization of `constexpr inline auto mgutility::detail::enum_type::name<Enum, EnumValue>() noexcept` function
 * Supports iterate over enum (names and values) with `mgutility::enum_for_each<T>()` class and it is compatible with standard ranges and views

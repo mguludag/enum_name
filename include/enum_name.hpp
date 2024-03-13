@@ -70,9 +70,10 @@ namespace mgutility {
             static constexpr auto value = std::is_enum<E>::value
                 && !std::is_convertible<E, typename std::underlying_type<E>::type>::value;
         };
-
+        #if MG_ENUM_NAME_CPLUSPLUS > 201103L
         template<typename E>
         static constexpr bool is_scoped_enum_v = is_scoped_enum<E>::value;
+        #endif
 
         template<typename T>
         using underlying_type_t = typename std::underlying_type<T>::type;
@@ -402,7 +403,7 @@ namespace mgutility {
         #define __PRETTY_FUNCTION__ __FUNCSIG__
         #endif
             template<typename Enum, Enum e,
-                detail::enable_if_t<!detail::is_scoped_enum_v<Enum>, bool> = true>
+                detail::enable_if_t<!detail::is_scoped_enum<Enum>::value, bool> = true>
             MG_ENUM_NAME_CNSTXPR static inline auto name() noexcept -> detail::string_view
             {
                 auto str = detail::string_view(__PRETTY_FUNCTION__);
@@ -415,7 +416,7 @@ namespace mgutility {
             }
 
             template<typename Enum, Enum e,
-                detail::enable_if_t<detail::is_scoped_enum_v<Enum>, bool> = true>
+                detail::enable_if_t<detail::is_scoped_enum<Enum>::value, bool> = true>
             MG_ENUM_NAME_CNSTXPR static inline auto name() noexcept -> detail::string_view
             {
                 auto str = detail::string_view(__PRETTY_FUNCTION__);
@@ -433,9 +434,9 @@ namespace mgutility {
         #elif defined(__GNUC__)
                 {
         #if MG_ENUM_NAME_CPLUSPLUS < 201703L
-                    158,
+                    179,
         #else
-                    144,
+                    165,
         #endif
                     5, ' ', ':', '('};
         #endif

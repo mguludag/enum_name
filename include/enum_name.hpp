@@ -29,6 +29,7 @@
 #include <array>
 #include <cstdint>
 #include <cstring>
+#include <ostream>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -585,5 +586,13 @@ namespace mgutility {
         return __for_each_to_enum_impl(str, Min, detail::make_enum_sequence<Enum, Min, Max>());
     }
 } // namespace mgutility
+
+template<typename Enum, typename std::enable_if<std::is_enum<Enum>::value, bool>::type = true>
+auto operator<<(std::ostream& os, Enum e) -> std::ostream&
+{
+    static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
+    os << mgutility::enum_name(e);
+    return os;
+}
 
 #endif // MGUTILITY_ENUM_NAME_HPP

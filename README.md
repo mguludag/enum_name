@@ -20,7 +20,7 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 * Wider range can increase compile time so user responsible to adjusting for enum's range
 
 
-## Usage ([try it!](https://godbolt.org/z/MnfscK7c9))
+## Usage ([try it!](https://godbolt.org/z/qfqoK494f))
 ```C++
 #include <iostream>
 #include "enum_name.hpp"
@@ -63,17 +63,17 @@ int main() {
 // enum_for_each<T> can usable with views and range algorithms
 auto colors = mgutility::enum_for_each<rgb_color>() |
                   std::ranges::views::filter(
-                      [](auto &&pair) { return pair.name != "UNKNOWN"; });
+                      [](auto &&pair) { return pair.second != "UNKNOWN"; });
 
     std::ranges::for_each(colors, [](auto &&color) {
-        std::println("{} \t: {}", color.name, color.to_underlying());
+        std::println("{} \t: {}", color.second, mgutility::enum_to_underlying(color.first));
     });
 
 #else
 
     for (auto&& e : mgutility::enum_for_each<rgb_color>()) {
-        if(e.name != "UNKNOWN"){
-        std::cout << e.name << " \t: " << e.to_underlying() << '\n';
+        if(e.second != "UNKNOWN"){
+            std::cout << e.second << " \t: " << mgutility::enum_to_underlying(e.first) << '\n';
         }
         // enum_pair<Enum> has two data members: name and value
         // to_underlying() converts into underlying type of enum

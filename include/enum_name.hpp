@@ -365,11 +365,9 @@ template <typename Enum>
 using enum_pair = std::pair<Enum, detail::string_view>;
 
 template <typename Enum, Enum... Is>
-MG_ENUM_NAME_CNSTXPR inline auto get_enum_array(
-    detail::enum_sequence<Enum, Is...>) noexcept
+inline auto get_enum_array(detail::enum_sequence<Enum, Is...>) noexcept
     -> std::array<detail::string_view, sizeof...(Is) + 1> {
-    static std::array<detail::string_view,
-                                           sizeof...(Is) + 1>
+    static std::array<detail::string_view, sizeof...(Is) + 1>
         arr{"", enum_type::template name<Enum, Is>()...};
     return arr;
 }

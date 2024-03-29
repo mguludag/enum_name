@@ -368,7 +368,7 @@ template <typename Enum, Enum... Is>
 MG_ENUM_NAME_CNSTXPR inline auto get_enum_array(
     detail::enum_sequence<Enum, Is...>) noexcept
     -> std::array<detail::string_view, sizeof...(Is) + 1> {
-    MG_ENUM_NAME_CNSTXPR static std::array<detail::string_view,
+    static std::array<detail::string_view,
                                            sizeof...(Is) + 1>
         arr{"", enum_type::template name<Enum, Is>()...};
     return arr;
@@ -377,8 +377,7 @@ MG_ENUM_NAME_CNSTXPR inline auto get_enum_array(
 template <typename Enum, int Min, int Max>
 inline auto to_enum_impl(detail::string_view str) noexcept
     -> detail::optional<Enum> {
-    MG_ENUM_NAME_CNSTXPR auto arr =
-        get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
+    auto arr = get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
     const auto index{std::find(arr.begin() + 1, arr.end(), str)};
     return index == arr.end()
                ? detail::nullopt
@@ -388,8 +387,7 @@ inline auto to_enum_impl(detail::string_view str) noexcept
 
 template <typename Enum, int Min, int Max>
 inline auto enum_name_impl(Enum e) noexcept -> detail::string_view {
-    MG_ENUM_NAME_CNSTXPR auto arr =
-        get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
+    auto arr = get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
     const auto index{std::abs(Min) + static_cast<int>(e) + (Min < 0 ? 1 : 1)};
     return arr[(index < Min || index > arr.size() - 1) ? 0 : index];
 }

@@ -1,0 +1,71 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/cpp
+{
+	"name": "C++",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {
+			"ppa": true,
+			"version": "latest"
+		},
+		// "ghcr.io/devcontainers/features/python:1": {
+		// 	"installTools": true,
+		// 	"optimize": true,
+		// 	"version": "latest"
+		// },
+		"ghcr.io/swift-server-community/swift-devcontainer-features/sqlite:1": {},
+		// "ghcr.io/hspaans/devcontainer-features/pytest:1": {
+		// 	"version": "latest",
+		// 	"plugins": "pytest-testinfra"
+		// },
+		"ghcr.io/devcontainers-extra/features/apt-packages:1": {
+			"clean_ppas": true,
+			"preserve_apt_list": true,
+			"packages": "curl,ca-certificates",
+			"ppas": "ppa:deadsnakes/ppa"
+		},
+		"ghcr.io/devcontainers-extra/features/curl-apt-get:1": {},
+		"ghcr.io/devcontainers-extra/features/ffmpeg-apt-get:1": {},
+		"ghcr.io/devcontainers-extra/features/protoc:1": {
+			"version": "latest"
+		},
+		// "ghcr.io/devcontainers-extra/features/pylint:2": {
+		// 	"version": "latest"
+		// },
+		"ghcr.io/devcontainers-extra/features/vscode-cli:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers-extra/features/vscode-server:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers-extra/features/wget-apt-get:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"llvm-vs-code-extensions.vscode-clangd",
+				"usernamehw.errorlens",
+				"twxs.cmake",
+				"ms-vscode.cpptools",
+				"ms-vscode.cmake-tools"
+			]
+		}
+	}
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "gcc -v",
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

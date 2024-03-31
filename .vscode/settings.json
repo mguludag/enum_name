@@ -1,6 +1,19 @@
 {
-    "files.associations": {
-        "cmath": "cpp",
-        "string_view": "cpp"
-    }
+  "files.associations": {
+    "cmath": "cpp",
+    "string_view": "cpp",
+    "sstream": "cpp",
+    "optional": "cpp",
+    "memory": "cpp",
+    "random": "cpp",
+    "array": "cpp",
+    "fstream": "cpp",
+    "tuple": "cpp",
+    "type_traits": "cpp",
+    "system_error": "cpp",
+    "print": "cpp",
+    "ranges": "cpp",
+    "version": "cpp"
+  },
+  "cmake.generator": "Unix Makefiles"
 }

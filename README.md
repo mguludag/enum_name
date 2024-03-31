@@ -1,91 +1,153 @@
 # enum_name
+
 Converting (scoped)enum values to/from string names written in C++>=11.
 
 ## Supported Compilers
-* Clang > 5
-* GCC > 8
-* MSVC > 2015
+
+- Clang > 5
+- GCC > 8
+- MSVC > 2015
 
 ## Features
-* Supports `enum` and `enum class`
-* Supports enums in namespaces, classes or structs even templated or not
-* Supports compile-time as much as possible using with C++14 and later
-* Changing enum range with template parameter <sub>(default range: `[0, 256)`)</sub> on each call or with your special function for types or adding specialized `enum_range<Enum>` struct
-* Supports and automatically overloaded `operator<<` for Enum types to direct using with ostream objects
-* Supports custom enum name output by explicit specialization of `constexpr inline auto mgutility::detail::enum_type::name<Enum, EnumValue>() noexcept` function
-* Supports iterate over enum (names and values) with `mgutility::enum_for_each<T>()` class and it is compatible with standard ranges and views
+
+- Supports `enum` and `enum class`
+- Supports enums in namespaces, classes or structs even templated or not
+- Supports full compile-time with C++20 and later
+- Changing enum range with template parameter <sub>(default range: `[0, 256)`)</sub> on each call or with your special function for types or adding specialized `enum_range<Enum>` struct
+- Supports and automatically overloaded `operator<<` and add `std::formatter` specialization for Enum types to direct using with ostream objects and `std::format` (If `fmtlib` is available, simply adding the specialization like this [`template <> struct fmt::formatter<YourEnumType> : ostream_formatter {};`] is enough.)
+- Supports custom enum name output by explicit specialization of `constexpr auto mgutility::detail::enum_type::name<Enum, EnumValue>() noexcept` function
+- Supports bitmasked enums and auto detect them
+- Supports iterate over enum (names and values) with `mgutility::enum_for_each<T>()` class and it is compatible with standard ranges and views
 
 ## Limitations
-* Compiler versions
-* Wider range can increase compile time so user responsible to adjusting for enum's range
 
+- Compiler versions
+- Wider range can increase compile time so user responsible to adjusting for enum's range
 
-## Usage ([try it!](https://godbolt.org/z/YM5EvY1Y5))
+## Fetch library with CMake
+
+```CMake
+include(FetchContent)
+
+FetchContent_Declare(
+  enum_name
+  GIT_REPOSITORY https://github.com/mguludag/enum_name.git
+  GIT_TAG main # or the specific tag or branch you want to use
+)
+
+FetchContent_MakeAvailable(enum_name)
+
+#...
+
+target_link_libraries(${PROJECT_NAME} PRIVATE mgutility::enum_name)
+```
+
+## Example usage ([try it!](https://godbolt.org/z/sWbEThv65))
+
 ```C++
 #include <iostream>
-#include "enum_name.hpp"
 
-num class rgb_color { red, green, blue, unknown = -1 };
-
-// specialize rgb_color::unknown to make output "UNKNOWN" instead of "unknown"
-template <>
-constexpr auto mgutility::detail::enum_type::name<rgb_color, rgb_color::unknown>() noexcept
-    -> string_view {
-    return "UNKNOWN";
-}
-
-// you can specialize enum ranges with overload per enum types (option 1)
-template <>
-struct mgutility::enum_range<rgb_color> {
-    static constexpr auto min = -1;
-    static constexpr auto max = 3;
-};
-
-// you can specialize enum ranges with overload per enum types (option 2)
-auto enum_name = [](rgb_color c) { return mgutility::enum_name<-1, 3>(c); };
+#include "mgutility/reflection/enum_name.hpp"
 
 #if defined(__cpp_lib_print)
 #include <print>
 #include <ranges>
 #endif
 
+enum class Position {
+    Top = 1 << 0,
+    Right = 1 << 1,
+    Bottom = 1 << 2,
+    Left = 1 << 3
+};
+
+// Define bitwise OR operator for Position
+auto constexpr operator|(Position lhs, Position rhs) -> Position {
+    return static_cast<Position>(mgutility::enum_to_underlying(lhs) |
+                                 mgutility::enum_to_underlying(rhs));
+}
+
+// Define bitwise AND operator for Position
+auto constexpr operator&(Position lhs, Position rhs) -> Position {
+    return static_cast<Position>(mgutility::enum_to_underlying(lhs) &
+                                 mgutility::enum_to_underlying(rhs));
+}
+
+// Define the range for Position enum values (Option 1)
+template <>
+struct mgutility::enum_range<Position> {
+    static constexpr auto min = 0;   // Minimum value
+    static constexpr auto max = 16;  // Maximum value
+};
+
+// Specialize individual enum names
+// Specialize enum_name for
+// (Position::Top|Position::Right|Position::Bottom|Position::Left) == Center
+template <>
+constexpr auto mgutility::detail::enum_type::name<
+    Position, (Position::Top | Position::Right | Position::Bottom |
+               Position::Left)>() noexcept -> mgutility::string_view {
+    return "CENTER";
+}
+
+// Specialize all enum names for enum
+// Specialize get_enum_array for Position to provide string representations
+// First index of array should be empty const char*
+template <>
+constexpr inline auto mgutility::detail::get_enum_array<Position>() noexcept
+    -> std::array<mgutility::string_view, 17 /*(max - min + 1)*/> {
+    return {"", "", "TOP", "RIGHT", "", "BOTTOM", "", "", "", "LEFT",
+                                       "", "", "", "", "", "", "CENTER"};
+}
+
 
 int main() {
-    auto x = rgb_color::blue;
-    auto y = mgutility::to_enum<rgb_color>("greenn");
+
+    // Specify enum range when call enum_name function (Option 2)
+    // Lambda function to get enum name
+    auto enum_name = [](Position c) { return mgutility::enum_name<0, 16>(c); };
+
+    auto x = Position::Left;
+    auto y = mgutility::to_enum<Position>("CENTER");  // Convert string to enum
+
+#if MGUTILITY_CPLUSPLUS > 201703L
+    static_assert(mgutility::enum_name(Position::Top | Position::Right) ==
+                  "TOP|RIGHT");  // Compile-time check
+    static_assert(mgutility::to_enum<Position>("BOTTOM|LEFT") ==
+                  (Position::Bottom | Position::Left));  // Compile-time check
+#endif
 
 #if defined(__cpp_lib_print)
 
-// enum_for_each<T> can usable with views and range algorithms
-auto colors = mgutility::enum_for_each<rgb_color>() |
-                  std::ranges::views::filter(
-                      [](auto &&pair) { return pair.second != "UNKNOWN"; });
+    // Print each Position and its underlying value using ranges
+    auto positions =
+        mgutility::enum_for_each<Position>() |
+        std::ranges::views::filter([](auto &&pair) {
+            return !pair.second.empty() &&
+                   pair.second.find('|') == mgutility::string_view::npos;
+        });
 
-    std::ranges::for_each(colors, [](auto &&color) {
-        std::println("{} \t: {}", color.second, mgutility::enum_to_underlying(color.first));
+    std::ranges::for_each(positions, [](auto &&pos) {
+        std::println("{} \t: {}", mgutility::enum_to_underlying(pos.first),
+                     pos.second);
     });
 
 #else
 
-    for (auto&& e : mgutility::enum_for_each<rgb_color>()) {
-        if(e.second != "UNKNOWN"){
-            std::cout << e.second << " \t: " << mgutility::enum_to_underlying(e.first) << '\n';
+    // Print each Position and its underlying value using a for loop
+    for (auto &&e : mgutility::enum_for_each<Position>()) {
+        if (!e.second.empty() &&
+            e.second.find('|') == mgutility::string_view::npos) {
+            std::cout << mgutility::enum_to_underlying(e.first)
+                      << " \t: " << e.second << '\n';
         }
-        // std::pair<Enum, string_view> {enum_type, name_of_enum}
     }
 #endif
 
-    // default signature: enum_name<min_value = -128, max_value = 128, Enum
-    // typename>(Enum&&) Changing max_value to not too much greater than enum's
-    // max value, it will compiles faster
-    std::cout << mgutility::enum_name(x) << '\n';  // will print "blue" to output
-    // or
-    std::cout << x << '\n';  // will print "blue" to output
+    // Print the value of x
+    std::cout << '\n' << x << '\n';
 
-    // calling specialized enum ranges function for rgb_color type
-    // will print "green" to output, if y can't convert to rgb_color prints
-    // "UNKNOWN"
-    std::cout << enum_name(y.value_or(rgb_color::unknown)) << '\n';
+    // Print the name of y or "TOP" if y is not valid
+    std::cout << y.value_or(Position::Top) << '\n';
 }
-
 ```

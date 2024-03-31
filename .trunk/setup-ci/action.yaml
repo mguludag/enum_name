@@ -1,0 +1,11 @@
+name: Trunk Check setup
+description: Set up dependencies for Trunk Check
+runs:
+  using: composite
+  steps:
+    - name: Configure Project
+      uses: threeal/cmake-action@main
+      with:
+        run-build: false
+        generator: Unix Makefiles
+        options: CMAKE_EXPORT_COMPILE_COMMANDS=ON

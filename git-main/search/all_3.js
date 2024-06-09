@@ -1,9 +1,0 @@
-var searchData=
-[
-  ['b_0',['B',['../classB.html',1,'B'],['../memgrp_8cpp.html#a7ddc550b157ed6f8db58e462b504ab0f',1,'B:&#160;memgrp.cpp']]],
-  ['bad_5foptional_5faccess_1',['bad_optional_access',['../structmgutility_1_1bad__optional__access.html',1,'mgutility']]],
-  ['base_2',['base',['../structVehicle.html#ad7970f528d429f6fc1725173e93a77c2',1,'Vehicle::base'],['../structCar.html#ab8ff28306286da5a8b14fa9bdccaafaa',1,'Car::base'],['../structTruck.html#ad0ac321609dda1a6c552488b05ec7ac8',1,'Truck::base']]],
-  ['basic_5fstring_5fview_3',['basic_string_view',['../classmgutility_1_1basic__string__view.html',1,'mgutility::basic_string_view&lt; Char &gt;'],['../classmgutility_1_1basic__string__view.html#a98047372022acfb78fbeb82ff7aa5190',1,'mgutility::basic_string_view::basic_string_view() noexcept'],['../classmgutility_1_1basic__string__view.html#a07cc48696b3095ed0b79327b3a423fe6',1,'mgutility::basic_string_view::basic_string_view(const Char *str) noexcept'],['../classmgutility_1_1basic__string__view.html#ac3d4a66987b79b36a6207a7d9c85a5ba',1,'mgutility::basic_string_view::basic_string_view(const Char *str, size_t len) noexcept'],['../classmgutility_1_1basic__string__view.html#a25e8d6ef98e904e1848fb80fe806b2db',1,'mgutility::basic_string_view::basic_string_view(const basic_string_view &amp;other)'],['../classmgutility_1_1basic__string__view.html#a3bf92ec244076c7a71569d64bddc7e3e',1,'mgutility::basic_string_view::basic_string_view(basic_string_view &amp;&amp;other) noexcept']]],
-  ['begin_4',['begin',['../classmgutility_1_1enum__for__each.html#a1415f386351d4564317694ea55e29954',1,'mgutility::enum_for_each::begin()'],['../classmgutility_1_1basic__string__view.html#a7e457bc18a0dbd2958f740befdb9943d',1,'mgutility::basic_string_view::begin()']]],
-  ['bug_20list_5',['Bug List',['../bug.html',1,'']]]
-];

@@ -155,6 +155,13 @@ Example usage (<a href="https://godbolt.org/z/rfeWWKdh3">try it!</a>)</h1>
 <div class="line">  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> max = 5;</div>
 <div class="line">};</div>
 <div class="line"> </div>
+<div class="line"><span class="comment">// specialize all string names from rgb_color enum (array size should be max - min + 1 and first element should be empty string)</span></div>
+<div class="line"><span class="keyword">template</span> &lt;&gt;</div>
+<div class="line"><span class="keyword">constexpr</span> <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence.html">mgutility::detail::get_enum_array&lt;rgb_color&gt;</a>() noexcept</div>
+<div class="line">    -&gt; std::array&lt;<a class="code hl_namespace" href="namespacemgutility.html">mgutility</a>::string_view, 7 <span class="comment">/*(max - min + 1)*/</span>&gt; {</div>
+<div class="line">    <span class="keywordflow">return</span> {<span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;UNKNOWN&quot;</span>, <span class="stringliteral">&quot;R&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;G&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;B&quot;</span>};</div>
+<div class="line">}</div>
+<div class="line"> </div>
 <div class="line"><span class="comment">// you can specialize enum ranges with overload per enum types (option 2)</span></div>
 <div class="line"><span class="keyword">auto</span> enum_name = [](rgb_color c) { <span class="keywordflow">return</span> <a class="code hl_function" href="namespacemgutility.html#a56127482f9ec47f2b6600cfdab84af03">mgutility::enum_name</a>&lt;-1, 5&gt;(c); };</div>
 <div class="line"> </div>
@@ -165,11 +172,11 @@ Example usage (<a href="https://godbolt.org/z/rfeWWKdh3">try it!</a>)</h1>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">int</span> main() {</div>
 <div class="line">  <span class="keyword">auto</span> x = rgb_color::blue;</div>
-<div class="line">  <span class="keyword">auto</span> y = mgutility::to_enum&lt;rgb_color&gt;(<span class="stringliteral">&quot;green|red&quot;</span>);</div>
+<div class="line">  <span class="keyword">auto</span> y = mgutility::to_enum&lt;rgb_color&gt;(<span class="stringliteral">&quot;G|R&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#if MGUTILITY_CPLUSPLUS &gt; 201703L</span></div>
-<div class="line"><span class="keyword">static_assert</span>(<a class="code hl_function" href="namespacemgutility.html#a56127482f9ec47f2b6600cfdab84af03">mgutility::enum_name</a>(rgb_color::blue | rgb_color::red) == <span class="stringliteral">&quot;red|blue&quot;</span>);</div>
-<div class="line"><span class="keyword">static_assert</span>(mgutility::to_enum&lt;rgb_color&gt;(<span class="stringliteral">&quot;red|blue&quot;</span>) == (rgb_color::blue | rgb_color::red));</div>
+<div class="line"><span class="keyword">static_assert</span>(<a class="code hl_function" href="namespacemgutility.html#a56127482f9ec47f2b6600cfdab84af03">mgutility::enum_name</a>(rgb_color::blue | rgb_color::red) == <span class="stringliteral">&quot;R|B&quot;</span>);</div>
+<div class="line"><span class="keyword">static_assert</span>(mgutility::to_enum&lt;rgb_color&gt;(<span class="stringliteral">&quot;R|B&quot;</span>) == (rgb_color::blue | rgb_color::red));</div>
 <div class="line"><span class="preprocessor">#endif</span></div>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#if defined(__cpp_lib_print)</span></div>
@@ -196,13 +203,11 @@ Example usage (<a href="https://godbolt.org/z/rfeWWKdh3">try it!</a>)</h1>
 <div class="line">  }</div>
 <div class="line"><span class="preprocessor">#endif</span></div>
 <div class="line"> </div>
-<div class="line">  <span class="comment">// default signature: enum_name&lt;min_value = -128, max_value = 128, Enum</span></div>
-<div class="line">  <span class="comment">// typename&gt;(Enum&amp;&amp;) Changing max_value to not too much greater than enum&#39;s</span></div>
-<div class="line">  <span class="comment">// max value, it will compiles faster</span></div>
-<div class="line">  std::cout &lt;&lt; x &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>; <span class="comment">// will print &quot;blue&quot; to output</span></div>
+<div class="line"> </div>
+<div class="line">  std::cout &lt;&lt; x &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>; <span class="comment">// will print &quot;B&quot; to output</span></div>
 <div class="line"> </div>
 <div class="line">  <span class="comment">// calling specialized enum ranges function for rgb_color type</span></div>
-<div class="line">  <span class="comment">// will print &quot;green&quot; to output, if y can&#39;t convert to rgb_color prints</span></div>
+<div class="line">  <span class="comment">// will print &quot;G&quot; to output, if y can&#39;t convert to rgb_color prints</span></div>
 <div class="line">  <span class="comment">// &quot;UNKNOWN&quot;</span></div>
 <div class="line">  std::cout &lt;&lt; enum_name(y.value_or(rgb_color::unknown)) &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
 <div class="line">}</div>
@@ -210,6 +215,7 @@ Example usage (<a href="https://godbolt.org/z/rfeWWKdh3">try it!</a>)</h1>
 <div class="ttc" id="anamespacemgutility_html"><div class="ttname"><a href="namespacemgutility.html">mgutility</a></div><div class="ttdoc">Checks for MSVC compiler version.</div><div class="ttdef"><b>Definition</b> enum_for_each.hpp:35</div></div>
 <div class="ttc" id="anamespacemgutility_html_a0434e4efb8b555e4f2ab34b000c8dd47"><div class="ttname"><a href="namespacemgutility.html#a0434e4efb8b555e4f2ab34b000c8dd47">mgutility::enum_to_underlying</a></div><div class="ttdeci">constexpr auto enum_to_underlying(Enum e) noexcept -&gt; detail::underlying_type_t&lt; Enum &gt;</div><div class="ttdoc">Converts an enum value to its underlying integer value.</div><div class="ttdef"><b>Definition</b> enum_name.hpp:41</div></div>
 <div class="ttc" id="anamespacemgutility_html_a56127482f9ec47f2b6600cfdab84af03"><div class="ttname"><a href="namespacemgutility.html#a56127482f9ec47f2b6600cfdab84af03">mgutility::enum_name</a></div><div class="ttdeci">MGUTILITY_CNSTXPR auto enum_name(Enum e) noexcept -&gt; detail::string_or_view_t&lt; Enum &gt;</div><div class="ttdoc">Gets the name of an enum value.</div><div class="ttdef"><b>Definition</b> enum_name.hpp:58</div></div>
+<div class="ttc" id="astructmgutility_1_1detail_1_1enum__sequence_html"><div class="ttname"><a href="structmgutility_1_1detail_1_1enum__sequence.html">mgutility::detail::enum_sequence</a></div><div class="ttdoc">Represents a sequence of enumeration values.</div><div class="ttdef"><b>Definition</b> meta.hpp:113</div></div>
 <div class="ttc" id="astructmgutility_1_1enum__range_html"><div class="ttname"><a href="structmgutility_1_1enum__range.html">mgutility::enum_range</a></div><div class="ttdoc">Provides the range for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:161</div></div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->

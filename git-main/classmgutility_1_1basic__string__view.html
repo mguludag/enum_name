@@ -101,6 +101,9 @@ constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>basic_string_vie
 <tr class="memitem:a07cc48696b3095ed0b79327b3a423fe6" id="r_a07cc48696b3095ed0b79327b3a423fe6"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07cc48696b3095ed0b79327b3a423fe6">basic_string_view</a> (const Char *str) noexcept</td></tr>
 <tr class="memdesc:a07cc48696b3095ed0b79327b3a423fe6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmgutility_1_1basic__string__view.html" title="A basic string view class template.">basic_string_view</a> from a C-string.  <br /></td></tr>
 <tr class="separator:a07cc48696b3095ed0b79327b3a423fe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8993982c8b6cc334f448f440d5f368d" id="r_ab8993982c8b6cc334f448f440d5f368d"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8993982c8b6cc334f448f440d5f368d">basic_string_view</a> (const std::basic_string&lt; Char &gt; &amp;str) noexcept</td></tr>
+<tr class="memdesc:ab8993982c8b6cc334f448f440d5f368d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmgutility_1_1basic__string__view.html" title="A basic string view class template.">basic_string_view</a> from a std::string.  <br /></td></tr>
+<tr class="separator:ab8993982c8b6cc334f448f440d5f368d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3d4a66987b79b36a6207a7d9c85a5ba" id="r_ac3d4a66987b79b36a6207a7d9c85a5ba"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3d4a66987b79b36a6207a7d9c85a5ba">basic_string_view</a> (const Char *str, size_t len) noexcept</td></tr>
 <tr class="memdesc:ac3d4a66987b79b36a6207a7d9c85a5ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmgutility_1_1basic__string__view.html" title="A basic string view class template.">basic_string_view</a> from a C-string and length.  <br /></td></tr>
 <tr class="separator:ac3d4a66987b79b36a6207a7d9c85a5ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -185,7 +188,7 @@ class mgutility::basic_string_view&lt; Char &gt;</div><p>A basic string view cla
 </dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a07cc48696b3095ed0b79327b3a423fe6" name="a07cc48696b3095ed0b79327b3a423fe6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07cc48696b3095ed0b79327b3a423fe6">&#9670;&#160;</a></span>basic_string_view() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a07cc48696b3095ed0b79327b3a423fe6">&#9670;&#160;</a></span>basic_string_view() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -219,8 +222,43 @@ template&lt;typename Char  = char&gt; </div>
 
 </div>
 </div>
+<a id="ab8993982c8b6cc334f448f440d5f368d" name="ab8993982c8b6cc334f448f440d5f368d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8993982c8b6cc334f448f440d5f368d">&#9670;&#160;</a></span>basic_string_view() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Char  = char&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="classmgutility_1_1basic__string__view.html">mgutility::basic_string_view</a>&lt; Char &gt;::basic_string_view </td>
+          <td>(</td>
+          <td class="paramtype">const std::basic_string&lt; Char &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="classmgutility_1_1basic__string__view.html" title="A basic string view class template.">basic_string_view</a> from a std::string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The std::string. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ac3d4a66987b79b36a6207a7d9c85a5ba" name="ac3d4a66987b79b36a6207a7d9c85a5ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac3d4a66987b79b36a6207a7d9c85a5ba">&#9670;&#160;</a></span>basic_string_view() <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3d4a66987b79b36a6207a7d9c85a5ba">&#9670;&#160;</a></span>basic_string_view() <span class="overload">[3/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -260,7 +298,7 @@ template&lt;typename Char  = char&gt; </div>
 </div>
 </div>
 <a id="a25e8d6ef98e904e1848fb80fe806b2db" name="a25e8d6ef98e904e1848fb80fe806b2db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a25e8d6ef98e904e1848fb80fe806b2db">&#9670;&#160;</a></span>basic_string_view() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a25e8d6ef98e904e1848fb80fe806b2db">&#9670;&#160;</a></span>basic_string_view() <span class="overload">[4/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -295,7 +333,7 @@ template&lt;typename Char  = char&gt; </div>
 </div>
 </div>
 <a id="a3bf92ec244076c7a71569d64bddc7e3e" name="a3bf92ec244076c7a71569d64bddc7e3e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3bf92ec244076c7a71569d64bddc7e3e">&#9670;&#160;</a></span>basic_string_view() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bf92ec244076c7a71569d64bddc7e3e">&#9670;&#160;</a></span>basic_string_view() <span class="overload">[5/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

@@ -1,5 +1,5 @@
 name: Push
-on: [push]
+on: [push, pull_request, workflow_dispatch]
 concurrency:
   group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true

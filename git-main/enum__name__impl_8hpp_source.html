@@ -277,7 +277,7 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>    -&gt; detail::string_or_view_t&lt;Enum&gt; {</div>
 <div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span> </div>
 <div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>  <span class="comment">// Get the array of enum names</span></div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>  MGUTILITY_CNSTXPR <span class="keyword">auto</span> arr = get_enum_array&lt;Enum, Min, Max&gt;();</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>  <a class="code hl_define" href="definitions_8hpp.html#ad7d158b2132888de05e72cdd28db7e11">MGUTILITY_CNSTXPR_CLANG_WA</a> <span class="keyword">auto</span> arr = get_enum_array&lt;Enum, Min, Max&gt;();</div>
 <div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span> </div>
 <div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>  <span class="comment">// Calculate the index in the array</span></div>
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>  <span class="keyword">const</span> <span class="keyword">auto</span> index = (Min &lt; 0 ? -Min : Min) + <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(e) + 1;</div>

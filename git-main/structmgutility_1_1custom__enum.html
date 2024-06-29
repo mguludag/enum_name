@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=11" />
     <meta name="generator" content="Doxygen 1.10.0" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>enum_name: mgutility::detail::is_scoped_enum&lt; E &gt; Struct Template Reference</title>
+    <title>enum_name: mgutility::custom_enum&lt; T &gt; Struct Template Reference</title>
     <link href="tabs.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="dynsections.js"></script>
@@ -83,69 +83,38 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="namespacemgutility.html">mgutility</a></li><li class="navelem"><b>detail</b></li><li class="navelem"><a class="el" href="structmgutility_1_1detail_1_1is__scoped__enum.html">is_scoped_enum</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacemgutility.html">mgutility</a></li><li class="navelem"><a class="el" href="structmgutility_1_1custom__enum.html">custom_enum</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="structmgutility_1_1detail_1_1is__scoped__enum-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">mgutility::detail::is_scoped_enum&lt; E &gt; Struct Template Reference</div></div>
+<a href="structmgutility_1_1custom__enum-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">mgutility::custom_enum&lt; T &gt; Struct Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Trait to check if a type is a scoped enumeration.  
+<p>Provides the custom names map for an enumeration type.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="meta_8hpp_source.html">meta.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a7f124839c728583930588def94fbfec0" id="r_a7f124839c728583930588def94fbfec0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmgutility_1_1detail_1_1enum__sequence.html">static</a> <a class="el" href="structmgutility_1_1detail_1_1enum__sequence.html">constexpr</a> <a class="el" href="structmgutility_1_1detail_1_1enum__sequence.html">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f124839c728583930588def94fbfec0">value</a></td></tr>
-<tr class="memdesc:a7f124839c728583930588def94fbfec0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Boolean value indicating if the type is a scoped enumeration.  <br /></td></tr>
-<tr class="separator:a7f124839c728583930588def94fbfec0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4ce3bf9c3f5e9fb02757d3ae4484a1d" id="r_aa4ce3bf9c3f5e9fb02757d3ae4484a1d"><td class="memItemLeft" align="right" valign="top"><a id="aa4ce3bf9c3f5e9fb02757d3ae4484a1d" name="aa4ce3bf9c3f5e9fb02757d3ae4484a1d"></a>
+static constexpr flat_map&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>map</b> = {}</td></tr>
+<tr class="separator:aa4ce3bf9c3f5e9fb02757d3ae4484a1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="structmgutility_1_1detail_1_1enum__sequence.html">typename</a> <a class="el" href="structmgutility_1_1detail_1_1enum__sequence.html">E</a>&gt;<br />
-struct mgutility::detail::is_scoped_enum&lt; E &gt;</div><p>Trait to check if a type is a scoped enumeration. </p>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename T&gt;<br />
+struct mgutility::custom_enum&lt; T &gt;</div><p>Provides the custom names map for an enumeration type. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">E</td><td>The type to check. </td></tr>
+    <tr><td class="paramname">T</td><td>The enumeration type. </td></tr>
   </table>
   </dd>
 </dl>
-</div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="a7f124839c728583930588def94fbfec0" name="a7f124839c728583930588def94fbfec0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f124839c728583930588def94fbfec0">&#9670;&#160;</a></span>value</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="structmgutility_1_1detail_1_1enum__sequence.html">typename</a> <a class="el" href="structmgutility_1_1detail_1_1enum__sequence.html">E</a> &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structmgutility_1_1detail_1_1enum__sequence.html">constexpr</a> <a class="el" href="structmgutility_1_1detail_1_1enum__sequence.html">auto</a> <a class="el" href="structmgutility_1_1detail_1_1is__scoped__enum.html">mgutility::detail::is_scoped_enum</a>&lt; <a class="el" href="structmgutility_1_1detail_1_1enum__sequence.html">E</a> &gt;::value</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">=</div>
-<div class="line">      std::is_enum&lt;E&gt;::value &amp;&amp;</div>
-<div class="line">      !std::is_convertible&lt;E, typename std::underlying_type&lt;E&gt;::type&gt;<a class="code hl_variable" href="#a7f124839c728583930588def94fbfec0">::value</a></div>
-<div class="ttc" id="astructmgutility_1_1detail_1_1is__scoped__enum_html_a7f124839c728583930588def94fbfec0"><div class="ttname"><a href="#a7f124839c728583930588def94fbfec0">mgutility::detail::is_scoped_enum::value</a></div><div class="ttdeci">static constexpr auto value</div><div class="ttdoc">Boolean value indicating if the type is a scoped enumeration.</div><div class="ttdef"><b>Definition</b> meta.hpp:44</div></div>
-</div><!-- fragment -->
-<p>Boolean value indicating if the type is a scoped enumeration. </p>
-
-</div>
-</div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/runner/work/enum_name/enum_name/include/mgutility/reflection/detail/<a class="el" href="meta_8hpp_source.html">meta.hpp</a></li>
 </ul>
 </div><!-- contents -->

@@ -136,7 +136,7 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="preprocessor">#error &quot;Standards older than C++11 is not supported!&quot;</span></div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="preprocessor">#if MGUTILITY_CPLUSPLUS &gt; 201703L</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="preprocessor">#if MGUTILITY_CPLUSPLUS &gt; 201703L &amp;&amp; defined(__cpp_lib_constexpr_string)</span></div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="preprocessor">#define MGUTILITY_CNSTXPR_CLANG_WA constexpr</span></div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="preprocessor">#else</span></div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="definitions_8hpp.html#ad7d158b2132888de05e72cdd28db7e11">   70</a></span><span class="preprocessor">#define MGUTILITY_CNSTXPR_CLANG_WA</span></div>

@@ -186,7 +186,7 @@ Example usage (<a href="https://godbolt.org/z/fz35T7bKG">try it!</a>)</h1>
 <div class="line">  <span class="keyword">auto</span> x = Position::Left;</div>
 <div class="line">  <span class="keyword">auto</span> y = mgutility::to_enum&lt;Position&gt;(<span class="stringliteral">&quot;CENTER&quot;</span>); <span class="comment">// Convert string to enum</span></div>
 <div class="line"> </div>
-<div class="line"><span class="preprocessor">#if MGUTILITY_CPLUSPLUS &gt; 201703L</span></div>
+<div class="line"><span class="preprocessor">#if defined(__cpp_lib_constexpr_string)</span></div>
 <div class="line">  <span class="keyword">static_assert</span>(<a class="code hl_function" href="namespacemgutility.html#a56127482f9ec47f2b6600cfdab84af03">mgutility::enum_name</a>(Position::Top | Position::Right) ==</div>
 <div class="line">                <span class="stringliteral">&quot;TOP|RIGHT&quot;</span>); <span class="comment">// Compile-time check</span></div>
 <div class="line">  <span class="keyword">static_assert</span>(mgutility::to_enum&lt;Position&gt;(<span class="stringliteral">&quot;BOTTOM|LEFT&quot;</span>) ==</div>

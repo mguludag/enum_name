@@ -1,11 +1,14 @@
 var searchData=
 [
-  ['enum_5ffor_5feach_0',['enum_for_each',['../classmgutility_1_1enum__for__each.html',1,'mgutility']]],
-  ['enum_5frange_1',['enum_range',['../structmgutility_1_1enum__range.html',1,'mgutility']]],
-  ['enum_5frange_3c_20color_20_3e_2',['enum_range&lt; color &gt;',['../structmgutility_1_1enum__range_3_01color_01_4.html',1,'mgutility']]],
-  ['enum_5frange_3c_20position_20_3e_3',['enum_range&lt; Position &gt;',['../structmgutility_1_1enum__range_3_01Position_01_4.html',1,'mgutility']]],
-  ['enum_5fsequence_4',['enum_sequence',['../structmgutility_1_1detail_1_1enum__sequence.html',1,'mgutility::detail']]],
-  ['enum_5fsequence_5fhelper_5',['enum_sequence_helper',['../structmgutility_1_1detail_1_1enum__sequence__helper.html',1,'mgutility::detail']]],
-  ['enum_5fsequence_5fhelper_3c_20enum_2c_20min_2c_20min_2c_20next_2e_2e_2e_20_3e_6',['enum_sequence_helper&lt; Enum, Min, Min, Next... &gt;',['../structmgutility_1_1detail_1_1enum__sequence__helper_3_01Enum_00_01Min_00_01Min_00_01Next_8_8_8_01_4.html',1,'mgutility::detail']]],
-  ['enum_5ftype_7',['enum_type',['../structmgutility_1_1detail_1_1enum__type.html',1,'mgutility::detail']]]
+  ['c_0',['C',['../structN_1_1C.html',1,'N']]],
+  ['char_5ftraits_1',['char_traits',['../structstd_1_1char__traits.html',1,'std']]],
+  ['contains_2',['Contains',['../classdoctest_1_1Contains.html',1,'doctest']]],
+  ['context_3',['Context',['../classdoctest_1_1Context.html',1,'doctest']]],
+  ['contextoptions_4',['ContextOptions',['../structdoctest_1_1ContextOptions.html',1,'doctest']]],
+  ['contextscope_5',['ContextScope',['../classdoctest_1_1detail_1_1ContextScope.html',1,'doctest::detail']]],
+  ['contextscopebase_6',['ContextScopeBase',['../structdoctest_1_1detail_1_1ContextScopeBase.html',1,'doctest::detail']]],
+  ['contextstate_7',['ContextState',['../structdoctest_1_1detail_1_1ContextState.html',1,'doctest::detail']]],
+  ['currenttestcasestats_8',['CurrentTestCaseStats',['../structdoctest_1_1CurrentTestCaseStats.html',1,'doctest']]],
+  ['custom_5fenum_9',['custom_enum',['../structmgutility_1_1custom__enum.html',1,'mgutility']]],
+  ['custom_5fenum_3c_20position_20_3e_10',['custom_enum&lt; Position &gt;',['../structmgutility_1_1custom__enum_3_01Position_01_4.html',1,'mgutility']]]
 ];

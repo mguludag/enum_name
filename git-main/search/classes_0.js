@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['bad_5foptional_5faccess_0',['bad_optional_access',['../structmgutility_1_1bad__optional__access.html',1,'mgutility']]],
-  ['basic_5fstring_5fview_1',['basic_string_view',['../classmgutility_1_1basic__string__view.html',1,'mgutility']]]
+  ['a_0',['A',['../structN_1_1A.html',1,'N']]],
+  ['approx_1',['Approx',['../structdoctest_1_1Approx.html',1,'doctest']]],
+  ['assertdata_2',['AssertData',['../structdoctest_1_1AssertData.html',1,'doctest']]]
 ];

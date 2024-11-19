@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['z_20fz35t7bkg_20try_20it_20a_0',['Example usage (&lt;a href=&quot;https://godbolt.org/z/fz35T7bKG&quot; &gt;try it!&lt;/a&gt;)',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md6',1,'']]]
+  ['what_0',['what',['../structmgutility_1_1bad__optional__access.html#af3a7f794c94499a7660cfed0d3fed8dc',1,'mgutility::bad_optional_access']]],
+  ['with_20cmake_1',['Fetch library with CMake',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md5',1,'']]]
 ];

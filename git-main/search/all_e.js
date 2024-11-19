@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['reset_0',['reset',['../classmgutility_1_1optional.html#aa5d9dc1c598a5735584b903dcf98c9f4',1,'mgutility::optional::reset()'],['../classmgutility_1_1optional.html#aa5d9dc1c598a5735584b903dcf98c9f4',1,'mgutility::optional::reset()']]],
-  ['rfind_1',['rfind',['../classmgutility_1_1basic__string__view.html#aa2ee34f07ee7ec37344898d4f5ea57f9',1,'mgutility::basic_string_view']]]
+  ['page_0',['Main page',['../index.html',1,'']]],
+  ['pair_1',['pair',['../structmgutility_1_1pair.html',1,'mgutility']]],
+  ['pair_3c_20position_20_3e_2',['pair&lt; Position &gt;',['../structmgutility_1_1pair.html',1,'mgutility']]],
+  ['pair_3c_20t_20_3e_3',['pair&lt; T &gt;',['../structmgutility_1_1pair.html',1,'mgutility']]]
 ];

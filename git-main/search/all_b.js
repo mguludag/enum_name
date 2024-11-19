@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['name_0',['name',['../structmgutility_1_1detail_1_1enum__type.html#abee017c1717fd3bf5c31b2c6fecd82fd',1,'mgutility::detail::enum_type::name() noexcept -&gt; mgutility::string_view'],['../structmgutility_1_1detail_1_1enum__type.html#abee017c1717fd3bf5c31b2c6fecd82fd',1,'mgutility::detail::enum_type::name() noexcept -&gt; mgutility::string_view']]],
-  ['nullopt_1',['nullopt',['../namespacemgutility.html#a2472ad38d80978a9a8c3150e0e2ba43c',1,'mgutility']]],
-  ['nullopt_5ft_2',['nullopt_t',['../structmgutility_1_1nullopt__t.html',1,'mgutility']]]
+  ['main_20page_0',['Main page',['../index.html',1,'']]],
+  ['mgutility_1',['mgutility',['../namespacemgutility.html',1,'']]],
+  ['mgutility_5fcnstevl_2',['MGUTILITY_CNSTEVL',['../definitions_8hpp.html#ae79da58f317cf12394dd7e76dbbe832c',1,'definitions.hpp']]],
+  ['mgutility_5fcnstxpr_5fclang_5fwa_3',['MGUTILITY_CNSTXPR_CLANG_WA',['../definitions_8hpp.html#ad7d158b2132888de05e72cdd28db7e11',1,'definitions.hpp']]],
+  ['mgutility_5fcplusplus_4',['MGUTILITY_CPLUSPLUS',['../definitions_8hpp.html#ad1e229b7b0500b2c1044b9816307fc02',1,'definitions.hpp']]]
 ];

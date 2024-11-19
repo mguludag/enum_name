@@ -287,7 +287,7 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span> </div>
 <div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, <span class="keywordtype">int</span> Min, <span class="keywordtype">int</span> Max,</div>
 <div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>          detail::enable_if_t&lt;detail::has_bit_or&lt;Enum&gt;::value, <span class="keywordtype">bool</span>&gt; = <span class="keyword">true</span>&gt;</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>MGUTILITY_CNSTXPR <span class="keyword">inline</span> <span class="keyword">auto</span> enum_name_impl(Enum e) <span class="keyword">noexcept</span></div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span><a class="code hl_define" href="definitions_8hpp.html#ad7d158b2132888de05e72cdd28db7e11">MGUTILITY_CNSTXPR_CLANG_WA</a> <span class="keyword">inline</span> <span class="keyword">auto</span> enum_name_impl(Enum e) <span class="keyword">noexcept</span></div>
 <div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    -&gt; detail::string_or_view_t&lt;Enum&gt; {</div>
 <div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span> </div>
 <div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>  <span class="comment">// Get the array of enum names</span></div>

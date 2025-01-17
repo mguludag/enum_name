@@ -120,12 +120,13 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">{</div>
-<div class="line">      {Position::Top, <span class="stringliteral">&quot;TOP&quot;</span>},</div>
-<div class="line">      {Position::Right, <span class="stringliteral">&quot;RIGHT&quot;</span>},</div>
-<div class="line">      {Position::Bottom, <span class="stringliteral">&quot;BOTTOM&quot;</span>},</div>
-<div class="line">      {Position::Left, <span class="stringliteral">&quot;LEFT&quot;</span>},</div>
-<div class="line">      {Position::Top | Position::Right | Position::Bottom | Position::Left,</div>
-<div class="line">       <span class="stringliteral">&quot;CENTER&quot;</span>}}</div>
+<div class="line">      {.first = Position::Top, .second = <span class="stringliteral">&quot;TOP&quot;</span>},</div>
+<div class="line">      {.first = Position::Right, .second = <span class="stringliteral">&quot;RIGHT&quot;</span>},</div>
+<div class="line">      {.first = Position::Bottom, .second = <span class="stringliteral">&quot;BOTTOM&quot;</span>},</div>
+<div class="line">      {.first = Position::Left, .second = <span class="stringliteral">&quot;LEFT&quot;</span>},</div>
+<div class="line">      {.first =</div>
+<div class="line">           Position::Top | Position::Right | Position::Bottom | Position::Left,</div>
+<div class="line">       .second = <span class="stringliteral">&quot;CENTER&quot;</span>}}</div>
 </div><!-- fragment -->
 </div>
 </div>

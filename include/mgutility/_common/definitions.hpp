@@ -64,7 +64,7 @@ SOFTWARE.
  * MGUTILITY_CNSTXPR_CLANG_WA is defined as constexpr. Otherwise, it is defined
  * as empty.
  */
-#if MGUTILITY_CPLUSPLUS > 201703L && defined(__cpp_lib_constexpr_string)
+ #if (MGUTILITY_CPLUSPLUS >= 201703L  && !defined(__clang__)) || (defined(__clang__) && __clang_major__ > 11 && MGUTILITY_CPLUSPLUS >= 201703L)
 #define MGUTILITY_CNSTXPR_CLANG_WA constexpr
 #else
 #define MGUTILITY_CNSTXPR_CLANG_WA

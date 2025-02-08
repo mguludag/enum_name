@@ -42,7 +42,7 @@ FetchContent_MakeAvailable(enum_name)
 target_link_libraries(${PROJECT_NAME} PRIVATE mgutility::enum_name)
 ```
 
-## Example usage ([try it!](https://godbolt.org/z/5Ye185MWa))
+## Example usage ([try it!](https://godbolt.org/z/1nqrj78vb))
 
 ```C++
 #include <iostream>

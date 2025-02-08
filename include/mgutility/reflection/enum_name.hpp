@@ -27,6 +27,7 @@ SOFTWARE.
 
 #include "detail/enum_name_impl.hpp"
 
+
 namespace mgutility {
 
 /**
@@ -37,10 +38,10 @@ namespace mgutility {
  * @return The underlying integer value of the enum.
  */
 template <typename Enum>
-constexpr auto enum_to_underlying(Enum e) noexcept
+constexpr auto enum_to_underlying(Enum enumValue) noexcept
     -> detail::underlying_type_t<Enum> {
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
-  return static_cast<detail::underlying_type_t<Enum>>(e);
+  return static_cast<detail::underlying_type_t<Enum>>(enumValue);
 }
 
 /**
@@ -53,11 +54,11 @@ constexpr auto enum_to_underlying(Enum e) noexcept
  * @return A string view or string representing the name of the enum value.
  */
 template <int Min, int Max, typename Enum>
-MGUTILITY_CNSTXPR auto enum_name(Enum e) noexcept
+MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
     -> detail::string_or_view_t<Enum> {
   static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
-  return detail::enum_name_impl<Enum, Min, Max>(e);
+  return detail::enum_name_impl<Enum, Min, Max>(enumValue);
 }
 
 /**
@@ -71,11 +72,11 @@ MGUTILITY_CNSTXPR auto enum_name(Enum e) noexcept
  */
 template <typename Enum, int Min = enum_range<Enum>::min,
           int Max = enum_range<Enum>::max>
-MGUTILITY_CNSTXPR auto enum_name(Enum e) noexcept
+MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
     -> detail::string_or_view_t<Enum> {
   static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
-  return detail::enum_name_impl<Enum, Min, Max>(e);
+  return detail::enum_name_impl<Enum, Min, Max>(enumValue);
 }
 
 /**

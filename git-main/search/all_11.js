@@ -49,6 +49,6 @@ var searchData=
   ['github_20com_20doctest_20doctest_20tree_20v2_204_208_20v2_204_208_20a_202022_2001_2010_46',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/v2.4.8&quot; &gt;v2.4.8&lt;/a&gt; (2022-01-10)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md4',1,'']]],
   ['github_20com_20doctest_20doctest_20tree_20v2_204_209_20v2_204_209_20a_202022_2006_2018_47',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/v2.4.9&quot; &gt;v2.4.9&lt;/a&gt; (2022-06-18)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md3',1,'']]],
   ['goals_48',['Features and design goals',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2features.html',1,'']]],
-  ['godbolt_20org_20z_205ye185mwa_20try_20it_20a_49',['Example usage (&lt;a href=&quot;https://godbolt.org/z/5Ye185MWa&quot; &gt;try it!&lt;/a&gt;)',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md194',1,'']]],
+  ['godbolt_20org_20z_201nqrj78vb_20try_20it_20a_49',['Example usage (&lt;a href=&quot;https://godbolt.org/z/1nqrj78vb&quot; &gt;try it!&lt;/a&gt;)',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md194',1,'']]],
   ['google_20test_50',['How is &lt;strong&gt;doctest&lt;/strong&gt; different from Google Test?',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2faq.html#autotoc_md128',1,'']]]
 ];

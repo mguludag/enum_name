@@ -5,7 +5,7 @@ var searchData=
   ['underlying_5ftype_2',['underlying_type',['../structdoctest_1_1detail_1_1types_1_1underlying__type.html',1,'doctest::detail::types']]],
   ['unintrusive_20transparent_20_3a_3',['Unintrusive (transparent):',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2features.html#autotoc_md142',1,'']]],
   ['up_4',['Scaling up',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2tutorial.html#autotoc_md181',1,'']]],
-  ['usage_20a_20href_20https_3a_20godbolt_20org_20z_205ye185mwa_20try_20it_20a_5',['Example usage (&lt;a href=&quot;https://godbolt.org/z/5Ye185MWa&quot; &gt;try it!&lt;/a&gt;)',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md194',1,'']]],
+  ['usage_20a_20href_20https_3a_20godbolt_20org_20z_201nqrj78vb_20try_20it_20a_5',['Example usage (&lt;a href=&quot;https://godbolt.org/z/1nqrj78vb&quot; &gt;try it!&lt;/a&gt;)',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md194',1,'']]],
   ['use_20exceptions_6',['Does the framework use exceptions?',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2faq.html#autotoc_md135',1,'']]],
   ['use_20with_20multiple_20files_7',['How to use with multiple files?',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2faq.html#autotoc_md139',1,'']]],
   ['used_20within_20the_20same_20binary_20executable_20dll_8',['Can different versions of the framework be used within the same binary (executable/dll)?',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2faq.html#autotoc_md137',1,'']]],

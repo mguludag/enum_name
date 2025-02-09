@@ -6,5 +6,6 @@ var searchData=
   ['filldata_3c_20const_20void_20_2a_20_3e_3',['filldata&lt; const void * &gt;',['../structdoctest_1_1detail_1_1filldata_3_01const_01void_01_5_01_4.html',1,'doctest::detail']]],
   ['filldata_3c_20t_20_2a_20_3e_4',['filldata&lt; T * &gt;',['../structdoctest_1_1detail_1_1filldata_3_01T_01_5_01_4.html',1,'doctest::detail']]],
   ['filldata_3c_20t_5bn_5d_3e_5',['filldata&lt; T[N]&gt;',['../structdoctest_1_1detail_1_1filldata_3_01T_0fN_0e_4.html',1,'doctest::detail']]],
-  ['foo_6',['Foo',['../structApp_1_1Foo.html',1,'App::Foo'],['../structBar_1_1Foo.html',1,'Bar::Foo']]]
+  ['fixed_5fstring_6',['fixed_string',['../classmgutility_1_1fixed__string.html',1,'mgutility']]],
+  ['foo_7',['Foo',['../structApp_1_1Foo.html',1,'App::Foo'],['../structBar_1_1Foo.html',1,'Bar::Foo']]]
 ];

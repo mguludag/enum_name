@@ -27,6 +27,6 @@ var searchData=
   ['is_5frvalue_5freference_3c_20t_20_26_26_20_3e_24',['is_rvalue_reference&lt; T &amp;&amp; &gt;',['../structdoctest_1_1detail_1_1types_1_1is__rvalue__reference_3_01T_01_6_6_01_4.html',1,'doctest::detail::types']]],
   ['is_5fscoped_5fenum_25',['is_scoped_enum',['../structmgutility_1_1detail_1_1is__scoped__enum.html',1,'mgutility::detail']]],
   ['isnan_26',['IsNaN',['../structdoctest_1_1IsNaN.html',1,'doctest']]],
-  ['it_20a_27',['Example usage (&lt;a href=&quot;https://godbolt.org/z/5Ye185MWa&quot; &gt;try it!&lt;/a&gt;)',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md194',1,'']]],
+  ['it_20a_27',['Example usage (&lt;a href=&quot;https://godbolt.org/z/1nqrj78vb&quot; &gt;try it!&lt;/a&gt;)',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md194',1,'']]],
   ['itranslator_28',['ITranslator',['../structITranslator.html',1,'']]]
 ];

@@ -47,7 +47,7 @@ struct bad_optional_access : public std::exception {
    *
    * @return A C-string with the exception message.
    */
-  const char *what() const noexcept { return "optional has no value"; }
+  const char *what() const noexcept override { return "optional has no value"; }
 };
 
 struct nullopt_t;
@@ -62,7 +62,7 @@ public:
   /**
    * @brief Constructs an empty optional.
    */
-  MGUTILITY_CNSTXPR inline optional(nullopt_t &)
+  MGUTILITY_CNSTXPR inline explicit optional(nullopt_t & /*unused*/)
       : dummy_{0}, has_value_{false} {}
 
   /**
@@ -77,7 +77,7 @@ public:
    * @param args The arguments to construct the value.
    */
   template <typename... Args>
-  MGUTILITY_CNSTXPR inline optional(Args &&...args)
+  MGUTILITY_CNSTXPR inline explicit optional(Args &&...args)
       : value_{T{std::forward<Args>(args)...}}, has_value_{true} {}
 
   /**
@@ -85,8 +85,8 @@ public:
    *
    * @param value The value to initialize with.
    */
-  MGUTILITY_CNSTXPR inline optional(T &&value)
-      : value_{value}, has_value_{true} {}
+  MGUTILITY_CNSTXPR inline explicit optional(T &&value)
+      : value_{std::move(value)}, has_value_{true} {}
 
   /**
    * @brief Copy constructor.
@@ -102,14 +102,14 @@ public:
    * @param other The other optional to move.
    */
   MGUTILITY_CNSTXPR inline optional(optional &&other)
-      : value_{other.value_}, has_value_{other.has_value_} {
+ noexcept       : value_{other.value_}, has_value_{other.has_value_} {
     other.reset();
   }
 
   /**
    * @brief Destructor.
    */
-  inline ~optional() { has_value_ = false; }
+   ~optional() = default;
 
   /**
    * @brief Copy assignment operator.
@@ -129,7 +129,7 @@ public:
    * @param other The other optional to move.
    * @return A reference to this optional.
    */
-  MGUTILITY_CNSTXPR inline optional &operator=(optional &&other) {
+  MGUTILITY_CNSTXPR inline optional &operator=(optional &&other)  noexcept {
     value_ = other.value_;
     has_value_ = other.has_value_;
     other.reset();
@@ -141,14 +141,14 @@ public:
    *
    * @param other The other optional to swap with.
    */
-  MGUTILITY_CNSTXPR inline void swap(optional &&other) {
+  MGUTILITY_CNSTXPR inline void swap(optional &other)  noexcept {
     auto val = std::move(other.value_);
     other.value_ = std::move(value_);
     value_ = std::move(val);
 
-    auto hval = std::move(other.has_value_);
-    other.has_value_ = std::move(has_value_);
-    has_value_ = std::move(hval);
+    auto hval = other.has_value_;
+    other.has_value_ = has_value_;
+    has_value_ = hval;
   }
 
   /**
@@ -172,8 +172,9 @@ public:
    * @throws bad_optional_access if the optional has no value.
    */
   MGUTILITY_CNSTXPR inline T &value() {
-    if (!has_value_)
+    if (!has_value_) {
       throw bad_optional_access();
+}
     return value_;
   }
 
@@ -184,8 +185,9 @@ public:
    * @throws bad_optional_access if the optional has no value.
    */
   MGUTILITY_CNSTXPR inline T &value() const {
-    if (!has_value_)
+    if (!has_value_) {
       throw bad_optional_access();
+}
     return value_;
   }
 
@@ -196,7 +198,7 @@ public:
    * @return The stored value or the default value.
    */
   MGUTILITY_CNSTXPR inline T value_or(T &&value) {
-    return has_value_ ? value_ : value;
+    return has_value_ ? value_ : std::move(value);
   }
 
   /**
@@ -207,7 +209,7 @@ public:
    * @return The stored value or the default value.
    */
   MGUTILITY_CNSTXPR inline T value_or(T &&value) const {
-    return has_value_ ? value_ : value;
+    return has_value_ ? value_ : std::move(value);
   }
 
   /**

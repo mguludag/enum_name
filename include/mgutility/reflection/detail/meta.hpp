@@ -164,7 +164,7 @@ template <typename T, typename U> struct pair {
 };
 
 template <typename T>
-#if MGUTILITY_CPLUSPLUS > 201103L || defined(__GNUC__) && !defined(__clang__)
+#if MGUTILITY_CPLUSPLUS > 201402L || defined(__GNUC__) && !defined(__clang__)
 using flat_map = std::initializer_list<pair<T, const char *>>;
 #else
 using flat_map = pair<T, const char *>[];

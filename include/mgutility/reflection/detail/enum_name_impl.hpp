@@ -27,6 +27,7 @@ SOFTWARE.
 
 #include "enum_for_each.hpp"
 #include "meta.hpp"
+#include "mgutility/_common/definitions.hpp"
 #include "mgutility/std/optional.hpp"
 #include "mgutility/std/string_view.hpp"
 
@@ -87,7 +88,7 @@ struct enum_type {
       typename Enum, Enum e,
       detail::enable_if_t<!detail::is_scoped_enum<Enum>::value, bool> = true>
   MGUTILITY_CNSTXPR static auto name() noexcept -> mgutility::string_view {
-    for (auto &pair : mgutility::custom_enum<Enum>::map) {
+    for (const auto &pair : mgutility::custom_enum<Enum>::map) {
       if (pair.first == e) {
         return pair.second;
       }
@@ -113,7 +114,7 @@ struct enum_type {
       typename Enum, Enum e,
       detail::enable_if_t<detail::is_scoped_enum<Enum>::value, bool> = true>
   MGUTILITY_CNSTXPR static auto name() noexcept -> mgutility::string_view {
-    for (auto &pair : mgutility::custom_enum<Enum>::map) {
+    for (const auto &pair : mgutility::custom_enum<Enum>::map) {
       if (pair.first == e) {
         return pair.second;
       }
@@ -124,20 +125,21 @@ struct enum_type {
     MGUTILITY_CNSTXPR auto result =
         str.substr(index, str.size() - lastidxenumname[0] - index);
     MGUTILITY_CNSTXPR auto is_invalid =
-            result.rfind(lastidxenumname[5]) != result.npos || (result.size() > 4 && result[4] == lastidxenumname[4]);
+        result.rfind(lastidxenumname[5]) != mgutility::string_view::npos ||
+        (result.size() > 4 && result[4] == lastidxenumname[4]);
     return is_invalid ? "" : result;
   }
 
 private:
   static constexpr int lastidxenumname[] =
 #if defined(__clang__)
-      {1, 1, ' ', ':', '(',
+      {1,  1, ' ', ':', '(',
 #if __clang_major__ < 13
-         ','
+       ','
 #else
-         ')'
+       ')'
 #endif
-    };
+  };
 #elif defined(_MSC_VER)
       {21, 0, ',', ':', '<', ')'};
 #elif defined(__GNUC__)
@@ -147,7 +149,7 @@ private:
 #else
           157,
 #endif
-          5, ' ', ':', '(', ')'};
+          5,   ' ', ':', '(', ')'};
 #endif
 };
 
@@ -194,10 +196,11 @@ template <typename Enum, int Min, int Max>
 MGUTILITY_CNSTXPR inline auto to_enum_impl(mgutility::string_view str) noexcept
     -> mgutility::optional<Enum> {
   MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
-  const auto index{std::find(arr.begin() + 1, arr.end(), str)};
-  return index == arr.end() ? mgutility::nullopt
-                            : mgutility::optional<Enum>{static_cast<Enum>(
-                                  std::distance(arr.begin(), index) + Min - 1)};
+
+  const auto index{detail::find(arr, str)};
+  return index == 0
+             ? mgutility::nullopt
+             : mgutility::optional<Enum>{static_cast<Enum>(index + Min - 1)};
 }
 
 /**
@@ -256,10 +259,10 @@ MGUTILITY_CNSTXPR auto to_enum_bitmask_impl(mgutility::string_view str) noexcept
  */
 template <typename Enum, int Min, int Max,
           detail::enable_if_t<!detail::has_bit_or<Enum>::value, bool> = true>
-MGUTILITY_CNSTXPR auto enum_name_impl(Enum e) noexcept
+MGUTILITY_CNSTXPR auto enum_name_impl(Enum enumValue) noexcept
     -> mgutility::string_view {
   MGUTILITY_CNSTXPR auto arr = get_enum_array<Enum, Min, Max>();
-  const auto index{(Min < 0 ? -Min : Min) + static_cast<int>(e) + 1};
+  const auto index{(Min < 0 ? -Min : Min) + static_cast<int>(enumValue) + 1};
   return arr[(index < Min || index > arr.size() - 1) ? 0 : index];
 }
 
@@ -275,32 +278,30 @@ MGUTILITY_CNSTXPR auto enum_name_impl(Enum e) noexcept
  */
 template <typename Enum, int Min, int Max,
           detail::enable_if_t<detail::has_bit_or<Enum>::value, bool> = true>
-MGUTILITY_CNSTXPR_CLANG_WA inline auto enum_name_impl(Enum e) noexcept
-    -> detail::string_or_view_t<Enum> {
+          MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
+    -> mgutility::fixed_string<MGUTILITY_ENUM_NAME_BUFFER_SIZE> {
 
   // Get the array of enum names
   MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
 
   // Calculate the index in the array
-  const auto index = (Min < 0 ? -Min : Min) + static_cast<int>(e) + 1;
+  const auto index = (Min < 0 ? -Min : Min) + static_cast<int>(enumValue) + 1;
   const auto name =
       arr[(index < Min || index >= static_cast<int>(arr.size())) ? 0 : index];
 
-  // Lambda to check if a character is a digit
-  const auto is_digit = [](char c) { return c >= '0' && c <= '9'; };
-
   // Return the name if it's valid
   if (!name.empty() && !is_digit(name[0])) {
-    return std::string{name};
+    return mgutility::fixed_string<MGUTILITY_ENUM_NAME_BUFFER_SIZE>{}.append(
+        name);
   }
 
   // Construct bitmasked name
-  std::string bitmasked_name;
+  mgutility::fixed_string<MGUTILITY_ENUM_NAME_BUFFER_SIZE> bitmasked_name;
   for (auto i = Min; i < Max; ++i) {
     const auto idx = (Min < 0 ? -Min : Min) + i + 1;
     if (idx >= 0 && idx < static_cast<int>(arr.size()) && !arr[idx].empty() &&
-        !is_digit(arr[idx][0]) &&
-        (e & static_cast<Enum>(i)) == static_cast<Enum>(i)) {
+        !detail::is_digit(arr[idx][0]) &&
+        (enumValue & static_cast<Enum>(i)) == static_cast<Enum>(i)) {
       bitmasked_name.append(arr[idx]).append("|");
     }
   }
@@ -310,10 +311,7 @@ MGUTILITY_CNSTXPR_CLANG_WA inline auto enum_name_impl(Enum e) noexcept
     bitmasked_name.pop_back();
   }
 
-  if (bitmasked_name.find('|') != std::string::npos) {
-    return bitmasked_name;
-  }
-  return std::string{""};
+  return bitmasked_name;
 }
 } // namespace detail
 } // namespace mgutility

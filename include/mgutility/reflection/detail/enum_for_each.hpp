@@ -31,6 +31,10 @@ SOFTWARE.
 #include <cstdint>
 #include <utility>
 
+#ifndef MGUTILITY_ENUM_NAME_BUFFER_SIZE
+#define MGUTILITY_ENUM_NAME_BUFFER_SIZE 512U
+#endif
+
 namespace mgutility {
 namespace detail {
 /**
@@ -44,7 +48,7 @@ namespace detail {
  */
 template <typename T>
 using string_or_view_t =
-    typename std::conditional<has_bit_or<T>::value, std::string,
+    typename std::conditional<has_bit_or<T>::value, mgutility::fixed_string<MGUTILITY_ENUM_NAME_BUFFER_SIZE>,
                               mgutility::string_view>::type;
 
 /**
@@ -89,7 +93,7 @@ template <typename Enum> class enum_for_each {
      *
      * @param value The initial position of the iterator.
      */
-    enum_iter(iter_type value) : m_pos{value} {}
+    explicit enum_iter(iter_type value) : m_pos{value} {}
 
     /**
      * @brief Pre-increment operator.

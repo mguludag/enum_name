@@ -74,7 +74,7 @@ template <typename Enum> class enum_for_each {
    * @brief An iterator for enum values.
    */
   struct enum_iter {
-    using const_iter_type = decltype(enum_range<Enum>::min);
+    using const_iter_type = int;
     using iter_type = detail::remove_const_t<const_iter_type>;
     using iterator_category = std::forward_iterator_tag;
     using value_type = const detail::enum_pair<Enum>;
@@ -172,12 +172,12 @@ public:
    * @return The size of the enum range.
    */
   auto size() -> std::size_t {
-    return enum_range<Enum>::max - enum_range<Enum>::min;
+    return static_cast<int>(enum_range<Enum>::max) - static_cast<int>(enum_range<Enum>::min) + 1;
   }
 
 private:
-  enum_iter m_begin{enum_range<Enum>::min}; /**< The beginning iterator. */
-  enum_iter m_end{enum_range<Enum>::max};   /**< The end iterator. */
+  enum_iter m_begin{static_cast<int>(enum_range<Enum>::min)}; /**< The beginning iterator. */
+  enum_iter m_end{static_cast<int>(enum_range<Enum>::max) + 1};   /**< The end iterator. */
 };
 } // namespace mgutility
 

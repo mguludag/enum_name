@@ -145,7 +145,7 @@ struct enum_sequence_helper<Enum, Min, Min, Next...> {
  * @tparam Max The maximum value in the sequence.
  */
 template <typename Enum, int Min, int Max>
-using make_enum_sequence = typename enum_sequence_helper<Enum, Min, Max>::type;
+using make_enum_sequence = typename enum_sequence_helper<Enum, Min, Max + 1>::type;
 } // namespace detail
 
 /**

@@ -179,7 +179,7 @@ get_enum_array(detail::enum_sequence<Enum, Is...> /*unused*/) noexcept
 template <typename Enum, int Min = mgutility::enum_range<Enum>::min,
           int Max = mgutility::enum_range<Enum>::max>
 MGUTILITY_CNSTXPR inline auto get_enum_array() noexcept
-    -> std::array<mgutility::string_view, Max - Min + 1> {
+    -> std::array<mgutility::string_view, Max - Min + 2> {
   return get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
 }
 

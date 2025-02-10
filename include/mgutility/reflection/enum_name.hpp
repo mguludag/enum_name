@@ -27,7 +27,6 @@ SOFTWARE.
 
 #include "detail/enum_name_impl.hpp"
 
-
 namespace mgutility {
 
 /**
@@ -56,7 +55,7 @@ constexpr auto enum_to_underlying(Enum enumValue) noexcept
 template <int Min, int Max, typename Enum>
 MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
     -> detail::string_or_view_t<Enum> {
-  static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
+  static_assert(Min < Max, "Max must be greater than Min!");
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
   return detail::enum_name_impl<Enum, Min, Max>(enumValue);
 }
@@ -70,11 +69,11 @@ MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
  * @param e The enum value.
  * @return A string view or string representing the name of the enum value.
  */
-template <typename Enum, int Min = enum_range<Enum>::min,
-          int Max = enum_range<Enum>::max>
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max)>
 MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
     -> detail::string_or_view_t<Enum> {
-  static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
+  static_assert(Min < Max, "Max must be greater than Min!");
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
   return detail::enum_name_impl<Enum, Min, Max>(enumValue);
 }
@@ -100,12 +99,12 @@ auto enum_for_each<Enum>::enum_iter::operator*() const -> value_type {
  * @param str The string view representing the enum name.
  * @return An optional enum value.
  */
-template <typename Enum, int Min = enum_range<Enum>::min,
-          int Max = enum_range<Enum>::max,
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max),
           detail::enable_if_t<!detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
     -> mgutility::optional<Enum> {
-  static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
+  static_assert(Min < Max, "Max must be greater than Min!");
   static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
   return detail::to_enum_impl<Enum, Min, Max>(str);
 }
@@ -119,12 +118,12 @@ MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
  * @param str The string view representing the enum name.
  * @return An optional enum bitmask value.
  */
-template <typename Enum, int Min = enum_range<Enum>::min,
-          int Max = enum_range<Enum>::max,
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max),
           detail::enable_if_t<detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
     -> mgutility::optional<Enum> {
-  static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
+  static_assert(Min < Max, "Max must be greater than Min!");
   static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
   return detail::to_enum_bitmask_impl<Enum, Min, Max>(str);
 }
@@ -138,11 +137,11 @@ MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
  * @param value The integer value to cast.
  * @return An optional enum value.
  */
-template <typename Enum, int Min = enum_range<Enum>::min,
-          int Max = enum_range<Enum>::max>
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max)>
 MGUTILITY_CNSTXPR auto enum_cast(int value) noexcept
     -> mgutility::optional<Enum> {
-  static_assert(Min < Max - 1, "Max must be greater than (Min + 1)!");
+  static_assert(Min < Max, "Max must be greater than Min!");
   static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
   if (enum_name(static_cast<Enum>(value)).empty()) {
     return mgutility::nullopt;
@@ -153,14 +152,14 @@ MGUTILITY_CNSTXPR auto enum_cast(int value) noexcept
 namespace operators {
 template <typename Enum, mgutility::detail::enable_if_t<
                              std::is_enum<Enum>::value, bool> = true>
-inline constexpr auto operator&(const Enum &lhs, const Enum &rhs) -> Enum {
+ constexpr auto operator&(const Enum &lhs, const Enum &rhs) -> Enum {
   return static_cast<Enum>(mgutility::enum_to_underlying(lhs) &
                            mgutility::enum_to_underlying(rhs));
 }
 
 template <typename Enum, mgutility::detail::enable_if_t<
                              std::is_enum<Enum>::value, bool> = true>
-inline constexpr auto operator|(const Enum &lhs, const Enum &rhs) -> Enum {
+ constexpr auto operator|(const Enum &lhs, const Enum &rhs) -> Enum {
   return static_cast<Enum>(mgutility::enum_to_underlying(lhs) |
                            mgutility::enum_to_underlying(rhs));
 }
@@ -178,10 +177,10 @@ inline constexpr auto operator|(const Enum &lhs, const Enum &rhs) -> Enum {
  */
 template <typename Enum, mgutility::detail::enable_if_t<
                              std::is_enum<Enum>::value, bool> = true>
-auto operator<<(std::ostream &os, Enum e) -> std::ostream & {
+auto operator<<(std::ostream &outStream, Enum enumVal) -> std::ostream & {
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
-  os << mgutility::enum_name(e);
-  return os;
+  outStream << mgutility::enum_name(enumVal);
+  return outStream;
 }
 
 #if defined(__cpp_lib_format)

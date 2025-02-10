@@ -149,11 +149,11 @@ Functions</h2></td></tr>
 <tr class="memitem:acd6b8335869248ad4f8525ef4371ea89"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structmgutility_1_1pair.html">MGUTILITY_CNSTXPR</a> <a class="el" href="structmgutility_1_1pair.html">auto</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#acd6b8335869248ad4f8525ef4371ea89">enum_name</a> (Enum <a class="el" href="structmgutility_1_1pair.html">enumValue</a>) <a class="el" href="structmgutility_1_1pair.html">noexcept</a> -&gt; detail::string_or_view_t&lt; Enum &gt;</td></tr>
 <tr class="memdesc:acd6b8335869248ad4f8525ef4371ea89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the name of an enum value.  <br /></td></tr>
 <tr class="separator:acd6b8335869248ad4f8525ef4371ea89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47470bc6b087ab3ceab7c3873203a2eb" id="r_a47470bc6b087ab3ceab7c3873203a2eb"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> Enum , int Min = enum_range&lt;Enum&gt;::min, int Max = enum_range&lt;Enum&gt;::max, detail::enable_if_t&lt;!<a class="el" href="structmgutility_1_1detail_1_1has__bit__or.html">detail::has_bit_or</a>&lt; Enum &gt;::value, <a class="el" href="structmgutility_1_1pair.html">bool</a> &gt;  = true&gt; </td></tr>
+<tr class="memitem:a47470bc6b087ab3ceab7c3873203a2eb" id="r_a47470bc6b087ab3ceab7c3873203a2eb"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> Enum , int Min = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::min), int Max = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::max), detail::enable_if_t&lt;!<a class="el" href="structmgutility_1_1detail_1_1has__bit__or.html">detail::has_bit_or</a>&lt; Enum &gt;::value, <a class="el" href="structmgutility_1_1pair.html">bool</a> &gt;  = true&gt; </td></tr>
 <tr class="memitem:a47470bc6b087ab3ceab7c3873203a2eb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structmgutility_1_1pair.html">MGUTILITY_CNSTXPR</a> <a class="el" href="structmgutility_1_1pair.html">auto</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a47470bc6b087ab3ceab7c3873203a2eb">to_enum</a> (<a class="el" href="classmgutility_1_1basic__string__view.html">mgutility::string_view</a> <a class="el" href="structmgutility_1_1pair.html">str</a>) <a class="el" href="structmgutility_1_1pair.html">noexcept</a> -&gt; <a class="el" href="classmgutility_1_1optional.html">mgutility::optional</a>&lt; Enum &gt;</td></tr>
 <tr class="memdesc:a47470bc6b087ab3ceab7c3873203a2eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a string to an enum value.  <br /></td></tr>
 <tr class="separator:a47470bc6b087ab3ceab7c3873203a2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a945fab3988ccb5de52589c67ee654e38" id="r_a945fab3988ccb5de52589c67ee654e38"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> Enum , int Min = enum_range&lt;Enum&gt;::min, int Max = enum_range&lt;Enum&gt;::max&gt; </td></tr>
+<tr class="memitem:a945fab3988ccb5de52589c67ee654e38" id="r_a945fab3988ccb5de52589c67ee654e38"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> Enum , int Min = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::min), int Max = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::max)&gt; </td></tr>
 <tr class="memitem:a945fab3988ccb5de52589c67ee654e38"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structmgutility_1_1pair.html">MGUTILITY_CNSTXPR</a> <a class="el" href="structmgutility_1_1pair.html">auto</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a945fab3988ccb5de52589c67ee654e38">enum_cast</a> (int value) <a class="el" href="structmgutility_1_1pair.html">noexcept</a> -&gt; <a class="el" href="classmgutility_1_1optional.html">mgutility::optional</a>&lt; Enum &gt;</td></tr>
 <tr class="memdesc:a945fab3988ccb5de52589c67ee654e38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Casts an integer value to an enum value.  <br /></td></tr>
 <tr class="separator:a945fab3988ccb5de52589c67ee654e38"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -177,7 +177,7 @@ Variables</h2></td></tr>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> Enum , int Min = enum_range&lt;Enum&gt;::min, int Max = enum_range&lt;Enum&gt;::max&gt; </div>
+template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> Enum , int Min = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::min), int Max = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::max)&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -322,7 +322,7 @@ template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> Enum 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> Enum , int Min = enum_range&lt;Enum&gt;::min, int Max = enum_range&lt;Enum&gt;::max, detail::enable_if_t&lt;!<a class="el" href="structmgutility_1_1detail_1_1has__bit__or.html">detail::has_bit_or</a>&lt; Enum &gt;::value, <a class="el" href="structmgutility_1_1pair.html">bool</a> &gt;  = true&gt; </div>
+template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> Enum , int Min = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::min), int Max = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::max), detail::enable_if_t&lt;!<a class="el" href="structmgutility_1_1detail_1_1has__bit__or.html">detail::has_bit_or</a>&lt; Enum &gt;::value, <a class="el" href="structmgutility_1_1pair.html">bool</a> &gt;  = true&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">

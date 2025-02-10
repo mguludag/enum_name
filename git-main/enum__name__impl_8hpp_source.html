@@ -228,7 +228,7 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>template &lt;typename Enum, int Min = mgutility::enum_range&lt;Enum&gt;::min,</div>
 <div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>          <span class="keywordtype">int</span> Max = <a class="code hl_struct" href="structmgutility_1_1enum__range.html">mgutility::enum_range&lt;Enum&gt;::max</a>&gt;</div>
 <div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>MGUTILITY_CNSTXPR <span class="keyword">inline</span> <span class="keyword">auto</span> get_enum_array() noexcept</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    -&gt; std::array&lt;<a class="code hl_namespace" href="namespacemgutility.html">mgutility</a>::string_view, Max - Min + 1&gt; {</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    -&gt; std::array&lt;<a class="code hl_namespace" href="namespacemgutility.html">mgutility</a>::string_view, Max - Min + 2&gt; {</div>
 <div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>  <span class="keywordflow">return</span> get_enum_array&lt;Enum&gt;(detail::make_enum_sequence&lt;Enum, Min, Max&gt;());</div>
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>}</div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>

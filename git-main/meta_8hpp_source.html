@@ -172,7 +172,7 @@ $(function() { codefold.init(0); });
 </div>
 <div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span> </div>
 <div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, <span class="keywordtype">int</span> Min, <span class="keywordtype">int</span> Max&gt;</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="keyword">using </span>make_enum_sequence = <span class="keyword">typename</span> <a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence__helper.html">enum_sequence_helper&lt;Enum, Min, Max&gt;::type</a>;</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="keyword">using </span>make_enum_sequence = <span class="keyword">typename</span> <a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence__helper.html">enum_sequence_helper&lt;Enum, Min, Max + 1&gt;::type</a>;</div>
 <div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>} <span class="comment">// namespace detail</span></div>
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
 <div class="foldopen" id="foldopen00156" data-start="{" data-end="};">

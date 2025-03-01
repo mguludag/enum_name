@@ -36,9 +36,13 @@ SOFTWARE.
  * For MSVC, it uses _MSVC_LANG. For other compilers, it uses __cplusplus.
  */
 #ifdef _MSC_VER
+#ifndef MGUTILITY_CPLUSPLUS
 #define MGUTILITY_CPLUSPLUS _MSVC_LANG
+#endif
 #else
+#ifndef MGUTILITY_CPLUSPLUS
 #define MGUTILITY_CPLUSPLUS __cplusplus
+#endif
 #endif
 
 /**

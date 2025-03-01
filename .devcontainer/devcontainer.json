@@ -10,20 +10,10 @@
 			"ppa": true,
 			"version": "latest"
 		},
-		// "ghcr.io/devcontainers/features/python:1": {
-		// 	"installTools": true,
-		// 	"optimize": true,
-		// 	"version": "latest"
-		// },
-		"ghcr.io/swift-server-community/swift-devcontainer-features/sqlite:1": {},
-		// "ghcr.io/hspaans/devcontainer-features/pytest:1": {
-		// 	"version": "latest",
-		// 	"plugins": "pytest-testinfra"
-		// },
 		"ghcr.io/devcontainers-extra/features/apt-packages:1": {
 			"clean_ppas": true,
 			"preserve_apt_list": true,
-			"packages": "curl,ca-certificates",
+			"packages": "curl,ca-certificates,htop,nano",
 			"ppas": "ppa:deadsnakes/ppa"
 		},
 		"ghcr.io/devcontainers-extra/features/curl-apt-get:1": {},
@@ -31,9 +21,6 @@
 		"ghcr.io/devcontainers-extra/features/protoc:1": {
 			"version": "latest"
 		},
-		// "ghcr.io/devcontainers-extra/features/pylint:2": {
-		// 	"version": "latest"
-		// },
 		"ghcr.io/devcontainers-extra/features/vscode-cli:1": {
 			"version": "latest"
 		},
@@ -42,6 +29,7 @@
 		},
 		"ghcr.io/devcontainers-extra/features/wget-apt-get:1": {}
 	},
+	"postCreateCommand": "pipx install pytest && pipx install conan",
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -50,23 +38,48 @@
 				"twxs.cmake",
 				"ms-vscode.cpptools",
 				"ms-vscode.cmake-tools",
-				"GitHub.copilot"
-			]
+				"GitHub.copilot",
+				"tarik02.absolutely-black",
+				"ms-vscode-remote.remote-containers",
+				"ms-vscode.remote-explorer",
+				"ms-vscode-remote.remote-wsl",
+				"amiralizadeh9480.cpp-helper",
+				"xaver.clang-format",
+				"yuzuhakuon.vscode-cpp-project",
+				"ms-vscode.live-server",
+				"ms-python.python",
+				"cweijan.vscode-office"
+			],
+			"settings": {
+				"errorLens.disableLineComments": {
+					"clang-tidy": "// NOLINTNEXTLINE [$code]"
+				},
+				"errorLens.editorHoverPartsEnabled": {
+					"sourceCodeEnabled": true,
+					"messageEnabled": true,
+					"buttonsEnabled": true
+				},
+				"cmake.options.statusBarVisibility": "compact",
+				"cmake.pinnedCommands": [
+					"workbench.action.tasks.configureTaskRunner",
+					"workbench.action.tasks.runTask"
+				],
+				"C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+				"cmake.showOptionsMovedNotification": false,
+				"editor.guides.indentation": true,
+				"editor.guides.bracketPairs": true,
+				"C_Cpp.autocompleteAddParentheses": true
+			}
 		}
 	}
-
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
-
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "gcc -v",
-
 	// Configure tool-specific properties.
 	// "customizations": {},
-
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
 }

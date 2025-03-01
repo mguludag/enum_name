@@ -57,6 +57,20 @@ ENV CC=/usr/bin/clang \
 RUN update-alternatives --install /usr/bin/cc cc /usr/bin/clang 100 && \
     update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++ 100
 
+# Install the latest Python, pip, and pytest
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip python3-venv pipx && \
+    pipx ensurepath --force && \
+    ln -s /usr/bin/python3 /usr/bin/python
+
+# Install vcpkg (C++ package manager)
+RUN git clone https://github.com/microsoft/vcpkg.git /opt/vcpkg && \
+    /opt/vcpkg/bootstrap-vcpkg.sh
+
+ENV VCPKG_ROOT=/opt/vcpkg
+ENV PATH="${VCPKG_ROOT}:${PATH}"
+
+
 # [Optional] Uncomment this section to install additional vcpkg ports.
 # RUN su vscode -c "${VCPKG_ROOT}/vcpkg install <your-port-name-here>"
 

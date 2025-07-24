@@ -203,8 +203,18 @@ struct std::formatter<Enum> : formatter<std::string_view> {
 #endif
 
 #if defined(__has_include)
-#if __has_include(<fmt/ostream.h>)
-#include <fmt/ostream.h>
+#if __has_include(<fmt/format.h>)
+#include <fmt/format.h>
+
+template<class Enum> 
+struct fmt::formatter<Enum, char, mgutility::detail::enable_if_t<
+                    std::is_enum<Enum>::value>> : formatter<string_view>
+{
+  auto format(const Enum e, format_context &ctx) const -> appender {
+    return formatter<string_view>::format(static_cast<
+        mgutility::string_view>(mgutility::enum_name(e)).data(), ctx);
+  }
+};
 #endif
 #endif
 

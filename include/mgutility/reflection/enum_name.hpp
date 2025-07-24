@@ -152,14 +152,14 @@ MGUTILITY_CNSTXPR auto enum_cast(int value) noexcept
 namespace operators {
 template <typename Enum, mgutility::detail::enable_if_t<
                              std::is_enum<Enum>::value, bool> = true>
- constexpr auto operator&(const Enum &lhs, const Enum &rhs) -> Enum {
+constexpr auto operator&(const Enum &lhs, const Enum &rhs) -> Enum {
   return static_cast<Enum>(mgutility::enum_to_underlying(lhs) &
                            mgutility::enum_to_underlying(rhs));
 }
 
 template <typename Enum, mgutility::detail::enable_if_t<
                              std::is_enum<Enum>::value, bool> = true>
- constexpr auto operator|(const Enum &lhs, const Enum &rhs) -> Enum {
+constexpr auto operator|(const Enum &lhs, const Enum &rhs) -> Enum {
   return static_cast<Enum>(mgutility::enum_to_underlying(lhs) |
                            mgutility::enum_to_underlying(rhs));
 }
@@ -206,13 +206,14 @@ struct std::formatter<Enum> : formatter<std::string_view> {
 #if __has_include(<fmt/format.h>)
 #include <fmt/format.h>
 
-template<class Enum> 
-struct fmt::formatter<Enum, char, mgutility::detail::enable_if_t<
-                    std::is_enum<Enum>::value>> : formatter<string_view>
-{
+template <class Enum>
+struct fmt::formatter<Enum, char,
+                      mgutility::detail::enable_if_t<std::is_enum<Enum>::value>>
+    : formatter<string_view> {
   auto format(const Enum e, format_context &ctx) const -> appender {
-    return formatter<string_view>::format(static_cast<
-        mgutility::string_view>(mgutility::enum_name(e)).data(), ctx);
+    return formatter<string_view>::format(
+        static_cast<mgutility::string_view>(mgutility::enum_name(e)).data(),
+        ctx);
   }
 };
 #endif

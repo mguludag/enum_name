@@ -68,12 +68,13 @@ SOFTWARE.
  * MGUTILITY_CNSTXPR_CLANG_WA is defined as constexpr. Otherwise, it is defined
  * as empty.
  */
- #if (MGUTILITY_CPLUSPLUS >= 201703L  && !defined(__clang__)) || (defined(__clang__) && __clang_major__ > 11 && MGUTILITY_CPLUSPLUS >= 201703L)
+#if (MGUTILITY_CPLUSPLUS >= 201703L && !defined(__clang__)) ||                 \
+    (defined(__clang__) && __clang_major__ > 11 &&                             \
+     MGUTILITY_CPLUSPLUS >= 201703L)
 #define MGUTILITY_CNSTXPR_CLANG_WA constexpr
 #else
 #define MGUTILITY_CNSTXPR_CLANG_WA
 #endif
-
 
 /**
  * @brief Defines the MGUTILITY_CNSTEVL macro based on the C++ standard.
@@ -85,6 +86,12 @@ SOFTWARE.
 #define MGUTILITY_CNSTEVL consteval
 #else
 #define MGUTILITY_CNSTEVL
+#endif
+
+#if defined(__has_include)
+#ifndef MGUTILITY_HAS_HAS_INCLUDE
+#define MGUTILITY_HAS_HAS_INCLUDE
+#endif
 #endif
 
 #endif // MGUTILITY_COMMON_DEFINITIONS_HPP

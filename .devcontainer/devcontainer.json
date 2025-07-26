@@ -29,7 +29,7 @@
 		},
 		"ghcr.io/devcontainers-extra/features/wget-apt-get:1": {}
 	},
-	"postCreateCommand": "pipx install pytest && pipx install conan",
+	"postCreateCommand": "pipx install pytest && pipx install conan && pipx install cmake-format --include-deps",
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -48,7 +48,8 @@
 				"yuzuhakuon.vscode-cpp-project",
 				"ms-vscode.live-server",
 				"ms-python.python",
-				"cweijan.vscode-office"
+				"cweijan.vscode-office",
+				"cheshirekow.cmake-format"
 			],
 			"settings": {
 				"errorLens.disableLineComments": {

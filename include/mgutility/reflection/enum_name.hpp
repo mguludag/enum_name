@@ -202,8 +202,8 @@ struct std::formatter<Enum> : formatter<std::string_view> {
 
 #endif
 
-#if defined(__has_include)
-#if __has_include(<fmt/format.h>)
+#if defined(ENUM_NAME_USE_FMT) ||                                              \
+    (defined(MGUTILITY_HAS_HAS_INCLUDE) && __has_include(<fmt/format.h>))
 #include <fmt/format.h>
 
 template <class Enum>
@@ -216,7 +216,6 @@ struct fmt::formatter<Enum, char,
         ctx);
   }
 };
-#endif
-#endif
+#endif // MGUTILITY_USE_FMT || __has_include(<fmt/format.h>)
 
 #endif // MGUTILITY_ENUM_NAME_HPP

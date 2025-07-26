@@ -1,12 +1,13 @@
 #include <iostream>
 
 #include "mgutility/reflection/enum_name.hpp"
-#include "mgutility/std/string_view.hpp"
 
 #if defined(__cpp_lib_print)
 #include <print>
 #include <ranges>
 #endif
+
+#include <fmt/format.h>
 
 enum class Position {
   Top = 1 << 0,
@@ -56,7 +57,8 @@ int main() {
       mgutility::to_enum<Position>("CENTER"); // Convert string to enum
 
 #if MGUTILITY_CPLUSPLUS > 201402L &&                                           \
-    ((defined(__clang__) && __clang_major__ > 11) || (defined(__GNUC__) && __GNUC__ > 11))
+    ((defined(__clang__) && __clang_major__ > 11) ||                           \
+     (defined(__GNUC__) && __GNUC__ > 11))
   static_assert(mgutility::enum_name(Position::Top | Position::Right) ==
                     "TOP|RIGHT",
                 "Compile-time check failed: TOP|RIGHT");
@@ -70,7 +72,7 @@ int main() {
 
 #if defined(__cpp_lib_print)
 
-//  Print each Position and its underlying value using ranges 
+  //  Print each Position and its underlying value using ranges
   auto positions =
       mgutility::enum_for_each<Position>() |
       std::ranges::views::filter([](auto &&pair) {
@@ -89,8 +91,8 @@ int main() {
   for (auto &&elem : mgutility::enum_for_each<Position>()) {
     if (!elem.second.empty() &&
         elem.second.find('|') == mgutility::string_view::npos) {
-      std::cout << mgutility::enum_to_underlying(elem.first)
-                << " \t: " << elem.second << '\n';
+      fmt::print("{} \t: {}\n", mgutility::enum_to_underlying(elem.first),
+                 elem.second);
     }
   }
 #endif

@@ -26,7 +26,7 @@ SOFTWARE.
 #define DETAIL_ENUM_FOR_EACH_HPP
 
 #include "meta.hpp"
-#include "mgutility/std/string_view.hpp"
+#include "mgutility/std/fixed_string.hpp"
 
 #include <cstdint>
 #include <utility>
@@ -47,9 +47,10 @@ namespace detail {
  * @tparam T The type to check.
  */
 template <typename T>
-using string_or_view_t =
-    typename std::conditional<has_bit_or<T>::value, mgutility::fixed_string<MGUTILITY_ENUM_NAME_BUFFER_SIZE>,
-                              mgutility::string_view>::type;
+using string_or_view_t = typename std::conditional<
+    has_bit_or<T>::value,
+    mgutility::fixed_string<MGUTILITY_ENUM_NAME_BUFFER_SIZE>,
+    mgutility::string_view>::type;
 
 /**
  * @brief A pair consisting of an enum value and its corresponding string or
@@ -172,12 +173,15 @@ public:
    * @return The size of the enum range.
    */
   auto size() -> std::size_t {
-    return static_cast<int>(enum_range<Enum>::max) - static_cast<int>(enum_range<Enum>::min) + 1;
+    return static_cast<int>(enum_range<Enum>::max) -
+           static_cast<int>(enum_range<Enum>::min) + 1;
   }
 
 private:
-  enum_iter m_begin{static_cast<int>(enum_range<Enum>::min)}; /**< The beginning iterator. */
-  enum_iter m_end{static_cast<int>(enum_range<Enum>::max) + 1};   /**< The end iterator. */
+  enum_iter m_begin{
+      static_cast<int>(enum_range<Enum>::min)}; /**< The beginning iterator. */
+  enum_iter m_end{static_cast<int>(enum_range<Enum>::max) +
+                  1}; /**< The end iterator. */
 };
 } // namespace mgutility
 

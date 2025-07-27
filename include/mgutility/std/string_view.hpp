@@ -22,14 +22,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef STRING_STRING_VIEW_HPP
-#define STRING_STRING_VIEW_HPP
+#ifndef MGUTILITY_STRING_VIEW_HPP
+#define MGUTILITY_STRING_VIEW_HPP
 
 #include <cstring>
-#include <ostream>
+// NOLINTNEXTLINE [unused-includes]
+#include <iosfwd>
 #include <string>
+#include <utility>
 
 #include "mgutility/_common/definitions.hpp"
+
+#if MGUTILITY_CPLUSPLUS > 201402L
+#include <string_view>
+#endif
 
 namespace mgutility {
 namespace detail {
@@ -41,7 +47,10 @@ namespace detail {
  * @param sz The initial size, default is 0.
  * @return The length of the C-string.
  */
-constexpr auto strlen_constexpr(const char *str, size_t sz = 0) noexcept -> size_t {
+// NOLINTNEXTLINE [readability-identifier-length]
+constexpr auto strlen_constexpr(const char *str, size_t sz = 0) noexcept
+    -> size_t {
+  // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
   return str[sz] == '\0' ? sz : strlen_constexpr(str, ++sz);
 }
 
@@ -64,17 +73,22 @@ constexpr auto is_digit(char character) noexcept -> bool {
  * @return An integer less than, equal to, or greater than zero if lhs is found,
  *         respectively, to be less than, to match, or be greater than rhs.
  */
- MGUTILITY_CNSTXPR int strncmp_constexpr(const char *lhs, const char *rhs, size_t count) noexcept {
+MGUTILITY_CNSTXPR int strncmp_constexpr(const char *lhs, const char *rhs,
+                                        size_t count) noexcept {
   for (size_t i = 0; i < count; ++i) {
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
     if (lhs[i] != rhs[i] || lhs[i] == '\0' || rhs[i] == '\0') {
-      return static_cast<unsigned char>(lhs[i]) - static_cast<unsigned char>(rhs[i]);
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
+      return static_cast<unsigned char>(lhs[i]) -
+             // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
+             static_cast<unsigned char>(rhs[i]);
     }
   }
   return 0;
 }
 
 template <typename Range, typename Pred>
-MGUTILITY_CNSTXPR auto find(const Range& rng, const Pred& pred) -> size_t {
+MGUTILITY_CNSTXPR auto find(const Range &rng, const Pred &pred) -> size_t {
   for (int i = 1; i < rng.size(); ++i) {
     if (pred == rng[i]) {
       return i;
@@ -92,11 +106,13 @@ MGUTILITY_CNSTXPR auto find(const Range& rng, const Pred& pred) -> size_t {
  *
  * @tparam Char The character type, default is char.
  */
+// NOLINTNEXTLINE [cppcoreguidelines-special-member-functions]
 template <typename Char = char> class basic_string_view {
 public:
   /**
    * @brief Default constructor.
    */
+  // NOLINTNEXTLINE [readability-redundant-inline-specifier]
   constexpr inline basic_string_view() noexcept : data_(""), size_(0) {}
 
   /**
@@ -104,6 +120,7 @@ public:
    *
    * @param str The C-string.
    */
+  // NOLINTNEXTLINE [google-explicit-constructor]
   constexpr inline basic_string_view(const Char *str) noexcept
       : data_(str), size_(detail::strlen_constexpr(str)) {}
 
@@ -112,8 +129,8 @@ public:
    *
    * @param str The std::string.
    */
-  constexpr  basic_string_view(
-      const std::basic_string<Char> &str) noexcept
+  // NOLINTNEXTLINE [google-explicit-constructor]
+  constexpr basic_string_view(const std::basic_string<Char> &str) noexcept
       : data_(str.c_str()), size_(str.size()) {}
 
   /**
@@ -122,7 +139,7 @@ public:
    * @param str The C-string.
    * @param len The length of the string.
    */
-  constexpr  basic_string_view(const Char *str, size_t len) noexcept
+  constexpr basic_string_view(const Char *str, size_t len) noexcept
       : data_(str), size_(len) {}
 
   /**
@@ -130,7 +147,7 @@ public:
    *
    * @param other The other basic_string_view to copy.
    */
-  constexpr  basic_string_view(const basic_string_view &other)
+  constexpr basic_string_view(const basic_string_view &other)
       : data_(other.data_), size_(other.size_) {}
 
   /**
@@ -138,8 +155,8 @@ public:
    *
    * @param other The other basic_string_view to move.
    */
-  constexpr  basic_string_view(basic_string_view &&other) noexcept
-      : data_(std::move(other.data_)), size_(std::move(other.size_)) {}
+  constexpr basic_string_view(basic_string_view &&other) noexcept
+      : data_(std::move(other.data_)), size_(other.size_) {}
 
   /**
    * @brief Copy assignment operator.
@@ -169,7 +186,9 @@ public:
    * @param index The index.
    * @return The character at the index.
    */
-  constexpr  const Char operator[](size_t index) const noexcept {
+  // NOLINTNEXTLINE [readability-const-return-type]
+  constexpr const Char operator[](size_t index) const noexcept {
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
     return data_[index];
   }
 
@@ -178,35 +197,35 @@ public:
    *
    * @return A pointer to the first character.
    */
-  constexpr  const Char *begin() const noexcept { return data_; }
+  constexpr const Char *begin() const noexcept { return data_; }
 
   /**
    * @brief Returns an iterator to the end of the string.
    *
    * @return A pointer to one past the last character.
    */
-  constexpr  const Char *end() const noexcept { return (data_ + size_); }
+  constexpr const Char *end() const noexcept { return (data_ + size_); }
 
   /**
    * @brief Checks if the string is empty.
    *
    * @return True if the string is empty, otherwise false.
    */
-  constexpr  bool empty() const noexcept { return size_ < 1; }
+  constexpr bool empty() const noexcept { return size_ < 1; }
 
   /**
    * @brief Returns the size of the string.
    *
    * @return The size of the string.
    */
-  constexpr  size_t size() const noexcept { return size_; }
+  constexpr size_t size() const noexcept { return size_; }
 
   /**
    * @brief Returns a pointer to the underlying data.
    *
    * @return A pointer to the data.
    */
-  constexpr  const Char *data() const noexcept { return data_; }
+  constexpr const Char *data() const noexcept { return data_; }
 
   /**
    * @brief Returns a substring view.
@@ -215,8 +234,8 @@ public:
    * @param len The length of the substring.
    * @return A basic_string_view representing the substring.
    */
-  constexpr  basic_string_view<Char>
-  substr(size_t begin, size_t len = 0U) const noexcept {
+  constexpr basic_string_view<Char> substr(size_t begin,
+                                           size_t len = 0U) const noexcept {
     return basic_string_view<Char>(data_ + begin,
                                    len == 0U ? size_ - begin : len);
   }
@@ -228,11 +247,14 @@ public:
    * @param pos The position to start from, default is npos.
    * @return The position of the character or npos if not found.
    */
-  constexpr  size_t rfind(Char c, size_t pos = npos) const noexcept {
-    return (pos == npos ? pos = size_ : pos = pos), c == data_[pos] ? pos
-                                                    : pos == 0U
-                                                        ? npos
-                                                        : rfind(c, --pos);
+  // NOLINTNEXTLINE [readability-identifier-length]
+  constexpr size_t rfind(Char c, size_t pos = npos) const noexcept {
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
+    return (pos == npos ? pos = size_ : pos = pos),
+           c == data_[pos] ? pos
+           // NOLINTNEXTLINE [readability-avoid-nested-conditional-operator]
+           : pos == 0U ? npos
+                       : rfind(c, --pos);
   }
 
   /**
@@ -242,7 +264,9 @@ public:
    * @param pos The position to start from, default is 0.
    * @return The position of the character or npos if not found.
    */
-  constexpr  size_t find(Char c, size_t pos = 0) const noexcept {
+  // NOLINTNEXTLINE [readability-identifier-length]
+  constexpr size_t find(Char c, size_t pos = 0) const noexcept {
+    // NOLINTNEXTLINE [readability-avoid-nested-conditional-operator]
     return c == data_[pos] ? pos : pos < size_ ? find(c, ++pos) : npos;
   }
 
@@ -253,7 +277,7 @@ public:
    * @param rhs The right-hand side basic_string_view.
    * @return True if the strings are equal, otherwise false.
    */
-  MGUTILITY_CNSTXPR friend  bool
+  MGUTILITY_CNSTXPR friend bool
   operator==(basic_string_view<Char> lhs,
              basic_string_view<Char> rhs) noexcept {
     return (lhs.size_ == rhs.size_) &&
@@ -267,10 +291,10 @@ public:
    * @param rhs The right-hand side C-string.
    * @return True if the strings are equal, otherwise false.
    */
-   MGUTILITY_CNSTXPR friend  bool operator==(basic_string_view<Char> lhs,
-                                          const Char *rhs) noexcept {
+  MGUTILITY_CNSTXPR friend bool operator==(basic_string_view<Char> lhs,
+                                           const Char *rhs) noexcept {
     return ((lhs.size_ == detail::strlen_constexpr(rhs)) &&
-           (detail::strncmp_constexpr(lhs.data_, rhs, lhs.size_) == 0));
+            (detail::strncmp_constexpr(lhs.data_, rhs, lhs.size_) == 0));
   }
 
   /**
@@ -280,7 +304,7 @@ public:
    * @param rhs The right-hand side basic_string_view.
    * @return True if the strings are not equal, otherwise false.
    */
-   MGUTILITY_CNSTXPR friend  bool
+  MGUTILITY_CNSTXPR friend bool
   operator!=(basic_string_view<Char> lhs,
              basic_string_view<Char> rhs) noexcept {
     return !(lhs == rhs);
@@ -293,8 +317,8 @@ public:
    * @param rhs The right-hand side C-string.
    * @return True if the strings are not equal, otherwise false.
    */
-   MGUTILITY_CNSTXPR friend  bool operator!=(basic_string_view<Char> lhs,
-                                          const Char *rhs) noexcept {
+  MGUTILITY_CNSTXPR friend bool operator!=(basic_string_view<Char> lhs,
+                                           const Char *rhs) noexcept {
     return !(lhs == rhs);
   }
 
@@ -303,14 +327,16 @@ public:
    *
    * @return An std::string representing the same string.
    */
-   operator std::string() { return std::string(data_, size_); }
+  // NOLINTNEXTLINE [google-explicit-constructor]
+  operator std::string() { return std::string(data_, size_); }
 
   /**
    * @brief Converts the string view to an std::string (const version).
    *
    * @return An std::string representing the same string.
    */
-   operator std::string() const { return std::string(data_, size_); }
+  // NOLINTNEXTLINE [google-explicit-constructor]
+  operator std::string() const { return std::string(data_, size_); }
 
   /**
    * @brief Stream insertion operator.
@@ -319,8 +345,12 @@ public:
    * @param sv The basic_string_view.
    * @return A reference to the output stream.
    */
-  friend  std::ostream &operator<<(std::ostream &os,
-                                         const basic_string_view<Char> &sv) {
+  // NOLINTNEXTLINE [readability-identifier-length]
+  friend std::ostream &
+  operator<<(std::ostream &os,
+             // NOLINTNEXTLINE [readability-identifier-length]
+             const basic_string_view<Char> &sv) {
+    // NOLINTNEXTLINE [readability-identifier-length]
     for (auto c : sv) {
       os << c;
     }
@@ -337,135 +367,11 @@ private:
 using string_view = basic_string_view<char>;
 
 #else
-#include <string_view>
 
 using string_view = std::string_view;
 
 #endif
 
-template <size_t N = 0> class fixed_string {
-public:
-  template <size_t M>
-  MGUTILITY_CNSTXPR static auto make(const char (&str)[M]) -> fixed_string<M> {
-    return fixed_string<M>{str};
-  }
-
-  MGUTILITY_CNSTXPR fixed_string() = default;
-
-  // Constructor to initialize from a string literal
-  MGUTILITY_CNSTXPR explicit fixed_string(const char (&str)[N]) {
-    for (size_t i = 0; i < N - 1; ++i) {
-      data[i] = str[i];
-    }
-    cursor = N - 1;
-    data[cursor] = '\0';
-  }
-
-  // Concatenation operator
-  template <size_t M>
-  MGUTILITY_CNSTXPR auto operator+(const fixed_string<M> &other) const
-      -> fixed_string<N + M - 1> {
-    fixed_string<N + M - 1> result{};
-    size_t idx = 0;
-    for (; idx < N - 1; ++idx) {
-      result.data[idx] = data[idx];
-    }
-    for (size_t j = 0; j < M; ++j) {
-      result.data[idx + j] = other.data[j];
-    }
-    result.cursor = N + M - 2;
-    result.data[result.cursor] = '\0';
-    return result;
-  }
-
-  // Concatenation operator
-  template <size_t M>
-  MGUTILITY_CNSTXPR auto operator+(const char (&str)[M]) const
-      -> fixed_string<N + M - 1> {
-    return *this + fixed_string<M>{str};
-  }
-
-  template <size_t M>
-  MGUTILITY_CNSTXPR auto append(const char (&str)[M]) -> fixed_string<N> & {
-    static_assert(N > M,
-                  "Capacity needs to be greater than string to be appended!");
-    for (size_t i = 0; i < M - 1; ++i) {
-      data[cursor++] = str[i];
-    }
-    data[cursor] = '\0';
-    return *this;
-  }
-
-  MGUTILITY_CNSTXPR auto append(string_view str) -> fixed_string<N> & {
-    for (char chr : str) {
-      data[cursor++] = chr;
-    }
-    data[cursor] = '\0';
-    return *this;
-  }
-
-  MGUTILITY_CNSTXPR auto pop_back() -> void {
-    if (cursor > 0) {
-      data[--cursor] = '\0';
-    }
-  }
-
-  MGUTILITY_CNSTXPR auto size() const -> size_t { return cursor; }
-
-  constexpr size_t find(char c, size_t pos = 0) const noexcept {
-    return c == data[pos] ? pos : (pos < cursor ? find(c, ++pos) : npos);
-  }
-
-  // Conversion to std::string_view for easy printing
-  MGUTILITY_CNSTXPR explicit operator string_view() const {
-    return string_view(data, cursor);
-  }
-
-  constexpr bool empty() const noexcept { return cursor == 0; }
-
-  constexpr const char &operator[](size_t index) const noexcept {
-    return data[index];
-  }
-
-  MGUTILITY_CNSTXPR inline bool operator==(const char *rhs) const {
-    return string_view(*this) == rhs;
-  }
-
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const fixed_string<N> &str) {
-    for (size_t i = 0; i < str.cursor; ++i) {
-      os << str.data[i];
-    }
-    return os;
-  }
-
-  static constexpr auto npos = -1;
-
-private:
-  char data[N]{'\0'};
-  size_t cursor{};
-};
-
 } // namespace mgutility
-
-#if defined(__cpp_lib_format)
-
-#include <format>
-
-/**
- * @brief Formatter for enum types for use with std::format.
- *
- * @tparam Enum The enum type.
- */
-template <size_t N>
-struct std::formatter<mgutility::fixed_string<N>>
-    : formatter<std::string_view> {
-  auto constexpr format(const mgutility::fixed_string<N> &str,
-                        format_context &ctx) const {
-    return formatter<std::string_view>::format(std::string_view(str), ctx);
-  }
-};
-
-#endif
 
 #endif // STRING_STRING_VIEW_HPP

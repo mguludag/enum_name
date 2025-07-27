@@ -39,6 +39,7 @@ namespace mgutility {
 template <typename Enum>
 constexpr auto enum_to_underlying(Enum enumValue) noexcept
     -> detail::underlying_type_t<Enum> {
+  // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
   return static_cast<detail::underlying_type_t<Enum>>(enumValue);
 }
@@ -56,6 +57,7 @@ template <int Min, int Max, typename Enum>
 MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
     -> detail::string_or_view_t<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
+  // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
   return detail::enum_name_impl<Enum, Min, Max>(enumValue);
 }
@@ -74,6 +76,7 @@ template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
 MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
     -> detail::string_or_view_t<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
+  // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
   return detail::enum_name_impl<Enum, Min, Max>(enumValue);
 }
@@ -105,6 +108,7 @@ template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
 MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
     -> mgutility::optional<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
+  // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
   return detail::to_enum_impl<Enum, Min, Max>(str);
 }
@@ -124,6 +128,7 @@ template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
 MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
     -> mgutility::optional<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
+  // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
   return detail::to_enum_bitmask_impl<Enum, Min, Max>(str);
 }
@@ -142,6 +147,7 @@ template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
 MGUTILITY_CNSTXPR auto enum_cast(int value) noexcept
     -> mgutility::optional<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
+  // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
   if (enum_name(static_cast<Enum>(value)).empty()) {
     return mgutility::nullopt;
@@ -151,15 +157,17 @@ MGUTILITY_CNSTXPR auto enum_cast(int value) noexcept
 
 namespace operators {
 template <typename Enum, mgutility::detail::enable_if_t<
+                             // NOLINTNEXTLINE [modernize-type-traits]
                              std::is_enum<Enum>::value, bool> = true>
- constexpr auto operator&(const Enum &lhs, const Enum &rhs) -> Enum {
+constexpr auto operator&(const Enum &lhs, const Enum &rhs) -> Enum {
   return static_cast<Enum>(mgutility::enum_to_underlying(lhs) &
                            mgutility::enum_to_underlying(rhs));
 }
 
 template <typename Enum, mgutility::detail::enable_if_t<
+                             // NOLINTNEXTLINE [modernize-type-traits]
                              std::is_enum<Enum>::value, bool> = true>
- constexpr auto operator|(const Enum &lhs, const Enum &rhs) -> Enum {
+constexpr auto operator|(const Enum &lhs, const Enum &rhs) -> Enum {
   return static_cast<Enum>(mgutility::enum_to_underlying(lhs) |
                            mgutility::enum_to_underlying(rhs));
 }
@@ -176,8 +184,10 @@ template <typename Enum, mgutility::detail::enable_if_t<
  * @return The output stream.
  */
 template <typename Enum, mgutility::detail::enable_if_t<
+                             // NOLINTNEXTLINE [modernize-type-traits]
                              std::is_enum<Enum>::value, bool> = true>
 auto operator<<(std::ostream &outStream, Enum enumVal) -> std::ostream & {
+  // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
   outStream << mgutility::enum_name(enumVal);
   return outStream;
@@ -195,6 +205,7 @@ auto operator<<(std::ostream &outStream, Enum enumVal) -> std::ostream & {
 template <typename Enum>
   requires std::is_enum_v<Enum>
 struct std::formatter<Enum> : formatter<std::string_view> {
+  // NOLINTNEXTLINE [readability-identifier-length]
   auto constexpr format(Enum e, format_context &ctx) const {
     return formatter<std::string_view>::format(mgutility::enum_name(e), ctx);
   }
@@ -202,10 +213,21 @@ struct std::formatter<Enum> : formatter<std::string_view> {
 
 #endif
 
-#if defined(__has_include)
-#if __has_include(<fmt/ostream.h>)
-#include <fmt/ostream.h>
-#endif
-#endif
+#if defined(ENUM_NAME_USE_FMT) ||                                              \
+    (defined(MGUTILITY_HAS_HAS_INCLUDE) && __has_include(<fmt/format.h>))
+#include <fmt/format.h>
+
+template <class Enum>
+struct fmt::formatter<Enum, char,
+                      mgutility::detail::enable_if_t<std::is_enum<Enum>::value>>
+    : formatter<string_view> {
+  // NOLINTNEXTLINE [readability-identifier-length]
+  auto format(const Enum e, format_context &ctx) const -> appender {
+    return formatter<string_view>::format(
+        static_cast<mgutility::string_view>(mgutility::enum_name(e)).data(),
+        ctx);
+  }
+};
+#endif // MGUTILITY_USE_FMT || __has_include(<fmt/format.h>)
 
 #endif // MGUTILITY_ENUM_NAME_HPP

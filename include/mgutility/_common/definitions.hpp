@@ -68,12 +68,13 @@ SOFTWARE.
  * MGUTILITY_CNSTXPR_CLANG_WA is defined as constexpr. Otherwise, it is defined
  * as empty.
  */
- #if (MGUTILITY_CPLUSPLUS >= 201703L  && !defined(__clang__)) || (defined(__clang__) && __clang_major__ > 11 && MGUTILITY_CPLUSPLUS >= 201703L)
+#if (MGUTILITY_CPLUSPLUS >= 201703L && !defined(__clang__)) ||                 \
+    (defined(__clang__) && __clang_major__ > 11 &&                             \
+     MGUTILITY_CPLUSPLUS >= 201703L)
 #define MGUTILITY_CNSTXPR_CLANG_WA constexpr
 #else
 #define MGUTILITY_CNSTXPR_CLANG_WA
 #endif
-
 
 /**
  * @brief Defines the MGUTILITY_CNSTEVL macro based on the C++ standard.
@@ -85,6 +86,26 @@ SOFTWARE.
 #define MGUTILITY_CNSTEVL consteval
 #else
 #define MGUTILITY_CNSTEVL
+#endif
+
+/**
+ * @brief Defines the MGUTILITY_HAS_HAS_INCLUDE macro if __has_include is
+ * supported.
+ *
+ * If __has_include is supported, MGUTILITY_HAS_HAS_INCLUDE is defined.
+ */
+#if defined(__has_include) && !defined(MGUTILITY_HAS_HAS_INCLUDE)
+#define MGUTILITY_HAS_HAS_INCLUDE
+#endif
+
+/**
+ * @brief Defines the MGUTILITY_ENUM_NAME_BUFFER_SIZE macro.
+ *
+ * This macro defines the size of the buffer used for enum names.
+ */
+#ifndef MGUTILITY_ENUM_NAME_BUFFER_SIZE
+// NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
+#define MGUTILITY_ENUM_NAME_BUFFER_SIZE 128U
 #endif
 
 #endif // MGUTILITY_COMMON_DEFINITIONS_HPP

@@ -1,7 +1,9 @@
+#include "mgutility/reflection/detail/meta.hpp"
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
 #include "mgutility/reflection/enum_name.hpp"
 
+// NOLINTNEXTLINE [performance-enum-size]
 enum class color : uint32_t {
   alice_blue,              // rgb(240,248,255)
   antique_white,           // rgb(250,235,215)
@@ -144,14 +146,16 @@ enum class color : uint32_t {
   white_smoke,             // rgb(245,245,245)
   yellow,                  // rgb(255,255,0)
   yellow_green             // rgb(154,205,50)
-};                         // enum class color
+}; // enum class color
 
-namespace mgutility {
-template <> struct enum_range<color> {
+template <> struct mgutility::enum_range<color> {
   static constexpr auto min = 0;
   static constexpr auto max = 150;
 };
-} // namespace mgutility
+
+template <> struct mgutility::custom_enum<color> {
+  static constexpr flat_map<color> map{{color::red, "RED"}};
+};
 
 TEST_CASE("testing the enum name serialization") {
   CHECK(mgutility::enum_name(color::blue) == "blue");
@@ -169,7 +173,7 @@ TEST_CASE("testing the enum name serialization") {
   CHECK(mgutility::enum_name(color::navy) == "navy");
   CHECK(mgutility::enum_name(color::spring_green) == "spring_green");
   CHECK(mgutility::enum_name(color::rebecca_purple) == "rebecca_purple");
-  CHECK(mgutility::enum_name(color::red) == "red");
+  CHECK(mgutility::enum_name(color::red) == "RED");
   CHECK(mgutility::enum_name(color::tan) == "tan");
   CHECK(mgutility::enum_name(color::mint_cream) == "mint_cream");
   CHECK(mgutility::enum_name(color::light_green) == "light_green");
@@ -199,7 +203,7 @@ TEST_CASE("testing the enum name deserialization") {
         color::spring_green);
   CHECK(mgutility::to_enum<color>("rebecca_purple").value() ==
         color::rebecca_purple);
-  CHECK(mgutility::to_enum<color>("red").value() == color::red);
+  CHECK(mgutility::to_enum<color>("RED").value() == color::red);
   CHECK(mgutility::to_enum<color>("tan").value() == color::tan);
   CHECK(mgutility::to_enum<color>("mint_cream").value() == color::mint_cream);
   CHECK(mgutility::to_enum<color>("light_green").value() == color::light_green);

@@ -88,10 +88,23 @@ SOFTWARE.
 #define MGUTILITY_CNSTEVL
 #endif
 
-#if defined(__has_include)
-#ifndef MGUTILITY_HAS_HAS_INCLUDE
+/**
+ * @brief Defines the MGUTILITY_HAS_HAS_INCLUDE macro if __has_include is
+ * supported.
+ *
+ * If __has_include is supported, MGUTILITY_HAS_HAS_INCLUDE is defined.
+ */
+#if defined(__has_include) && !defined(MGUTILITY_HAS_HAS_INCLUDE)
 #define MGUTILITY_HAS_HAS_INCLUDE
 #endif
+
+/**
+ * @brief Defines the MGUTILITY_ENUM_NAME_BUFFER_SIZE macro.
+ *
+ * This macro defines the size of the buffer used for enum names.
+ */
+#ifndef MGUTILITY_ENUM_NAME_BUFFER_SIZE
+#define MGUTILITY_ENUM_NAME_BUFFER_SIZE 128U
 #endif
 
 #endif // MGUTILITY_COMMON_DEFINITIONS_HPP

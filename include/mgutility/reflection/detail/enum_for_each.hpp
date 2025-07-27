@@ -31,10 +31,6 @@ SOFTWARE.
 #include <cstdint>
 #include <utility>
 
-#ifndef MGUTILITY_ENUM_NAME_BUFFER_SIZE
-#define MGUTILITY_ENUM_NAME_BUFFER_SIZE 512U
-#endif
-
 namespace mgutility {
 namespace detail {
 /**

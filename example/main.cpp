@@ -16,17 +16,8 @@ enum class Position {
   Left = 1 << 3
 };
 
-// Define bitwise OR operator for Position
-constexpr static auto operator|(Position lhs, Position rhs) -> Position {
-  return static_cast<Position>(mgutility::enum_to_underlying(lhs) |
-                               mgutility::enum_to_underlying(rhs));
-}
-
-// Define bitwise AND operator for Position
-constexpr static auto operator&(Position lhs, Position rhs) -> Position {
-  return static_cast<Position>(mgutility::enum_to_underlying(lhs) &
-                               mgutility::enum_to_underlying(rhs));
-}
+using mgutility::operators::operator|;
+using mgutility::operators::operator&;
 
 // Define the range for Position enum values (Option 1)
 template <> struct mgutility::enum_range<Position> {

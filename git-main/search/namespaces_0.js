@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['mgutility_0',['mgutility',['../namespacemgutility.html',1,'']]]
+  ['detail_5fexported_0',['detail_exported',['../namespacedetail__exported.html',1,'']]],
+  ['docopt_1',['docopt',['../namespacedocopt.html',1,'']]]
 ];

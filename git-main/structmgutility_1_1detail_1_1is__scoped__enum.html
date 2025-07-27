@@ -101,12 +101,12 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a7f124839c728583930588def94fbfec0" id="r_a7f124839c728583930588def94fbfec0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmgutility_1_1pair.html">static</a> <a class="el" href="structmgutility_1_1pair.html">constexpr</a> <a class="el" href="structmgutility_1_1pair.html">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f124839c728583930588def94fbfec0">value</a></td></tr>
+<tr class="memitem:a7f124839c728583930588def94fbfec0" id="r_a7f124839c728583930588def94fbfec0"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f124839c728583930588def94fbfec0">value</a></td></tr>
 <tr class="memdesc:a7f124839c728583930588def94fbfec0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Boolean value indicating if the type is a scoped enumeration.  <br /></td></tr>
 <tr class="separator:a7f124839c728583930588def94fbfec0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">E</a>&gt;<br />
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename E&gt;<br />
 struct mgutility::detail::is_scoped_enum&lt; E &gt;</div><p>Trait to check if a type is a scoped enumeration. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -121,13 +121,13 @@ struct mgutility::detail::is_scoped_enum&lt; E &gt;</div><p>Trait to check if a 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">E</a> &gt; </div>
+template&lt;typename E &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structmgutility_1_1pair.html">constexpr</a> <a class="el" href="structmgutility_1_1pair.html">auto</a> <a class="el" href="structmgutility_1_1detail_1_1is__scoped__enum.html">mgutility::detail::is_scoped_enum</a>&lt; <a class="el" href="structmgutility_1_1pair.html">E</a> &gt;::value</td>
+          <td class="memname">constexpr auto <a class="el" href="structmgutility_1_1detail_1_1is__scoped__enum.html">mgutility::detail::is_scoped_enum</a>&lt; E &gt;::value</td>
         </tr>
       </table>
   </td>
@@ -137,7 +137,9 @@ template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a cl
 </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      </div>
 <div class="line">      std::is_enum&lt;E&gt;::value &amp;&amp;</div>
+<div class="line">      </div>
 <div class="line">      !std::is_convertible&lt;E, typename std::underlying_type&lt;E&gt;::type&gt;<a class="code hl_variable" href="#a7f124839c728583930588def94fbfec0">::value</a></div>
 <div class="ttc" id="astructmgutility_1_1detail_1_1is__scoped__enum_html_a7f124839c728583930588def94fbfec0"><div class="ttname"><a href="#a7f124839c728583930588def94fbfec0">mgutility::detail::is_scoped_enum::value</a></div><div class="ttdeci">static constexpr auto value</div><div class="ttdoc">Boolean value indicating if the type is a scoped enumeration.</div><div class="ttdef"><b>Definition</b> meta.hpp:44</div></div>
 </div><!-- fragment -->

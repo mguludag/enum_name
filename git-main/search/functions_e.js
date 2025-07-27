@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['_7eoptional_0',['~optional',['../classmgutility_1_1optional.html#aa8f4cd2aef5f75073cec5489be03096e',1,'mgutility::optional']]]
+  ['to_5fenum_0',['to_enum',['../namespacemgutility.html#a47470bc6b087ab3ceab7c3873203a2eb',1,'mgutility']]],
+  ['transform_1',['transform',['../namespacedocopt.html#a412f6f4dd8746226f4f3b5f464c47da1',1,'docopt']]]
 ];

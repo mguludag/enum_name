@@ -86,15 +86,15 @@ $(function() {
   <div class="headertitle"><div class="title">enum_name</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md189"></a> Converting (scoped)enum values to/from string names written in C++&gt;=11.</p>
-<h1><a class="anchor" id="autotoc_md190"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md278"></a> Converting (scoped)enum values to/from string names written in C++&gt;=11.</p>
+<h1><a class="anchor" id="autotoc_md279"></a>
 Supported Compilers</h1>
 <ul>
 <li>Clang &gt; 5</li>
 <li>GCC &gt; 8</li>
 <li>MSVC &gt; 2015</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md191"></a>
+<h1><a class="anchor" id="autotoc_md280"></a>
 Features</h1>
 <ul>
 <li>Supports <code>enum</code> and <code>enum class</code></li>
@@ -106,13 +106,13 @@ Features</h1>
 <li>Supports bitmasked enums and auto detect them</li>
 <li>Supports iterate over enum (names and values) with <code><a class="el" href="classmgutility_1_1enum__for__each.html" title="A class template for iterating over enum values.">mgutility::enum_for_each</a>&lt;T&gt;()</code> class and it is compatible with standard ranges and views</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md192"></a>
+<h1><a class="anchor" id="autotoc_md281"></a>
 Limitations</h1>
 <ul>
 <li>Compiler versions</li>
 <li>Wider range can increase compile time so user responsible to adjusting for enum's range</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md193"></a>
+<h1><a class="anchor" id="autotoc_md282"></a>
 Fetch library with CMake</h1>
 <div class="fragment"><div class="line">include(FetchContent)</div>
 <div class="line"> </div>
@@ -127,7 +127,7 @@ Fetch library with CMake</h1>
 <div class="line">#...</div>
 <div class="line"> </div>
 <div class="line">target_link_libraries(${PROJECT_NAME} PRIVATE mgutility::enum_name)</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md194"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md283"></a>
 Example usage (<a href="https://godbolt.org/z/1nqrj78vb">try it!</a>)</h1>
 <div class="fragment"><div class="line"> ++</div>
 <div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
@@ -181,15 +181,15 @@ Example usage (<a href="https://godbolt.org/z/1nqrj78vb">try it!</a>)</h1>
 <div class="line"> </div>
 <div class="line">  <span class="comment">// Specify enum range when call enum_name function (Option 2)</span></div>
 <div class="line">  <span class="comment">// Lambda function to get enum name</span></div>
-<div class="line">  <span class="keyword">auto</span> <a class="code hl_function" href="namespacemgutility.html#acd6b8335869248ad4f8525ef4371ea89">enum_name</a> = [](Position c) { <span class="keywordflow">return</span> <a class="code hl_struct" href="structmgutility_1_1pair.html">mgutility::enum_name&lt;0, 16&gt;</a>(c); };</div>
+<div class="line">  <span class="keyword">auto</span> <a class="code hl_function" href="namespacemgutility.html#acd6b8335869248ad4f8525ef4371ea89">enum_name</a> = [](Position c) { <span class="keywordflow">return</span> mgutility::enum_name&lt;0, 16&gt;(c); };</div>
 <div class="line"> </div>
 <div class="line">  <span class="keyword">auto</span> x = Position::Left;</div>
-<div class="line">  <span class="keyword">auto</span> y = <a class="code hl_struct" href="structmgutility_1_1pair.html">mgutility::to_enum&lt;Position&gt;</a>(<span class="stringliteral">&quot;CENTER&quot;</span>); <span class="comment">// Convert string to enum</span></div>
+<div class="line">  <span class="keyword">auto</span> y = mgutility::to_enum&lt;Position&gt;(<span class="stringliteral">&quot;CENTER&quot;</span>); <span class="comment">// Convert string to enum</span></div>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#if defined(__cpp_lib_constexpr_string)</span></div>
 <div class="line">  <span class="keyword">static_assert</span>(<a class="code hl_function" href="namespacemgutility.html#acd6b8335869248ad4f8525ef4371ea89">mgutility::enum_name</a>(Position::Top | Position::Right) ==</div>
 <div class="line">                <span class="stringliteral">&quot;TOP|RIGHT&quot;</span>); <span class="comment">// Compile-time check</span></div>
-<div class="line">  <span class="keyword">static_assert</span>(<a class="code hl_struct" href="structmgutility_1_1pair.html">mgutility::to_enum&lt;Position&gt;</a>(<span class="stringliteral">&quot;BOTTOM|LEFT&quot;</span>) ==</div>
+<div class="line">  <span class="keyword">static_assert</span>(mgutility::to_enum&lt;Position&gt;(<span class="stringliteral">&quot;BOTTOM|LEFT&quot;</span>) ==</div>
 <div class="line">                (Position::Bottom | Position::Left)); <span class="comment">// Compile-time check</span></div>
 <div class="line"><span class="preprocessor">#endif</span></div>
 <div class="line"> </div>
@@ -197,7 +197,7 @@ Example usage (<a href="https://godbolt.org/z/1nqrj78vb">try it!</a>)</h1>
 <div class="line"> </div>
 <div class="line">  <span class="comment">// Print each Position and its underlying value using ranges</span></div>
 <div class="line">  <span class="keyword">auto</span> positions =</div>
-<div class="line">      <a class="code hl_struct" href="structmgutility_1_1pair.html">mgutility::enum_for_each&lt;Position&gt;</a>() |</div>
+<div class="line">      <a class="code hl_class" href="classmgutility_1_1enum__for__each.html">mgutility::enum_for_each&lt;Position&gt;</a>() |</div>
 <div class="line">      std::ranges::views::filter([](<span class="keyword">auto</span> &amp;&amp;pair) {</div>
 <div class="line">        <span class="keywordflow">return</span> !pair.second.empty() &amp;&amp;</div>
 <div class="line">               pair.second.find(<span class="charliteral">&#39;|&#39;</span>) == mgutility::string_view::npos;</div>
@@ -226,12 +226,13 @@ Example usage (<a href="https://godbolt.org/z/1nqrj78vb">try it!</a>)</h1>
 <div class="line">  <span class="comment">// Print the name of y or &quot;TOP&quot; if y is not valid</span></div>
 <div class="line">  std::cout &lt;&lt; y.value_or(Position::Top) &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
 <div class="line">}</div>
-<div class="ttc" id="anamespacemgutility_html"><div class="ttname"><a href="namespacemgutility.html">mgutility</a></div><div class="ttdoc">Checks for MSVC compiler version.</div><div class="ttdef"><b>Definition</b> enum_for_each.hpp:38</div></div>
+<div class="ttc" id="aclassmgutility_1_1enum__for__each_html"><div class="ttname"><a href="classmgutility_1_1enum__for__each.html">mgutility::enum_for_each</a></div><div class="ttdoc">A class template for iterating over enum values.</div><div class="ttdef"><b>Definition</b> enum_for_each.hpp:68</div></div>
+<div class="ttc" id="anamespacemgutility_html"><div class="ttname"><a href="namespacemgutility.html">mgutility</a></div><div class="ttdoc">Checks for MSVC compiler version.</div><div class="ttdef"><b>Definition</b> enum_for_each.hpp:35</div></div>
 <div class="ttc" id="anamespacemgutility_html_a1b03a039d6f5e963df90cb72a9671aa7"><div class="ttname"><a href="namespacemgutility.html#a1b03a039d6f5e963df90cb72a9671aa7">mgutility::enum_to_underlying</a></div><div class="ttdeci">constexpr auto enum_to_underlying(Enum enumValue) noexcept -&gt; detail::underlying_type_t&lt; Enum &gt;</div><div class="ttdoc">Converts an enum value to its underlying integer value.</div><div class="ttdef"><b>Definition</b> enum_name.hpp:40</div></div>
-<div class="ttc" id="anamespacemgutility_html_acd6b8335869248ad4f8525ef4371ea89"><div class="ttname"><a href="namespacemgutility.html#acd6b8335869248ad4f8525ef4371ea89">mgutility::enum_name</a></div><div class="ttdeci">MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept -&gt; detail::string_or_view_t&lt; Enum &gt;</div><div class="ttdoc">Gets the name of an enum value.</div><div class="ttdef"><b>Definition</b> enum_name.hpp:56</div></div>
-<div class="ttc" id="astructmgutility_1_1custom__enum_html"><div class="ttname"><a href="structmgutility_1_1custom__enum.html">mgutility::custom_enum</a></div><div class="ttdoc">Provides the custom names map for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:178</div></div>
-<div class="ttc" id="astructmgutility_1_1enum__range_html"><div class="ttname"><a href="structmgutility_1_1enum__range.html">mgutility::enum_range</a></div><div class="ttdoc">Provides the range for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:156</div></div>
-<div class="ttc" id="astructmgutility_1_1pair_html"><div class="ttname"><a href="structmgutility_1_1pair.html">mgutility::pair</a></div><div class="ttdef"><b>Definition</b> meta.hpp:161</div></div>
+<div class="ttc" id="anamespacemgutility_html_acd6b8335869248ad4f8525ef4371ea89"><div class="ttname"><a href="namespacemgutility.html#acd6b8335869248ad4f8525ef4371ea89">mgutility::enum_name</a></div><div class="ttdeci">MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept -&gt; detail::string_or_view_t&lt; Enum &gt;</div><div class="ttdoc">Gets the name of an enum value.</div><div class="ttdef"><b>Definition</b> enum_name.hpp:57</div></div>
+<div class="ttc" id="astructmgutility_1_1custom__enum_html"><div class="ttname"><a href="structmgutility_1_1custom__enum.html">mgutility::custom_enum</a></div><div class="ttdoc">Provides the custom names map for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:185</div></div>
+<div class="ttc" id="astructmgutility_1_1enum__range_html"><div class="ttname"><a href="structmgutility_1_1enum__range.html">mgutility::enum_range</a></div><div class="ttdoc">Provides the range for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:162</div></div>
+<div class="ttc" id="astructmgutility_1_1pair_html"><div class="ttname"><a href="structmgutility_1_1pair.html">mgutility::pair</a></div><div class="ttdef"><b>Definition</b> meta.hpp:167</div></div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->

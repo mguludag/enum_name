@@ -1769,7 +1769,7 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l01619" name="l01619"></a><span class="lineno"> 1619</span>        <span class="keywordtype">int</span> m_template_id; <span class="comment">// an ID used to distinguish between the different versions of a templated test case</span></div>
 <div class="line"><a id="l01620" name="l01620"></a><span class="lineno"> 1620</span>        <a class="code hl_class" href="classdoctest_1_1String.html">String</a> m_full_name; <span class="comment">// contains the name (only for templated test cases!) + the template type</span></div>
 <div class="line"><a id="l01621" name="l01621"></a><span class="lineno"> 1621</span> </div>
-<div class="line"><a id="l01622" name="l01622"></a><span class="lineno"> 1622</span>        <a class="code hl_struct" href="structdoctest_1_1detail_1_1TestCase.html">TestCase</a>(funcType test, <span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">unsigned</span> line, <span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1detail_1_1TestSuite.html">TestSuite</a>&amp; test_suite,</div>
+<div class="line"><a id="l01622" name="l01622"></a><span class="lineno"> 1622</span>        <a class="code hl_struct" href="structdoctest_1_1detail_1_1TestCase.html">TestCase</a>(funcType <a class="code hl_struct" href="structtest.html">test</a>, <span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">unsigned</span> line, <span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1detail_1_1TestSuite.html">TestSuite</a>&amp; test_suite,</div>
 <div class="line"><a id="l01623" name="l01623"></a><span class="lineno"> 1623</span>                 <span class="keyword">const</span> <a class="code hl_class" href="classdoctest_1_1String.html">String</a>&amp; type = <a class="code hl_class" href="classdoctest_1_1String.html">String</a>(), <span class="keywordtype">int</span> template_id = -1);</div>
 <div class="line"><a id="l01624" name="l01624"></a><span class="lineno"> 1624</span> </div>
 <div class="line"><a id="l01625" name="l01625"></a><span class="lineno"> 1625</span>        <a class="code hl_struct" href="structdoctest_1_1detail_1_1TestCase.html">TestCase</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1detail_1_1TestCase.html">TestCase</a>&amp; other);</div>
@@ -4136,13 +4136,13 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l03959" name="l03959"></a><span class="lineno"> 3959</span>String toString(<span class="keywordtype">long</span> <span class="keywordtype">long</span> in) { <span class="keywordflow">return</span> toStreamLit(in); }</div>
 <div class="line"><a id="l03960" name="l03960"></a><span class="lineno"> 3960</span>String toString(<span class="keywordtype">long</span> <span class="keywordtype">long</span> <span class="keywordtype">unsigned</span> in) { <span class="keywordflow">return</span> toStreamLit(in); }</div>
 <div class="line"><a id="l03961" name="l03961"></a><span class="lineno"> 3961</span> </div>
-<div class="line"><a id="l03962" name="l03962"></a><span class="lineno"> 3962</span>Approx::Approx(<span class="keywordtype">double</span> value)</div>
+<div class="line"><a id="l03962" name="l03962"></a><span class="lineno"> 3962</span>Approx::Approx(<span class="keywordtype">double</span> <a class="code hl_class" href="classdetail_1_1value.html">value</a>)</div>
 <div class="line"><a id="l03963" name="l03963"></a><span class="lineno"> 3963</span>        : m_epsilon(static_cast&lt;double&gt;(std::numeric_limits&lt;float&gt;::epsilon()) * 100)</div>
 <div class="line"><a id="l03964" name="l03964"></a><span class="lineno"> 3964</span>        , m_scale(1.0)</div>
-<div class="line"><a id="l03965" name="l03965"></a><span class="lineno"> 3965</span>        , m_value(value) {}</div>
+<div class="line"><a id="l03965" name="l03965"></a><span class="lineno"> 3965</span>        , m_value(<a class="code hl_class" href="classdetail_1_1value.html">value</a>) {}</div>
 <div class="line"><a id="l03966" name="l03966"></a><span class="lineno"> 3966</span> </div>
-<div class="line"><a id="l03967" name="l03967"></a><span class="lineno"> 3967</span>Approx Approx::operator()(<span class="keywordtype">double</span> value)<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l03968" name="l03968"></a><span class="lineno"> 3968</span>    Approx approx(value);</div>
+<div class="line"><a id="l03967" name="l03967"></a><span class="lineno"> 3967</span>Approx Approx::operator()(<span class="keywordtype">double</span> <a class="code hl_class" href="classdetail_1_1value.html">value</a>)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l03968" name="l03968"></a><span class="lineno"> 3968</span>    Approx approx(<a class="code hl_class" href="classdetail_1_1value.html">value</a>);</div>
 <div class="line"><a id="l03969" name="l03969"></a><span class="lineno"> 3969</span>    approx.epsilon(m_epsilon);</div>
 <div class="line"><a id="l03970" name="l03970"></a><span class="lineno"> 3970</span>    approx.scale(m_scale);</div>
 <div class="line"><a id="l03971" name="l03971"></a><span class="lineno"> 3971</span>    <span class="keywordflow">return</span> approx;</div>
@@ -4182,14 +4182,14 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l04005" name="l04005"></a><span class="lineno"> 4005</span>DOCTEST_MSVC_SUPPRESS_WARNING_WITH_PUSH(4738)</div>
 <div class="line"><a id="l04006" name="l04006"></a><span class="lineno"> 4006</span>template &lt;typename F&gt;</div>
 <div class="line"><a id="l04007" name="l04007"></a><span class="lineno"> 4007</span>IsNaN&lt;F&gt;::operator <span class="keywordtype">bool</span>()<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l04008" name="l04008"></a><span class="lineno"> 4008</span>    <span class="keywordflow">return</span> std::isnan(value) ^ flipped;</div>
+<div class="line"><a id="l04008" name="l04008"></a><span class="lineno"> 4008</span>    <span class="keywordflow">return</span> std::isnan(<a class="code hl_class" href="classdetail_1_1value.html">value</a>) ^ flipped;</div>
 <div class="line"><a id="l04009" name="l04009"></a><span class="lineno"> 4009</span>}</div>
 <div class="line"><a id="l04010" name="l04010"></a><span class="lineno"> 4010</span>DOCTEST_MSVC_SUPPRESS_WARNING_POP</div>
 <div class="line"><a id="l04011" name="l04011"></a><span class="lineno"> 4011</span><span class="keyword">template</span> <span class="keyword">struct </span>DOCTEST_INTERFACE_DEF IsNaN&lt;float&gt;;</div>
 <div class="line"><a id="l04012" name="l04012"></a><span class="lineno"> 4012</span><span class="keyword">template</span> <span class="keyword">struct </span>DOCTEST_INTERFACE_DEF IsNaN&lt;double&gt;;</div>
 <div class="line"><a id="l04013" name="l04013"></a><span class="lineno"> 4013</span><span class="keyword">template</span> <span class="keyword">struct </span>DOCTEST_INTERFACE_DEF IsNaN&lt;long double&gt;;</div>
 <div class="line"><a id="l04014" name="l04014"></a><span class="lineno"> 4014</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> F&gt;</div>
-<div class="line"><a id="l04015" name="l04015"></a><span class="lineno"> 4015</span>String toString(IsNaN&lt;F&gt; in) { <span class="keywordflow">return</span> String(in.flipped ? <span class="stringliteral">&quot;! &quot;</span> : <span class="stringliteral">&quot;&quot;</span>) + <span class="stringliteral">&quot;IsNaN( &quot;</span> + doctest::toString(in.value) + <span class="stringliteral">&quot; )&quot;</span>; }</div>
+<div class="line"><a id="l04015" name="l04015"></a><span class="lineno"> 4015</span>String toString(IsNaN&lt;F&gt; in) { <span class="keywordflow">return</span> String(in.flipped ? <span class="stringliteral">&quot;! &quot;</span> : <span class="stringliteral">&quot;&quot;</span>) + <span class="stringliteral">&quot;IsNaN( &quot;</span> + doctest::toString(in.<a class="code hl_class" href="classdetail_1_1value.html">value</a>) + <span class="stringliteral">&quot; )&quot;</span>; }</div>
 <div class="line"><a id="l04016" name="l04016"></a><span class="lineno"> 4016</span>String toString(IsNaN&lt;float&gt; in) { <span class="keywordflow">return</span> toString&lt;float&gt;(in); }</div>
 <div class="line"><a id="l04017" name="l04017"></a><span class="lineno"> 4017</span>String toString(IsNaN&lt;double&gt; in) { <span class="keywordflow">return</span> toString&lt;double&gt;(in); }</div>
 <div class="line"><a id="l04018" name="l04018"></a><span class="lineno"> 4018</span>String toString(IsNaN&lt;double long&gt; in) { <span class="keywordflow">return</span> toString&lt;double long&gt;(in); }</div>
@@ -4467,7 +4467,7 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l04290" name="l04290"></a><span class="lineno"> 4290</span>        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
 <div class="line"><a id="l04291" name="l04291"></a><span class="lineno"> 4291</span>    }</div>
 <div class="line"><a id="l04292" name="l04292"></a><span class="lineno"> 4292</span> </div>
-<div class="line"><a id="l04293" name="l04293"></a><span class="lineno"> 4293</span>    TestCase::TestCase(funcType test, <span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">unsigned</span> line, <span class="keyword">const</span> TestSuite&amp; test_suite,</div>
+<div class="line"><a id="l04293" name="l04293"></a><span class="lineno"> 4293</span>    TestCase::TestCase(funcType <a class="code hl_struct" href="structtest.html">test</a>, <span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">unsigned</span> line, <span class="keyword">const</span> TestSuite&amp; test_suite,</div>
 <div class="line"><a id="l04294" name="l04294"></a><span class="lineno"> 4294</span>                       <span class="keyword">const</span> String&amp; type, <span class="keywordtype">int</span> template_id) {</div>
 <div class="line"><a id="l04295" name="l04295"></a><span class="lineno"> 4295</span>        m_file              = file;</div>
 <div class="line"><a id="l04296" name="l04296"></a><span class="lineno"> 4296</span>        m_line              = line;</div>
@@ -4482,7 +4482,7 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l04305" name="l04305"></a><span class="lineno"> 4305</span>        m_expected_failures = test_suite.m_expected_failures;</div>
 <div class="line"><a id="l04306" name="l04306"></a><span class="lineno"> 4306</span>        m_timeout           = test_suite.m_timeout;</div>
 <div class="line"><a id="l04307" name="l04307"></a><span class="lineno"> 4307</span> </div>
-<div class="line"><a id="l04308" name="l04308"></a><span class="lineno"> 4308</span>        m_test        = test;</div>
+<div class="line"><a id="l04308" name="l04308"></a><span class="lineno"> 4308</span>        m_test        = <a class="code hl_struct" href="structtest.html">test</a>;</div>
 <div class="line"><a id="l04309" name="l04309"></a><span class="lineno"> 4309</span>        m_type        = type;</div>
 <div class="line"><a id="l04310" name="l04310"></a><span class="lineno"> 4310</span>        m_template_id = template_id;</div>
 <div class="line"><a id="l04311" name="l04311"></a><span class="lineno"> 4311</span>    }</div>
@@ -5414,22 +5414,22 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l05237" name="l05237"></a><span class="lineno"> 5237</span>                <span class="comment">// The next encBytes bytes must together be a valid utf-8</span></div>
 <div class="line"><a id="l05238" name="l05238"></a><span class="lineno"> 5238</span>                <span class="comment">// This means: bitpattern 10XX XXXX and the extracted value is sane (ish)</span></div>
 <div class="line"><a id="l05239" name="l05239"></a><span class="lineno"> 5239</span>                <span class="keywordtype">bool</span> valid = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l05240" name="l05240"></a><span class="lineno"> 5240</span>                uint32_t value = headerValue(c);</div>
+<div class="line"><a id="l05240" name="l05240"></a><span class="lineno"> 5240</span>                uint32_t <a class="code hl_class" href="classdetail_1_1value.html">value</a> = headerValue(c);</div>
 <div class="line"><a id="l05241" name="l05241"></a><span class="lineno"> 5241</span>                <span class="keywordflow">for</span> (std::size_t n = 1; n &lt; encBytes; ++n) {</div>
 <div class="line"><a id="l05242" name="l05242"></a><span class="lineno"> 5242</span>                    uchar nc = m_str[idx + n];</div>
 <div class="line"><a id="l05243" name="l05243"></a><span class="lineno"> 5243</span>                    valid &amp;= ((nc &amp; 0xC0) == 0x80);</div>
-<div class="line"><a id="l05244" name="l05244"></a><span class="lineno"> 5244</span>                    value = (value &lt;&lt; 6) | (nc &amp; 0x3F);</div>
+<div class="line"><a id="l05244" name="l05244"></a><span class="lineno"> 5244</span>                    <a class="code hl_class" href="classdetail_1_1value.html">value</a> = (<a class="code hl_class" href="classdetail_1_1value.html">value</a> &lt;&lt; 6) | (nc &amp; 0x3F);</div>
 <div class="line"><a id="l05245" name="l05245"></a><span class="lineno"> 5245</span>                }</div>
 <div class="line"><a id="l05246" name="l05246"></a><span class="lineno"> 5246</span> </div>
 <div class="line"><a id="l05247" name="l05247"></a><span class="lineno"> 5247</span>                <span class="keywordflow">if</span> (</div>
 <div class="line"><a id="l05248" name="l05248"></a><span class="lineno"> 5248</span>                    <span class="comment">// Wrong bit pattern of following bytes</span></div>
 <div class="line"><a id="l05249" name="l05249"></a><span class="lineno"> 5249</span>                    (!valid) ||</div>
 <div class="line"><a id="l05250" name="l05250"></a><span class="lineno"> 5250</span>                    <span class="comment">// Overlong encodings</span></div>
-<div class="line"><a id="l05251" name="l05251"></a><span class="lineno"> 5251</span>                    (value &lt; 0x80) ||</div>
+<div class="line"><a id="l05251" name="l05251"></a><span class="lineno"> 5251</span>                    (<a class="code hl_class" href="classdetail_1_1value.html">value</a> &lt; 0x80) ||</div>
 <div class="line"><a id="l05252" name="l05252"></a><span class="lineno"> 5252</span>                    (                 value &lt; 0x800   &amp;&amp; encBytes &gt; 2) || <span class="comment">// removed &quot;0x80 &lt;= value &amp;&amp;&quot; because redundant</span></div>
-<div class="line"><a id="l05253" name="l05253"></a><span class="lineno"> 5253</span>                    (0x800 &lt; value &amp;&amp; value &lt; 0x10000 &amp;&amp; encBytes &gt; 3) ||</div>
+<div class="line"><a id="l05253" name="l05253"></a><span class="lineno"> 5253</span>                    (0x800 &lt; <a class="code hl_class" href="classdetail_1_1value.html">value</a> &amp;&amp; value &lt; 0x10000 &amp;&amp; encBytes &gt; 3) ||</div>
 <div class="line"><a id="l05254" name="l05254"></a><span class="lineno"> 5254</span>                    <span class="comment">// Encoded value out of range</span></div>
-<div class="line"><a id="l05255" name="l05255"></a><span class="lineno"> 5255</span>                    (value &gt;= 0x110000)</div>
+<div class="line"><a id="l05255" name="l05255"></a><span class="lineno"> 5255</span>                    (<a class="code hl_class" href="classdetail_1_1value.html">value</a> &gt;= 0x110000)</div>
 <div class="line"><a id="l05256" name="l05256"></a><span class="lineno"> 5256</span>                    ) {</div>
 <div class="line"><a id="l05257" name="l05257"></a><span class="lineno"> 5257</span>                    hexEscapeChar(os, c);</div>
 <div class="line"><a id="l05258" name="l05258"></a><span class="lineno"> 5258</span>                    <span class="keywordflow">break</span>;</div>
@@ -6624,12 +6624,12 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l06447" name="l06447"></a><span class="lineno"> 6447</span><span class="preprocessor">#endif </span><span class="comment">// DOCTEST_PLATFORM_WINDOWS</span></div>
 <div class="line"><a id="l06448" name="l06448"></a><span class="lineno"> 6448</span> </div>
 <div class="line"><a id="l06449" name="l06449"></a><span class="lineno"> 6449</span>    <span class="comment">// the implementation of parseOption()</span></div>
-<div class="line"><a id="l06450" name="l06450"></a><span class="lineno"> 6450</span>    <span class="keywordtype">bool</span> parseOptionImpl(<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span>* argv, <span class="keyword">const</span> <span class="keywordtype">char</span>* pattern, String* value) {</div>
+<div class="line"><a id="l06450" name="l06450"></a><span class="lineno"> 6450</span>    <span class="keywordtype">bool</span> parseOptionImpl(<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span>* argv, <span class="keyword">const</span> <span class="keywordtype">char</span>* pattern, String* <a class="code hl_class" href="classdetail_1_1value.html">value</a>) {</div>
 <div class="line"><a id="l06451" name="l06451"></a><span class="lineno"> 6451</span>        <span class="comment">// going from the end to the beginning and stopping on the first occurrence from the end</span></div>
 <div class="line"><a id="l06452" name="l06452"></a><span class="lineno"> 6452</span>        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = argc; i &gt; 0; --i) {</div>
 <div class="line"><a id="l06453" name="l06453"></a><span class="lineno"> 6453</span>            <span class="keyword">auto</span> index = i - 1;</div>
 <div class="line"><a id="l06454" name="l06454"></a><span class="lineno"> 6454</span>            <span class="keyword">auto</span> temp = std::strstr(argv[index], pattern);</div>
-<div class="line"><a id="l06455" name="l06455"></a><span class="lineno"> 6455</span>            <span class="keywordflow">if</span>(temp &amp;&amp; (value || strlen(temp) == strlen(pattern))) { </div>
+<div class="line"><a id="l06455" name="l06455"></a><span class="lineno"> 6455</span>            <span class="keywordflow">if</span>(temp &amp;&amp; (<a class="code hl_class" href="classdetail_1_1value.html">value</a> || strlen(temp) == strlen(pattern))) { </div>
 <div class="line"><a id="l06456" name="l06456"></a><span class="lineno"> 6456</span>                <span class="comment">// eliminate matches in which the chars before the option are not &#39;-&#39;</span></div>
 <div class="line"><a id="l06457" name="l06457"></a><span class="lineno"> 6457</span>                <span class="keywordtype">bool</span> noBadCharsFound = <span class="keyword">true</span>;</div>
 <div class="line"><a id="l06458" name="l06458"></a><span class="lineno"> 6458</span>                <span class="keyword">auto</span> curr            = argv[index];</div>
@@ -6640,12 +6640,12 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l06463" name="l06463"></a><span class="lineno"> 6463</span>                    }</div>
 <div class="line"><a id="l06464" name="l06464"></a><span class="lineno"> 6464</span>                }</div>
 <div class="line"><a id="l06465" name="l06465"></a><span class="lineno"> 6465</span>                <span class="keywordflow">if</span>(noBadCharsFound &amp;&amp; argv[index][0] == <span class="charliteral">&#39;-&#39;</span>) {</div>
-<div class="line"><a id="l06466" name="l06466"></a><span class="lineno"> 6466</span>                    <span class="keywordflow">if</span>(value) {</div>
+<div class="line"><a id="l06466" name="l06466"></a><span class="lineno"> 6466</span>                    <span class="keywordflow">if</span>(<a class="code hl_class" href="classdetail_1_1value.html">value</a>) {</div>
 <div class="line"><a id="l06467" name="l06467"></a><span class="lineno"> 6467</span>                        <span class="comment">// parsing the value of an option</span></div>
 <div class="line"><a id="l06468" name="l06468"></a><span class="lineno"> 6468</span>                        temp += strlen(pattern);</div>
 <div class="line"><a id="l06469" name="l06469"></a><span class="lineno"> 6469</span>                        <span class="keyword">const</span> <span class="keywordtype">unsigned</span> len = strlen(temp);</div>
 <div class="line"><a id="l06470" name="l06470"></a><span class="lineno"> 6470</span>                        <span class="keywordflow">if</span>(len) {</div>
-<div class="line"><a id="l06471" name="l06471"></a><span class="lineno"> 6471</span>                            *value = temp;</div>
+<div class="line"><a id="l06471" name="l06471"></a><span class="lineno"> 6471</span>                            *<a class="code hl_class" href="classdetail_1_1value.html">value</a> = temp;</div>
 <div class="line"><a id="l06472" name="l06472"></a><span class="lineno"> 6472</span>                            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l06473" name="l06473"></a><span class="lineno"> 6473</span>                        }</div>
 <div class="line"><a id="l06474" name="l06474"></a><span class="lineno"> 6474</span>                    } <span class="keywordflow">else</span> {</div>
@@ -6659,16 +6659,16 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l06482" name="l06482"></a><span class="lineno"> 6482</span>    }</div>
 <div class="line"><a id="l06483" name="l06483"></a><span class="lineno"> 6483</span> </div>
 <div class="line"><a id="l06484" name="l06484"></a><span class="lineno"> 6484</span>    <span class="comment">// parses an option and returns the string after the &#39;=&#39; character</span></div>
-<div class="line"><a id="l06485" name="l06485"></a><span class="lineno"> 6485</span>    <span class="keywordtype">bool</span> parseOption(<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span>* argv, <span class="keyword">const</span> <span class="keywordtype">char</span>* pattern, String* value = <span class="keyword">nullptr</span>,</div>
+<div class="line"><a id="l06485" name="l06485"></a><span class="lineno"> 6485</span>    <span class="keywordtype">bool</span> parseOption(<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span>* argv, <span class="keyword">const</span> <span class="keywordtype">char</span>* pattern, String* <a class="code hl_class" href="classdetail_1_1value.html">value</a> = <span class="keyword">nullptr</span>,</div>
 <div class="line"><a id="l06486" name="l06486"></a><span class="lineno"> 6486</span>                     <span class="keyword">const</span> String&amp; defaultVal = String()) {</div>
-<div class="line"><a id="l06487" name="l06487"></a><span class="lineno"> 6487</span>        <span class="keywordflow">if</span>(value)</div>
-<div class="line"><a id="l06488" name="l06488"></a><span class="lineno"> 6488</span>            *value = defaultVal;</div>
+<div class="line"><a id="l06487" name="l06487"></a><span class="lineno"> 6487</span>        <span class="keywordflow">if</span>(<a class="code hl_class" href="classdetail_1_1value.html">value</a>)</div>
+<div class="line"><a id="l06488" name="l06488"></a><span class="lineno"> 6488</span>            *<a class="code hl_class" href="classdetail_1_1value.html">value</a> = defaultVal;</div>
 <div class="line"><a id="l06489" name="l06489"></a><span class="lineno"> 6489</span><span class="preprocessor">#ifndef DOCTEST_CONFIG_NO_UNPREFIXED_OPTIONS</span></div>
 <div class="line"><a id="l06490" name="l06490"></a><span class="lineno"> 6490</span>        <span class="comment">// offset (normally 3 for &quot;dt-&quot;) to skip prefix</span></div>
-<div class="line"><a id="l06491" name="l06491"></a><span class="lineno"> 6491</span>        <span class="keywordflow">if</span>(parseOptionImpl(argc, argv, pattern + strlen(DOCTEST_CONFIG_OPTIONS_PREFIX), value))</div>
+<div class="line"><a id="l06491" name="l06491"></a><span class="lineno"> 6491</span>        <span class="keywordflow">if</span>(parseOptionImpl(argc, argv, pattern + strlen(DOCTEST_CONFIG_OPTIONS_PREFIX), <a class="code hl_class" href="classdetail_1_1value.html">value</a>))</div>
 <div class="line"><a id="l06492" name="l06492"></a><span class="lineno"> 6492</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l06493" name="l06493"></a><span class="lineno"> 6493</span><span class="preprocessor">#endif </span><span class="comment">// DOCTEST_CONFIG_NO_UNPREFIXED_OPTIONS</span></div>
-<div class="line"><a id="l06494" name="l06494"></a><span class="lineno"> 6494</span>        <span class="keywordflow">return</span> parseOptionImpl(argc, argv, pattern, value);</div>
+<div class="line"><a id="l06494" name="l06494"></a><span class="lineno"> 6494</span>        <span class="keywordflow">return</span> parseOptionImpl(argc, argv, pattern, <a class="code hl_class" href="classdetail_1_1value.html">value</a>);</div>
 <div class="line"><a id="l06495" name="l06495"></a><span class="lineno"> 6495</span>    }</div>
 <div class="line"><a id="l06496" name="l06496"></a><span class="lineno"> 6496</span> </div>
 <div class="line"><a id="l06497" name="l06497"></a><span class="lineno"> 6497</span>    <span class="comment">// locates a flag on the command line</span></div>
@@ -6910,7 +6910,7 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l06733" name="l06733"></a><span class="lineno"> 6733</span>}</div>
 <div class="line"><a id="l06734" name="l06734"></a><span class="lineno"> 6734</span> </div>
 <div class="line"><a id="l06735" name="l06735"></a><span class="lineno"> 6735</span><span class="comment">// allows the user to add procedurally to the filters from the command line</span></div>
-<div class="line"><a id="l06736" name="l06736"></a><span class="lineno"> 6736</span><span class="keywordtype">void</span> Context::addFilter(<span class="keyword">const</span> <span class="keywordtype">char</span>* filter, <span class="keyword">const</span> <span class="keywordtype">char</span>* value) { setOption(filter, value); }</div>
+<div class="line"><a id="l06736" name="l06736"></a><span class="lineno"> 6736</span><span class="keywordtype">void</span> Context::addFilter(<span class="keyword">const</span> <span class="keywordtype">char</span>* filter, <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_class" href="classdetail_1_1value.html">value</a>) { setOption(filter, <a class="code hl_class" href="classdetail_1_1value.html">value</a>); }</div>
 <div class="line"><a id="l06737" name="l06737"></a><span class="lineno"> 6737</span> </div>
 <div class="line"><a id="l06738" name="l06738"></a><span class="lineno"> 6738</span><span class="comment">// allows the user to clear all filters from the command line</span></div>
 <div class="line"><a id="l06739" name="l06739"></a><span class="lineno"> 6739</span><span class="keywordtype">void</span> Context::clearFilters() {</div>
@@ -6919,18 +6919,18 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l06742" name="l06742"></a><span class="lineno"> 6742</span>}</div>
 <div class="line"><a id="l06743" name="l06743"></a><span class="lineno"> 6743</span> </div>
 <div class="line"><a id="l06744" name="l06744"></a><span class="lineno"> 6744</span><span class="comment">// allows the user to override procedurally the bool options from the command line</span></div>
-<div class="line"><a id="l06745" name="l06745"></a><span class="lineno"> 6745</span><span class="keywordtype">void</span> Context::setOption(<span class="keyword">const</span> <span class="keywordtype">char</span>* option, <span class="keywordtype">bool</span> value) {</div>
-<div class="line"><a id="l06746" name="l06746"></a><span class="lineno"> 6746</span>    setOption(option, value ? <span class="stringliteral">&quot;true&quot;</span> : <span class="stringliteral">&quot;false&quot;</span>);</div>
+<div class="line"><a id="l06745" name="l06745"></a><span class="lineno"> 6745</span><span class="keywordtype">void</span> Context::setOption(<span class="keyword">const</span> <span class="keywordtype">char</span>* option, <span class="keywordtype">bool</span> <a class="code hl_class" href="classdetail_1_1value.html">value</a>) {</div>
+<div class="line"><a id="l06746" name="l06746"></a><span class="lineno"> 6746</span>    setOption(option, <a class="code hl_class" href="classdetail_1_1value.html">value</a> ? <span class="stringliteral">&quot;true&quot;</span> : <span class="stringliteral">&quot;false&quot;</span>);</div>
 <div class="line"><a id="l06747" name="l06747"></a><span class="lineno"> 6747</span>}</div>
 <div class="line"><a id="l06748" name="l06748"></a><span class="lineno"> 6748</span> </div>
 <div class="line"><a id="l06749" name="l06749"></a><span class="lineno"> 6749</span><span class="comment">// allows the user to override procedurally the int options from the command line</span></div>
-<div class="line"><a id="l06750" name="l06750"></a><span class="lineno"> 6750</span><span class="keywordtype">void</span> Context::setOption(<span class="keyword">const</span> <span class="keywordtype">char</span>* option, <span class="keywordtype">int</span> value) {</div>
-<div class="line"><a id="l06751" name="l06751"></a><span class="lineno"> 6751</span>    setOption(option, toString(value).c_str());</div>
+<div class="line"><a id="l06750" name="l06750"></a><span class="lineno"> 6750</span><span class="keywordtype">void</span> Context::setOption(<span class="keyword">const</span> <span class="keywordtype">char</span>* option, <span class="keywordtype">int</span> <a class="code hl_class" href="classdetail_1_1value.html">value</a>) {</div>
+<div class="line"><a id="l06751" name="l06751"></a><span class="lineno"> 6751</span>    setOption(option, toString(<a class="code hl_class" href="classdetail_1_1value.html">value</a>).c_str());</div>
 <div class="line"><a id="l06752" name="l06752"></a><span class="lineno"> 6752</span>}</div>
 <div class="line"><a id="l06753" name="l06753"></a><span class="lineno"> 6753</span> </div>
 <div class="line"><a id="l06754" name="l06754"></a><span class="lineno"> 6754</span><span class="comment">// allows the user to override procedurally the string options from the command line</span></div>
-<div class="line"><a id="l06755" name="l06755"></a><span class="lineno"> 6755</span><span class="keywordtype">void</span> Context::setOption(<span class="keyword">const</span> <span class="keywordtype">char</span>* option, <span class="keyword">const</span> <span class="keywordtype">char</span>* value) {</div>
-<div class="line"><a id="l06756" name="l06756"></a><span class="lineno"> 6756</span>    <span class="keyword">auto</span> argv   = String(<span class="stringliteral">&quot;-&quot;</span>) + option + <span class="stringliteral">&quot;=&quot;</span> + value;</div>
+<div class="line"><a id="l06755" name="l06755"></a><span class="lineno"> 6755</span><span class="keywordtype">void</span> Context::setOption(<span class="keyword">const</span> <span class="keywordtype">char</span>* option, <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_class" href="classdetail_1_1value.html">value</a>) {</div>
+<div class="line"><a id="l06756" name="l06756"></a><span class="lineno"> 6756</span>    <span class="keyword">auto</span> argv   = String(<span class="stringliteral">&quot;-&quot;</span>) + option + <span class="stringliteral">&quot;=&quot;</span> + <a class="code hl_class" href="classdetail_1_1value.html">value</a>;</div>
 <div class="line"><a id="l06757" name="l06757"></a><span class="lineno"> 6757</span>    <span class="keyword">auto</span> lvalue = argv.c_str();</div>
 <div class="line"><a id="l06758" name="l06758"></a><span class="lineno"> 6758</span>    parseArgs(1, &amp;lvalue);</div>
 <div class="line"><a id="l06759" name="l06759"></a><span class="lineno"> 6759</span>}</div>
@@ -7281,6 +7281,7 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l07104" name="l07104"></a><span class="lineno"> 7104</span><span class="preprocessor">#undef NOMINMAX</span></div>
 <div class="line"><a id="l07105" name="l07105"></a><span class="lineno"> 7105</span><span class="preprocessor">#undef DOCTEST_UNDEF_NOMINMAX</span></div>
 <div class="line"><a id="l07106" name="l07106"></a><span class="lineno"> 7106</span><span class="preprocessor">#endif </span><span class="comment">// DOCTEST_UNDEF_NOMINMAX</span></div>
+<div class="ttc" id="aclassdetail_1_1value_html"><div class="ttname"><a href="classdetail_1_1value.html">detail::value</a></div><div class="ttdef"><b>Definition</b> core.h:1257</div></div>
 <div class="ttc" id="aclassdoctest_1_1AssertData_1_1StringContains_html"><div class="ttname"><a href="classdoctest_1_1AssertData_1_1StringContains.html">doctest::AssertData::StringContains</a></div><div class="ttdef"><b>Definition</b> doctest.h:845</div></div>
 <div class="ttc" id="aclassdoctest_1_1Contains_html"><div class="ttname"><a href="classdoctest_1_1Contains.html">doctest::Contains</a></div><div class="ttdef"><b>Definition</b> doctest.h:674</div></div>
 <div class="ttc" id="aclassdoctest_1_1Context_html"><div class="ttname"><a href="classdoctest_1_1Context.html">doctest::Context</a></div><div class="ttdef"><b>Definition</b> doctest.h:1965</div></div>
@@ -7337,6 +7338,7 @@ $(function() { codefold.init(0); });
 <div class="ttc" id="astructdoctest_1_1detail_1_1types_1_1true__type_html"><div class="ttname"><a href="structdoctest_1_1detail_1_1types_1_1true__type.html">doctest::detail::types::true_type</a></div><div class="ttdef"><b>Definition</b> doctest.h:952</div></div>
 <div class="ttc" id="astructdoctest_1_1detail_1_1types_1_1underlying__type_html"><div class="ttname"><a href="structdoctest_1_1detail_1_1types_1_1underlying__type.html">doctest::detail::types::underlying_type</a></div><div class="ttdef"><b>Definition</b> doctest.h:967</div></div>
 <div class="ttc" id="astructstd_1_1char__traits_html"><div class="ttname"><a href="structstd_1_1char__traits.html">std::char_traits</a></div><div class="ttdef"><b>Definition</b> doctest.h:526</div></div>
+<div class="ttc" id="astructtest_html"><div class="ttname"><a href="structtest.html">test</a></div><div class="ttdef"><b>Definition</b> ostream-test.cc:14</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

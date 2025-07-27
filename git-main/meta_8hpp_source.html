@@ -132,88 +132,95 @@ $(function() { codefold.init(0); });
 <div class="foldopen" id="foldopen00040" data-start="{" data-end="};">
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="structmgutility_1_1detail_1_1is__scoped__enum.html">   40</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1detail_1_1is__scoped__enum.html">is_scoped_enum</a> {</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="structmgutility_1_1detail_1_1is__scoped__enum.html#a7f124839c728583930588def94fbfec0">   44</a></span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_variable" href="structmgutility_1_1detail_1_1is__scoped__enum.html#a7f124839c728583930588def94fbfec0">value</a> =</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>      std::is_enum&lt;E&gt;::value &amp;&amp;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>      !std::is_convertible&lt;E, typename std::underlying_type&lt;E&gt;::type&gt;<a class="code hl_variable" href="structmgutility_1_1detail_1_1is__scoped__enum.html#a7f124839c728583930588def94fbfec0">::value</a>;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>};</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>      <span class="comment">// NOLINTNEXTLINE [modernize-type-traits]</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>      std::is_enum&lt;E&gt;::value &amp;&amp;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>      <span class="comment">// NOLINTNEXTLINE [modernize-type-traits]</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>      !std::is_convertible&lt;E, typename std::underlying_type&lt;E&gt;::type&gt;<a class="code hl_variable" href="structmgutility_1_1detail_1_1is__scoped__enum.html#a7f124839c728583930588def94fbfec0">::value</a>;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>};</div>
 </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="structmgutility_1_1detail_1_1has__bit__or.html">   55</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> = <span class="keywordtype">void</span>&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1detail_1_1has__bit__or.html">has_bit_or</a> : std::false_type {};</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="structmgutility_1_1detail_1_1has__bit__or_3_01T_00_01decltype_07_07T_02_03_7T_02_03_08_00_01void_07_08_08_4.html">   64</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1detail_1_1has__bit__or.html">has_bit_or</a>&lt;<a class="code hl_struct" href="structmgutility_1_1pair.html">T</a>, <a class="code hl_struct" href="structmgutility_1_1pair.html">decltype</a>((<a class="code hl_struct" href="structmgutility_1_1pair.html">T</a>{} | <a class="code hl_struct" href="structmgutility_1_1pair.html">T</a>{}), <span class="keywordtype">void</span>())&gt; : std::true_type {};</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="preprocessor">#if MGUTILITY_CPLUSPLUS &gt; 201103L</span></div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_struct" href="structmgutility_1_1pair.html">is_scoped_enum_v</a> = <a class="code hl_variable" href="structmgutility_1_1detail_1_1is__scoped__enum.html#a7f124839c728583930588def94fbfec0">is_scoped_enum&lt;E&gt;::value</a>;</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="keyword">template</span> &lt;<span class="keywordtype">bool</span> B, <span class="keyword">class</span> T = <span class="keywordtype">void</span>&gt;</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="keyword">using </span>enable_if_t = <span class="keyword">typename</span> std::enable_if&lt;B, T&gt;::type;</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="keyword">using </span>underlying_type_t = <span class="keyword">typename</span> std::underlying_type&lt;T&gt;::type;</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="keyword">using </span>remove_const_t = <span class="keyword">typename</span> std::remove_const&lt;T&gt;::type;</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno"><a class="line" href="structmgutility_1_1detail_1_1enum__sequence.html">  111</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, Enum...&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence.html">enum_sequence</a> {};</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, <span class="keywordtype">int</span> <a class="code hl_struct" href="structmgutility_1_1pair.html">Min</a>, <span class="keywordtype">int</span> <a class="code hl_struct" href="structmgutility_1_1pair.html">Max</a>, <span class="keywordtype">int</span>... <a class="code hl_struct" href="structmgutility_1_1pair.html">Next</a>&gt;</div>
-<div class="foldopen" id="foldopen00122" data-start="{" data-end="};">
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno"><a class="line" href="structmgutility_1_1detail_1_1enum__sequence__helper.html">  122</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence__helper.html">enum_sequence_helper</a></div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    : <a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence__helper.html">enum_sequence_helper</a>&lt;Enum, Min, Max - 1, Max - 1, Next...&gt; {};</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="structmgutility_1_1detail_1_1has__bit__or.html">   57</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> = <span class="keywordtype">void</span>&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1detail_1_1has__bit__or.html">has_bit_or</a> : std::false_type {};</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="structmgutility_1_1detail_1_1has__bit__or_3_01T_00_01decltype_07_07T_02_03_7T_02_03_08_00_01void_07_08_08_4.html">   66</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1detail_1_1has__bit__or.html">has_bit_or</a>&lt;T, decltype((T{} | T{}), <span class="keywordtype">void</span>())&gt; : std::true_type {};</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="preprocessor">#if MGUTILITY_CPLUSPLUS &gt; 201103L</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> is_scoped_enum_v = <a class="code hl_variable" href="structmgutility_1_1detail_1_1is__scoped__enum.html#a7f124839c728583930588def94fbfec0">is_scoped_enum&lt;E&gt;::value</a>;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="keyword">template</span> &lt;<span class="keywordtype">bool</span> B, <span class="keyword">class</span> T = <span class="keywordtype">void</span>&gt;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment">// NOLINTNEXTLINE [modernize-type-traits]</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="keyword">using </span>enable_if_t = <span class="keyword">typename</span> std::enable_if&lt;B, T&gt;::type;</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">// NOLINTNEXTLINE [modernize-type-traits]</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="keyword">using </span>underlying_type_t = <span class="keyword">typename</span> std::underlying_type&lt;T&gt;::type;</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment">// NOLINTNEXTLINE [modernize-type-traits]</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="keyword">using </span>remove_const_t = <span class="keyword">typename</span> std::remove_const&lt;T&gt;::type;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno"><a class="line" href="structmgutility_1_1detail_1_1enum__sequence.html">  116</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, Enum...&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence.html">enum_sequence</a> {};</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, <span class="keywordtype">int</span> Min, <span class="keywordtype">int</span> Max, <span class="keywordtype">int</span>... Next&gt;</div>
+<div class="foldopen" id="foldopen00127" data-start="{" data-end="};">
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno"><a class="line" href="structmgutility_1_1detail_1_1enum__sequence__helper.html">  127</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence__helper.html">enum_sequence_helper</a></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    : <a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence__helper.html">enum_sequence_helper</a>&lt;Enum, Min, Max - 1, Max - 1, Next...&gt; {};</div>
 </div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, <span class="keywordtype">int</span> <a class="code hl_struct" href="structmgutility_1_1pair.html">Min</a>, <span class="keywordtype">int</span>... <a class="code hl_struct" href="structmgutility_1_1pair.html">Next</a>&gt;</div>
-<div class="foldopen" id="foldopen00133" data-start="{" data-end="};">
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno"><a class="line" href="structmgutility_1_1detail_1_1enum__sequence__helper_3_01Enum_00_01Min_00_01Min_00_01Next_8_8_8_01_4.html">  133</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence__helper.html">enum_sequence_helper</a>&lt;Enum, <a class="code hl_struct" href="structmgutility_1_1pair.html">Min</a>, <a class="code hl_struct" href="structmgutility_1_1pair.html">Min</a>, <a class="code hl_struct" href="structmgutility_1_1pair.html">Next</a>...&gt; {</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno"><a class="line" href="structmgutility_1_1detail_1_1enum__sequence__helper_3_01Enum_00_01Min_00_01Min_00_01Next_8_8_8_01_4.html#a7b17e3be2a8e0003e56e5fd8cbfa9524">  137</a></span>  <span class="keyword">using </span><a class="code hl_struct" href="structmgutility_1_1pair.html">type</a> = <a class="code hl_struct" href="structmgutility_1_1pair.html">enum_sequence&lt;Enum, static_cast&lt;Enum&gt;</a>(<a class="code hl_struct" href="structmgutility_1_1pair.html">Next</a>)...&gt;;</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>};</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, <span class="keywordtype">int</span> Min, <span class="keywordtype">int</span>... Next&gt;</div>
+<div class="foldopen" id="foldopen00138" data-start="{" data-end="};">
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno"><a class="line" href="structmgutility_1_1detail_1_1enum__sequence__helper_3_01Enum_00_01Min_00_01Min_00_01Next_8_8_8_01_4.html">  138</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence__helper.html">enum_sequence_helper</a>&lt;Enum, Min, Min, Next...&gt; {</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno"><a class="line" href="structmgutility_1_1detail_1_1enum__sequence__helper_3_01Enum_00_01Min_00_01Min_00_01Next_8_8_8_01_4.html#a7b17e3be2a8e0003e56e5fd8cbfa9524">  142</a></span>  <span class="keyword">using </span><a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence.html">type</a> = <a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence.html">enum_sequence&lt;Enum, static_cast&lt;Enum&gt;</a>(Next)...&gt;;</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>};</div>
 </div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span> </div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, <span class="keywordtype">int</span> Min, <span class="keywordtype">int</span> Max&gt;</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="keyword">using </span>make_enum_sequence = <span class="keyword">typename</span> <a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence__helper.html">enum_sequence_helper&lt;Enum, Min, Max + 1&gt;::type</a>;</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>} <span class="comment">// namespace detail</span></div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
-<div class="foldopen" id="foldopen00156" data-start="{" data-end="};">
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno"><a class="line" href="structmgutility_1_1enum__range.html">  156</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1enum__range.html">enum_range</a> {</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> min{0};</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> max{256};</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>};</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, <span class="keywordtype">int</span> Min, <span class="keywordtype">int</span> Max&gt;</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><span class="keyword">using </span>make_enum_sequence =</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    <span class="keyword">typename</span> <a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence__helper.html">enum_sequence_helper&lt;Enum, Min, Max + 1&gt;::type</a>;</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>} <span class="comment">// namespace detail</span></div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span> </div>
+<div class="foldopen" id="foldopen00162" data-start="{" data-end="};">
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno"><a class="line" href="structmgutility_1_1enum__range.html">  162</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1enum__range.html">enum_range</a> {</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> min{0};</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> max{256};</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>};</div>
 </div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
-<div class="foldopen" id="foldopen00161" data-start="{" data-end="};">
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno"><a class="line" href="structmgutility_1_1pair.html">  161</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1pair.html">pair</a> {</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>  <a class="code hl_struct" href="structmgutility_1_1pair.html">T</a> first;</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>  <a class="code hl_struct" href="structmgutility_1_1pair.html">U</a> second;</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>};</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
+<div class="foldopen" id="foldopen00167" data-start="{" data-end="};">
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno"><a class="line" href="structmgutility_1_1pair.html">  167</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1pair.html">pair</a> {</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>  T first;</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>  U second;</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>};</div>
 </div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span><span class="preprocessor">#if MGUTILITY_CPLUSPLUS &gt; 201402L || defined(__GNUC__) &amp;&amp; !defined(__clang__)</span></div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span><span class="keyword">using </span><a class="code hl_struct" href="structmgutility_1_1pair.html">flat_map</a> = std::initializer_list&lt;pair&lt;T, const char *&gt;&gt;;</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="preprocessor">#else</span></div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="keyword">using </span><a class="code hl_struct" href="structmgutility_1_1pair.html">flat_map</a> = <a class="code hl_struct" href="structmgutility_1_1pair.html">pair&lt;T, const char *&gt;</a>[];</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
-<div class="foldopen" id="foldopen00178" data-start="{" data-end="};">
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno"><a class="line" href="structmgutility_1_1custom__enum.html">  178</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1custom__enum.html">custom_enum</a> {</div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <a class="code hl_struct" href="structmgutility_1_1pair.html">flat_map&lt;T&gt;</a> map = {};</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>};</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span> </div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="preprocessor">#if MGUTILITY_CPLUSPLUS &gt; 201402L || defined(__GNUC__) &amp;&amp; !defined(__clang__)</span></div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="keyword">using </span><a class="code hl_struct" href="structmgutility_1_1pair.html">flat_map</a> = std::initializer_list&lt;pair&lt;T, const char *&gt;&gt;;</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="comment">// NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]</span></div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="keyword">using </span><a class="code hl_struct" href="structmgutility_1_1pair.html">flat_map</a> = <a class="code hl_struct" href="structmgutility_1_1pair.html">pair&lt;T, const char *&gt;</a>[];</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
+<div class="foldopen" id="foldopen00185" data-start="{" data-end="};">
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno"><a class="line" href="structmgutility_1_1custom__enum.html">  185</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1custom__enum.html">custom_enum</a> {</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <a class="code hl_struct" href="structmgutility_1_1pair.html">flat_map&lt;T&gt;</a> map = {};</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>};</div>
 </div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>} <span class="comment">// namespace mgutility</span></div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="preprocessor">#endif </span><span class="comment">// DETAIL_META_HPP</span></div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>} <span class="comment">// namespace mgutility</span></div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span> </div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="preprocessor">#endif </span><span class="comment">// DETAIL_META_HPP</span></div>
 <div class="ttc" id="adefinitions_8hpp_html"><div class="ttname"><a href="definitions_8hpp.html">definitions.hpp</a></div><div class="ttdoc">Defines macros for compiler and standard support detection.</div></div>
-<div class="ttc" id="anamespacemgutility_html"><div class="ttname"><a href="namespacemgutility.html">mgutility</a></div><div class="ttdoc">Checks for MSVC compiler version.</div><div class="ttdef"><b>Definition</b> enum_for_each.hpp:38</div></div>
-<div class="ttc" id="astructmgutility_1_1custom__enum_html"><div class="ttname"><a href="structmgutility_1_1custom__enum.html">mgutility::custom_enum</a></div><div class="ttdoc">Provides the custom names map for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:178</div></div>
-<div class="ttc" id="astructmgutility_1_1detail_1_1enum__sequence__helper_html"><div class="ttname"><a href="structmgutility_1_1detail_1_1enum__sequence__helper.html">mgutility::detail::enum_sequence_helper</a></div><div class="ttdoc">Helper for generating a sequence of enumeration values.</div><div class="ttdef"><b>Definition</b> meta.hpp:123</div></div>
-<div class="ttc" id="astructmgutility_1_1detail_1_1enum__sequence_html"><div class="ttname"><a href="structmgutility_1_1detail_1_1enum__sequence.html">mgutility::detail::enum_sequence</a></div><div class="ttdoc">Represents a sequence of enumeration values.</div><div class="ttdef"><b>Definition</b> meta.hpp:111</div></div>
-<div class="ttc" id="astructmgutility_1_1detail_1_1has__bit__or_html"><div class="ttname"><a href="structmgutility_1_1detail_1_1has__bit__or.html">mgutility::detail::has_bit_or</a></div><div class="ttdoc">Trait to check if a type supports the bitwise OR operator.</div><div class="ttdef"><b>Definition</b> meta.hpp:55</div></div>
+<div class="ttc" id="anamespacemgutility_html"><div class="ttname"><a href="namespacemgutility.html">mgutility</a></div><div class="ttdoc">Checks for MSVC compiler version.</div><div class="ttdef"><b>Definition</b> enum_for_each.hpp:35</div></div>
+<div class="ttc" id="astructmgutility_1_1custom__enum_html"><div class="ttname"><a href="structmgutility_1_1custom__enum.html">mgutility::custom_enum</a></div><div class="ttdoc">Provides the custom names map for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:185</div></div>
+<div class="ttc" id="astructmgutility_1_1detail_1_1enum__sequence__helper_html"><div class="ttname"><a href="structmgutility_1_1detail_1_1enum__sequence__helper.html">mgutility::detail::enum_sequence_helper</a></div><div class="ttdoc">Helper for generating a sequence of enumeration values.</div><div class="ttdef"><b>Definition</b> meta.hpp:128</div></div>
+<div class="ttc" id="astructmgutility_1_1detail_1_1enum__sequence_html"><div class="ttname"><a href="structmgutility_1_1detail_1_1enum__sequence.html">mgutility::detail::enum_sequence</a></div><div class="ttdoc">Represents a sequence of enumeration values.</div><div class="ttdef"><b>Definition</b> meta.hpp:116</div></div>
+<div class="ttc" id="astructmgutility_1_1detail_1_1has__bit__or_html"><div class="ttname"><a href="structmgutility_1_1detail_1_1has__bit__or.html">mgutility::detail::has_bit_or</a></div><div class="ttdoc">Trait to check if a type supports the bitwise OR operator.</div><div class="ttdef"><b>Definition</b> meta.hpp:57</div></div>
 <div class="ttc" id="astructmgutility_1_1detail_1_1is__scoped__enum_html"><div class="ttname"><a href="structmgutility_1_1detail_1_1is__scoped__enum.html">mgutility::detail::is_scoped_enum</a></div><div class="ttdoc">Trait to check if a type is a scoped enumeration.</div><div class="ttdef"><b>Definition</b> meta.hpp:40</div></div>
 <div class="ttc" id="astructmgutility_1_1detail_1_1is__scoped__enum_html_a7f124839c728583930588def94fbfec0"><div class="ttname"><a href="structmgutility_1_1detail_1_1is__scoped__enum.html#a7f124839c728583930588def94fbfec0">mgutility::detail::is_scoped_enum::value</a></div><div class="ttdeci">static constexpr auto value</div><div class="ttdoc">Boolean value indicating if the type is a scoped enumeration.</div><div class="ttdef"><b>Definition</b> meta.hpp:44</div></div>
-<div class="ttc" id="astructmgutility_1_1enum__range_html"><div class="ttname"><a href="structmgutility_1_1enum__range.html">mgutility::enum_range</a></div><div class="ttdoc">Provides the range for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:156</div></div>
-<div class="ttc" id="astructmgutility_1_1pair_html"><div class="ttname"><a href="structmgutility_1_1pair.html">mgutility::pair</a></div><div class="ttdef"><b>Definition</b> meta.hpp:161</div></div>
+<div class="ttc" id="astructmgutility_1_1enum__range_html"><div class="ttname"><a href="structmgutility_1_1enum__range.html">mgutility::enum_range</a></div><div class="ttdoc">Provides the range for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:162</div></div>
+<div class="ttc" id="astructmgutility_1_1pair_html"><div class="ttname"><a href="structmgutility_1_1pair.html">mgutility::pair</a></div><div class="ttdef"><b>Definition</b> meta.hpp:167</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

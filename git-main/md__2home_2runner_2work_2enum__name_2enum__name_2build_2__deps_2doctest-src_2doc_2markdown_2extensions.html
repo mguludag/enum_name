@@ -150,13 +150,14 @@ The main entry points and mpi reporters</h2>
 <div class="line">  ctx.setOption(<span class="stringliteral">&quot;force-colors&quot;</span>, <span class="keyword">true</span>);</div>
 <div class="line">  ctx.applyCommandLine(argc, argv);</div>
 <div class="line"> </div>
-<div class="line">  <span class="keywordtype">int</span> test_result = ctx.run();</div>
+<div class="line">  <span class="keywordtype">int</span> <a class="code hl_struct" href="structtest__result.html">test_result</a> = ctx.run();</div>
 <div class="line"> </div>
 <div class="line">  doctest::mpi_finalize();</div>
 <div class="line"> </div>
-<div class="line">  <span class="keywordflow">return</span> test_result;</div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code hl_struct" href="structtest__result.html">test_result</a>;</div>
 <div class="line">}</div>
 <div class="ttc" id="aclassdoctest_1_1Context_html"><div class="ttname"><a href="classdoctest_1_1Context.html">doctest::Context</a></div><div class="ttdef"><b>Definition</b> doctest.h:1965</div></div>
+<div class="ttc" id="astructtest__result_html"><div class="ttname"><a href="structtest__result.html">test_result</a></div><div class="ttdef"><b>Definition</b> core-test.cc:321</div></div>
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md120"></a>
 MpiConsoleReporter</h3>
 <p>The <code>MpiConsoleReporter</code> should be substituted to the default reporter. It does the same as the default console reporter for regular assertions, but only outputs on process 0. For MPI test cases, if there is a failure it tells the process that failed</p>

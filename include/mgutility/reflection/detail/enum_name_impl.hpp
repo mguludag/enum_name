@@ -25,6 +25,7 @@ SOFTWARE.
 #ifndef MGUTILITY_REFLECTION_DETAIL_ENUM_NAME_IMPL_HPP
 #define MGUTILITY_REFLECTION_DETAIL_ENUM_NAME_IMPL_HPP
 
+// NOLINTNEXTLINE [unused-includes]
 #include "enum_for_each.hpp"
 #include "meta.hpp"
 #include "mgutility/_common/definitions.hpp"
@@ -73,6 +74,7 @@ SOFTWARE.
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
 
+// NOLINTNEXTLINE [modernize-concat-nested-namespaces]
 namespace mgutility {
 namespace detail {
 
@@ -131,6 +133,7 @@ struct enum_type {
   }
 
 private:
+  // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
   static constexpr int lastidxenumname[] =
 #if defined(__clang__)
       {1,  1, ' ', ':', '(',
@@ -276,9 +279,10 @@ MGUTILITY_CNSTXPR auto enum_name_impl(Enum enumValue) noexcept
  * @return A string view or string representing the name of the enum bitmask
  * value.
  */
+// NOLINTNEXTLINE [modernize-use-constraints]
 template <typename Enum, int Min, int Max,
           detail::enable_if_t<detail::has_bit_or<Enum>::value, bool> = true>
-          MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
+MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
     -> mgutility::fixed_string<MGUTILITY_ENUM_NAME_BUFFER_SIZE> {
 
   // Get the array of enum names

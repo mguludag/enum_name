@@ -9,6 +9,7 @@
 
 #include <fmt/format.h>
 
+// NOLINTNEXTLINE [performance-enum-size]
 enum class Position {
   Top = 1 << 0,
   Right = 1 << 1,
@@ -16,7 +17,9 @@ enum class Position {
   Left = 1 << 3
 };
 
+// NOLINTNEXTLINE [misc-unused-using-decls]
 using mgutility::operators::operator|;
+// NOLINTNEXTLINE [misc-unused-using-decls]
 using mgutility::operators::operator&;
 
 // Define the range for Position enum values (Option 1)
@@ -28,10 +31,15 @@ template <> struct mgutility::enum_range<Position> {
 // Specialize individual or all enum names
 template <> struct mgutility::custom_enum<Position> {
   static constexpr mgutility::flat_map<Position> map{
+      // NOLINTNEXTLINE [modernize-use-designated-initializers]
       {Position::Top, "TOP"},
+      // NOLINTNEXTLINE [modernize-use-designated-initializers]
       {Position::Right, "RIGHT"},
+      // NOLINTNEXTLINE [modernize-use-designated-initializers]
       {Position::Bottom, "BOTTOM"},
+      // NOLINTNEXTLINE [modernize-use-designated-initializers]
       {Position::Left, "LEFT"},
+      // NOLINTNEXTLINE [modernize-use-designated-initializers]
       {Position::Top | Position::Right | Position::Bottom | Position::Left,
        "CENTER"}};
 };

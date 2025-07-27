@@ -42,7 +42,9 @@ template <typename E> struct is_scoped_enum {
    * @brief Boolean value indicating if the type is a scoped enumeration.
    */
   static constexpr auto value =
+      // NOLINTNEXTLINE [modernize-type-traits]
       std::is_enum<E>::value &&
+      // NOLINTNEXTLINE [modernize-type-traits]
       !std::is_convertible<E, typename std::underlying_type<E>::type>::value;
 };
 
@@ -84,6 +86,7 @@ static constexpr bool is_scoped_enum_v = is_scoped_enum<E>::value;
  * @tparam T The type to be enabled if `B` is true, default is void.
  */
 template <bool B, class T = void>
+// NOLINTNEXTLINE [modernize-type-traits]
 using enable_if_t = typename std::enable_if<B, T>::type;
 
 /**
@@ -92,6 +95,7 @@ using enable_if_t = typename std::enable_if<B, T>::type;
  * @tparam T The enumeration type.
  */
 template <typename T>
+// NOLINTNEXTLINE [modernize-type-traits]
 using underlying_type_t = typename std::underlying_type<T>::type;
 
 /**
@@ -100,6 +104,7 @@ using underlying_type_t = typename std::underlying_type<T>::type;
  * @tparam T The type to remove const from.
  */
 template <typename T>
+// NOLINTNEXTLINE [modernize-type-traits]
 using remove_const_t = typename std::remove_const<T>::type;
 
 /**
@@ -145,7 +150,8 @@ struct enum_sequence_helper<Enum, Min, Min, Next...> {
  * @tparam Max The maximum value in the sequence.
  */
 template <typename Enum, int Min, int Max>
-using make_enum_sequence = typename enum_sequence_helper<Enum, Min, Max + 1>::type;
+using make_enum_sequence =
+    typename enum_sequence_helper<Enum, Min, Max + 1>::type;
 } // namespace detail
 
 /**
@@ -167,6 +173,7 @@ template <typename T>
 #if MGUTILITY_CPLUSPLUS > 201402L || defined(__GNUC__) && !defined(__clang__)
 using flat_map = std::initializer_list<pair<T, const char *>>;
 #else
+// NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
 using flat_map = pair<T, const char *>[];
 #endif
 

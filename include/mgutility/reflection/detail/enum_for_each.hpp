@@ -28,6 +28,7 @@ SOFTWARE.
 #include "meta.hpp"
 #include "mgutility/std/fixed_string.hpp"
 
+// NOLINTNEXTLINE [unused-includes]
 #include <cstdint>
 #include <utility>
 
@@ -43,6 +44,7 @@ namespace detail {
  * @tparam T The type to check.
  */
 template <typename T>
+// NOLINTNEXTLINE [modernize-type-traits]
 using string_or_view_t = typename std::conditional<
     has_bit_or<T>::value,
     mgutility::fixed_string<MGUTILITY_ENUM_NAME_BUFFER_SIZE>,

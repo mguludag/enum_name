@@ -26,8 +26,10 @@ SOFTWARE.
 #define DETAIL_OPTIONAL_HPP
 
 #include "mgutility/_common/definitions.hpp"
+// NOLINTNEXTLINE [unused-includes]
 #include "mgutility/reflection/detail/meta.hpp"
 
+// NOLINTNEXTLINE [unused-includes]
 #include <exception>
 
 #if MGUTILITY_CPLUSPLUS >= 201703L
@@ -101,15 +103,15 @@ public:
    *
    * @param other The other optional to move.
    */
-  MGUTILITY_CNSTXPR inline optional(optional &&other)
- noexcept       : value_{other.value_}, has_value_{other.has_value_} {
+  MGUTILITY_CNSTXPR inline optional(optional &&other) noexcept
+      : value_{other.value_}, has_value_{other.has_value_} {
     other.reset();
   }
 
   /**
    * @brief Destructor.
    */
-   ~optional() = default;
+  ~optional() = default;
 
   /**
    * @brief Copy assignment operator.
@@ -129,7 +131,7 @@ public:
    * @param other The other optional to move.
    * @return A reference to this optional.
    */
-  MGUTILITY_CNSTXPR inline optional &operator=(optional &&other)  noexcept {
+  MGUTILITY_CNSTXPR inline optional &operator=(optional &&other) noexcept {
     value_ = other.value_;
     has_value_ = other.has_value_;
     other.reset();
@@ -141,7 +143,7 @@ public:
    *
    * @param other The other optional to swap with.
    */
-  MGUTILITY_CNSTXPR inline void swap(optional &other)  noexcept {
+  MGUTILITY_CNSTXPR inline void swap(optional &other) noexcept {
     auto val = std::move(other.value_);
     other.value_ = std::move(value_);
     value_ = std::move(val);
@@ -174,7 +176,7 @@ public:
   MGUTILITY_CNSTXPR inline T &value() {
     if (!has_value_) {
       throw bad_optional_access();
-}
+    }
     return value_;
   }
 
@@ -187,7 +189,7 @@ public:
   MGUTILITY_CNSTXPR inline T &value() const {
     if (!has_value_) {
       throw bad_optional_access();
-}
+    }
     return value_;
   }
 

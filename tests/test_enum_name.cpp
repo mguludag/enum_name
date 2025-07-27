@@ -3,6 +3,7 @@
 #include "doctest/doctest.h"
 #include "mgutility/reflection/enum_name.hpp"
 
+// NOLINTNEXTLINE [performance-enum-size]
 enum class color : uint32_t {
   alice_blue,              // rgb(240,248,255)
   antique_white,           // rgb(250,235,215)

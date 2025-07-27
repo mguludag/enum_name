@@ -26,7 +26,10 @@ SOFTWARE.
 #define MGUTILITY_STRING_VIEW_HPP
 
 #include <cstring>
+// NOLINTNEXTLINE [unused-includes]
 #include <iosfwd>
+#include <string>
+#include <utility>
 
 #include "mgutility/_common/definitions.hpp"
 
@@ -44,8 +47,10 @@ namespace detail {
  * @param sz The initial size, default is 0.
  * @return The length of the C-string.
  */
+// NOLINTNEXTLINE [readability-identifier-length]
 constexpr auto strlen_constexpr(const char *str, size_t sz = 0) noexcept
     -> size_t {
+  // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
   return str[sz] == '\0' ? sz : strlen_constexpr(str, ++sz);
 }
 
@@ -71,8 +76,11 @@ constexpr auto is_digit(char character) noexcept -> bool {
 MGUTILITY_CNSTXPR int strncmp_constexpr(const char *lhs, const char *rhs,
                                         size_t count) noexcept {
   for (size_t i = 0; i < count; ++i) {
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
     if (lhs[i] != rhs[i] || lhs[i] == '\0' || rhs[i] == '\0') {
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
       return static_cast<unsigned char>(lhs[i]) -
+             // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
              static_cast<unsigned char>(rhs[i]);
     }
   }
@@ -98,11 +106,13 @@ MGUTILITY_CNSTXPR auto find(const Range &rng, const Pred &pred) -> size_t {
  *
  * @tparam Char The character type, default is char.
  */
+// NOLINTNEXTLINE [cppcoreguidelines-special-member-functions]
 template <typename Char = char> class basic_string_view {
 public:
   /**
    * @brief Default constructor.
    */
+  // NOLINTNEXTLINE [readability-redundant-inline-specifier]
   constexpr inline basic_string_view() noexcept : data_(""), size_(0) {}
 
   /**
@@ -110,6 +120,7 @@ public:
    *
    * @param str The C-string.
    */
+  // NOLINTNEXTLINE [google-explicit-constructor]
   constexpr inline basic_string_view(const Char *str) noexcept
       : data_(str), size_(detail::strlen_constexpr(str)) {}
 
@@ -118,6 +129,7 @@ public:
    *
    * @param str The std::string.
    */
+  // NOLINTNEXTLINE [google-explicit-constructor]
   constexpr basic_string_view(const std::basic_string<Char> &str) noexcept
       : data_(str.c_str()), size_(str.size()) {}
 
@@ -144,7 +156,7 @@ public:
    * @param other The other basic_string_view to move.
    */
   constexpr basic_string_view(basic_string_view &&other) noexcept
-      : data_(std::move(other.data_)), size_(std::move(other.size_)) {}
+      : data_(std::move(other.data_)), size_(other.size_) {}
 
   /**
    * @brief Copy assignment operator.
@@ -174,7 +186,9 @@ public:
    * @param index The index.
    * @return The character at the index.
    */
+  // NOLINTNEXTLINE [readability-const-return-type]
   constexpr const Char operator[](size_t index) const noexcept {
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
     return data_[index];
   }
 
@@ -233,11 +247,14 @@ public:
    * @param pos The position to start from, default is npos.
    * @return The position of the character or npos if not found.
    */
+  // NOLINTNEXTLINE [readability-identifier-length]
   constexpr size_t rfind(Char c, size_t pos = npos) const noexcept {
-    return (pos == npos ? pos = size_ : pos = pos), c == data_[pos] ? pos
-                                                    : pos == 0U
-                                                        ? npos
-                                                        : rfind(c, --pos);
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
+    return (pos == npos ? pos = size_ : pos = pos),
+           c == data_[pos] ? pos
+           // NOLINTNEXTLINE [readability-avoid-nested-conditional-operator]
+           : pos == 0U ? npos
+                       : rfind(c, --pos);
   }
 
   /**
@@ -247,7 +264,9 @@ public:
    * @param pos The position to start from, default is 0.
    * @return The position of the character or npos if not found.
    */
+  // NOLINTNEXTLINE [readability-identifier-length]
   constexpr size_t find(Char c, size_t pos = 0) const noexcept {
+    // NOLINTNEXTLINE [readability-avoid-nested-conditional-operator]
     return c == data_[pos] ? pos : pos < size_ ? find(c, ++pos) : npos;
   }
 
@@ -308,6 +327,7 @@ public:
    *
    * @return An std::string representing the same string.
    */
+  // NOLINTNEXTLINE [google-explicit-constructor]
   operator std::string() { return std::string(data_, size_); }
 
   /**
@@ -315,6 +335,7 @@ public:
    *
    * @return An std::string representing the same string.
    */
+  // NOLINTNEXTLINE [google-explicit-constructor]
   operator std::string() const { return std::string(data_, size_); }
 
   /**
@@ -324,8 +345,12 @@ public:
    * @param sv The basic_string_view.
    * @return A reference to the output stream.
    */
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const basic_string_view<Char> &sv) {
+  // NOLINTNEXTLINE [readability-identifier-length]
+  friend std::ostream &
+  operator<<(std::ostream &os,
+             // NOLINTNEXTLINE [readability-identifier-length]
+             const basic_string_view<Char> &sv) {
+    // NOLINTNEXTLINE [readability-identifier-length]
     for (auto c : sv) {
       os << c;
     }

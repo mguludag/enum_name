@@ -32,6 +32,7 @@ namespace mgutility {
 template <size_t N = 0> class fixed_string {
 public:
   template <size_t M>
+  // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
   MGUTILITY_CNSTXPR static auto make(const char (&str)[M]) -> fixed_string<M> {
     return fixed_string<M>{str};
   }
@@ -39,6 +40,7 @@ public:
   MGUTILITY_CNSTXPR fixed_string() = default;
 
   // Constructor to initialize from a string literal
+  // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
   MGUTILITY_CNSTXPR explicit fixed_string(const char (&str)[N]) {
     for (size_t i = 0; i < N - 1; ++i) {
       data[i] = str[i];
@@ -54,51 +56,63 @@ public:
     fixed_string<N + M - 1> result{};
     size_t idx = 0;
     for (; idx < N - 1; ++idx) {
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
       result.data[idx] = data[idx];
     }
     for (size_t j = 0; j < M; ++j) {
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
       result.data[idx + j] = other.data[j];
     }
     result.cursor = N + M - 2;
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
     result.data[result.cursor] = '\0';
     return result;
   }
 
   // Concatenation operator
   template <size_t M>
+  // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
   MGUTILITY_CNSTXPR auto operator+(const char (&str)[M]) const
       -> fixed_string<N + M - 1> {
     return *this + fixed_string<M>{str};
   }
 
   template <size_t M>
+  // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
   MGUTILITY_CNSTXPR auto append(const char (&str)[M]) -> fixed_string<N> & {
     static_assert(N > M,
                   "Capacity needs to be greater than string to be appended!");
     for (size_t i = 0; i < M - 1; ++i) {
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
       data[cursor++] = str[i];
     }
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
     data[cursor] = '\0';
     return *this;
   }
 
   MGUTILITY_CNSTXPR auto append(string_view str) -> fixed_string<N> & {
-    for (char chr : str) {
+    for (const char chr : str) {
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
       data[cursor++] = chr;
     }
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
     data[cursor] = '\0';
     return *this;
   }
 
   MGUTILITY_CNSTXPR auto pop_back() -> void {
     if (cursor > 0) {
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
       data[--cursor] = '\0';
     }
   }
 
   MGUTILITY_CNSTXPR auto size() const -> size_t { return cursor; }
 
+  // NOLINTNEXTLINE [readability-identifier-length]
   constexpr size_t find(char c, size_t pos = 0) const noexcept {
+    // NOLINTNEXTLINE [readability-avoid-nested-conditional-operator]
     return c == data[pos] ? pos : (pos < cursor ? find(c, ++pos) : npos);
   }
 
@@ -115,16 +129,19 @@ public:
   constexpr bool empty() const noexcept { return cursor == 0; }
 
   constexpr const char &operator[](size_t index) const noexcept {
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
     return data[index];
   }
 
   MGUTILITY_CNSTXPR inline bool operator==(const char *rhs) const {
-    return string_view(*this) == rhs;
+    return view() == rhs;
   }
 
+  // NOLINTNEXTLINE [readability-identifier-length]
   friend std::ostream &operator<<(std::ostream &os,
                                   const fixed_string<N> &str) {
     for (size_t i = 0; i < str.cursor; ++i) {
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
       os << str.data[i];
     }
     return os;
@@ -133,6 +150,7 @@ public:
   static constexpr auto npos = -1;
 
 private:
+  // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
   char data[N]{'\0'};
   size_t cursor{};
 };

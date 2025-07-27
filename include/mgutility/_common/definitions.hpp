@@ -104,6 +104,7 @@ SOFTWARE.
  * This macro defines the size of the buffer used for enum names.
  */
 #ifndef MGUTILITY_ENUM_NAME_BUFFER_SIZE
+// NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
 #define MGUTILITY_ENUM_NAME_BUFFER_SIZE 128U
 #endif
 

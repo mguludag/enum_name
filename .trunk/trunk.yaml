@@ -21,16 +21,6 @@ lint:
     - cmake-format@0.6.13
     - clang-format@16.0.3
     - clang-tidy@16.0.3
-    - actionlint@1.7.6
-    - checkov@3.2.352
-    - git-diff-check
-    - markdownlint@0.43.0
-    - prettier@3.4.2
-    - shellcheck@0.10.0
-    - shfmt@3.6.0
-    - trivy@0.58.1
-    - trufflehog@3.88.2
-    - yamllint@1.35.1
 
 actions:
   disabled:

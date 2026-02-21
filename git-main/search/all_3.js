@@ -1,24 +1,9 @@
 var searchData=
 [
-  ['3_200_200_202016_2005_2007_0',['3.0.0 - 2016-05-07',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2fmt-src_2ChangeLog.html#autotoc_md238',1,'']]],
-  ['3_200_201_202016_2011_2001_1',['3.0.1 - 2016-11-01',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2fmt-src_2ChangeLog.html#autotoc_md237',1,'']]],
-  ['3_200_202_202017_2006_2014_2',['3.0.2 - 2017-06-14',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2fmt-src_2ChangeLog.html#autotoc_md236',1,'']]],
-  ['3_200_202_203_200_20a_202019_2003_2023_3',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/2.3.0&quot; &gt;2.3.0&lt;/a&gt; (2019-03-23)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md21',1,'']]],
-  ['3_200_202018_2012_2028_4',['5.3.0 - 2018-12-28',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2fmt-src_2ChangeLog.html#autotoc_md229',1,'']]],
-  ['3_201_201_203_20a_202016_2011_2015_5',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/1.1.3&quot; &gt;1.1.3&lt;/a&gt; (2016-11-15)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md40',1,'']]],
-  ['3_201_202_203_201_20a_202019_2003_2024_6',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/2.3.1&quot; &gt;2.3.1&lt;/a&gt; (2019-03-24)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md20',1,'']]],
-  ['3_201_202_203_20a_202017_2009_2011_7',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/1.2.3&quot; &gt;1.2.3&lt;/a&gt; (2017-09-11)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md35',1,'']]],
-  ['3_202_202_203_202_20a_202019_2005_2006_8',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/2.3.2&quot; &gt;2.3.2&lt;/a&gt; (2019-05-06)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md19',1,'']]],
-  ['3_202_202_203_20a_202019_2002_2010_9',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/2.2.3&quot; &gt;2.2.3&lt;/a&gt; (2019-02-10)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md22',1,'']]],
-  ['3_202_204_203_20a_202020_2012_2016_10',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/2.4.3&quot; &gt;2.4.3&lt;/a&gt; (2020-12-16)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md9',1,'']]],
-  ['3_202020_2008_2006_11',['7.0.3 - 2020-08-06',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2fmt-src_2ChangeLog.html#autotoc_md219',1,'']]],
-  ['3_202020_2011_2024_12',['7.1.3 - 2020-11-24',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2fmt-src_2ChangeLog.html#autotoc_md215',1,'']]],
-  ['3_203_202_203_203_20a_202019_2006_2002_13',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/2.3.3&quot; &gt;2.3.3&lt;/a&gt; (2019-06-02)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md18',1,'']]],
-  ['3_204_202_203_204_20a_202019_2008_2012_14',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/2.3.4&quot; &gt;2.3.4&lt;/a&gt; (2019-08-12)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md17',1,'']]],
-  ['3_205_202_203_205_20a_202019_2009_2022_15',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/2.3.5&quot; &gt;2.3.5&lt;/a&gt; (2019-09-22)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md16',1,'']]],
-  ['3_206_202_203_206_20a_202019_2012_2016_16',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/2.3.6&quot; &gt;2.3.6&lt;/a&gt; (2019-12-16)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md15',1,'']]],
-  ['3_207_202_203_207_20a_202020_2002_2024_17',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/2.3.7&quot; &gt;2.3.7&lt;/a&gt; (2020-02-24)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md14',1,'']]],
-  ['3_208_202_203_208_20a_202020_2005_2017_18',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/2.3.8&quot; &gt;2.3.8&lt;/a&gt; (2020-05-17)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md13',1,'']]],
-  ['30_19',['&lt;a href=&quot;https://github.com/doctest/doctest/tree/2.1.0&quot; &gt;2.1.0&lt;/a&gt; (2018-11-30)',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CHANGELOG.html#autotoc_md26',1,'']]],
-  ['35243000_20',['FMTCompileOld/9223372036854775807       19.4 ns         19.4 ns     35243000',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2fmt-src_2ChangeLog.html#autotoc_md208',1,'']]]
+  ['cmake_0',['Fetch library with CMake',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md5',1,'']]],
+  ['cmake_20options_1',['CMake options',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md6',1,'']]],
+  ['compilers_2',['Supported Compilers',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md2',1,'']]],
+  ['custom_5fenum_3',['custom_enum',['../structmgutility_1_1custom__enum.html',1,'mgutility']]],
+  ['custom_5fenum_3c_20color_20_3e_4',['custom_enum&lt; color &gt;',['../structmgutility_1_1custom__enum_3_01color_01_4.html',1,'mgutility']]],
+  ['custom_5fenum_3c_20position_20_3e_5',['custom_enum&lt; Position &gt;',['../structmgutility_1_1custom__enum_3_01Position_01_4.html',1,'mgutility']]]
 ];

@@ -122,26 +122,26 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a75473c617d81cd0249ce810ad90c05b7" id="r_a75473c617d81cd0249ce810ad90c05b7"><td class="memTemplParams" colspan="2"><a id="a75473c617d81cd0249ce810ad90c05b7" name="a75473c617d81cd0249ce810ad90c05b7"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a75473c617d81cd0249ce810ad90c05b7"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>flat_map</b> = <a class="el" href="structmgutility_1_1pair.html">pair</a>&lt;T, const char *&gt;[]</td></tr>
+template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">T</a> &gt; </td></tr>
+<tr class="memitem:a75473c617d81cd0249ce810ad90c05b7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structmgutility_1_1pair.html">using</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>flat_map</b> = <a class="el" href="structmgutility_1_1pair.html">pair</a>&lt;<a class="el" href="structmgutility_1_1pair.html">T</a>, <a class="el" href="structmgutility_1_1pair.html">const</a> <a class="el" href="structmgutility_1_1pair.html">char</a> *&gt;[]</td></tr>
 <tr class="separator:a75473c617d81cd0249ce810ad90c05b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a1b03a039d6f5e963df90cb72a9671aa7" id="r_a1b03a039d6f5e963df90cb72a9671aa7"><td class="memTemplParams" colspan="2">template&lt;typename Enum &gt; </td></tr>
-<tr class="memitem:a1b03a039d6f5e963df90cb72a9671aa7"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a1b03a039d6f5e963df90cb72a9671aa7">enum_to_underlying</a> (Enum enumValue) noexcept -&gt; detail::underlying_type_t&lt; Enum &gt;</td></tr>
-<tr class="memdesc:a1b03a039d6f5e963df90cb72a9671aa7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts an enum value to its underlying integer value.  <br /></td></tr>
-<tr class="separator:a1b03a039d6f5e963df90cb72a9671aa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd6b8335869248ad4f8525ef4371ea89" id="r_acd6b8335869248ad4f8525ef4371ea89"><td class="memTemplParams" colspan="2">template&lt;int Min, int Max, typename Enum &gt; </td></tr>
-<tr class="memitem:acd6b8335869248ad4f8525ef4371ea89"><td class="memTemplItemLeft" align="right" valign="top">MGUTILITY_CNSTXPR auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#acd6b8335869248ad4f8525ef4371ea89">enum_name</a> (Enum enumValue) noexcept -&gt; detail::string_or_view_t&lt; Enum &gt;</td></tr>
+<tr class="memitem:afca3554db8bd05f918d5b1d820a620c1" id="r_afca3554db8bd05f918d5b1d820a620c1"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">Enum</a> , detail::enable_if_t&lt; std::is_enum&lt; <a class="el" href="structmgutility_1_1pair.html">Enum</a> &gt;::value, <a class="el" href="structmgutility_1_1pair.html">bool</a> &gt;  = true&gt; </td></tr>
+<tr class="memitem:afca3554db8bd05f918d5b1d820a620c1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structmgutility_1_1pair.html">constexpr</a> <a class="el" href="structmgutility_1_1pair.html">auto</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#afca3554db8bd05f918d5b1d820a620c1">to_underlying</a> (<a class="el" href="structmgutility_1_1pair.html">Enum</a> <a class="el" href="structmgutility_1_1pair.html">enumValue</a>) <a class="el" href="structmgutility_1_1pair.html">noexcept</a> -&gt; detail::underlying_type_t&lt; <a class="el" href="structmgutility_1_1pair.html">Enum</a> &gt;</td></tr>
+<tr class="memdesc:afca3554db8bd05f918d5b1d820a620c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts an enum value to its underlying integer value.  <br /></td></tr>
+<tr class="separator:afca3554db8bd05f918d5b1d820a620c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd6b8335869248ad4f8525ef4371ea89" id="r_acd6b8335869248ad4f8525ef4371ea89"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="structmgutility_1_1pair.html">int</a> Min, <a class="el" href="structmgutility_1_1pair.html">int</a> Max, <a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">Enum</a> &gt; </td></tr>
+<tr class="memitem:acd6b8335869248ad4f8525ef4371ea89"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structmgutility_1_1pair.html">MGUTILITY_CNSTXPR</a> <a class="el" href="structmgutility_1_1pair.html">auto</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#acd6b8335869248ad4f8525ef4371ea89">enum_name</a> (<a class="el" href="structmgutility_1_1pair.html">Enum</a> <a class="el" href="structmgutility_1_1pair.html">enumValue</a>) <a class="el" href="structmgutility_1_1pair.html">noexcept</a> -&gt; detail::string_or_view_t&lt; <a class="el" href="structmgutility_1_1pair.html">Enum</a> &gt;</td></tr>
 <tr class="memdesc:acd6b8335869248ad4f8525ef4371ea89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the name of an enum value.  <br /></td></tr>
 <tr class="separator:acd6b8335869248ad4f8525ef4371ea89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47470bc6b087ab3ceab7c3873203a2eb" id="r_a47470bc6b087ab3ceab7c3873203a2eb"><td class="memTemplParams" colspan="2">template&lt;typename Enum , int Min = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::min), int Max = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::max), detail::enable_if_t&lt;!<a class="el" href="structmgutility_1_1detail_1_1has__bit__or.html">detail::has_bit_or</a>&lt; Enum &gt;::value, bool &gt;  = true&gt; </td></tr>
-<tr class="memitem:a47470bc6b087ab3ceab7c3873203a2eb"><td class="memTemplItemLeft" align="right" valign="top">MGUTILITY_CNSTXPR auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a47470bc6b087ab3ceab7c3873203a2eb">to_enum</a> (mgutility::string_view str) noexcept -&gt; mgutility::optional&lt; Enum &gt;</td></tr>
+<tr class="memitem:a47470bc6b087ab3ceab7c3873203a2eb" id="r_a47470bc6b087ab3ceab7c3873203a2eb"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">Enum</a> , <a class="el" href="structmgutility_1_1pair.html">int</a> Min = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::min), <a class="el" href="structmgutility_1_1pair.html">int</a> Max = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::max), detail::enable_if_t&lt;!<a class="el" href="structmgutility_1_1detail_1_1has__bit__or.html">detail::has_bit_or</a>&lt; <a class="el" href="structmgutility_1_1pair.html">Enum</a> &gt;::value, <a class="el" href="structmgutility_1_1pair.html">bool</a> &gt;  = true&gt; </td></tr>
+<tr class="memitem:a47470bc6b087ab3ceab7c3873203a2eb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structmgutility_1_1pair.html">MGUTILITY_CNSTXPR</a> <a class="el" href="structmgutility_1_1pair.html">auto</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a47470bc6b087ab3ceab7c3873203a2eb">to_enum</a> (<a class="el" href="structmgutility_1_1pair.html">mgutility::string_view</a> <a class="el" href="structmgutility_1_1pair.html">str</a>) <a class="el" href="structmgutility_1_1pair.html">noexcept</a> -&gt; <a class="el" href="structmgutility_1_1pair.html">mgutility::optional</a>&lt; <a class="el" href="structmgutility_1_1pair.html">Enum</a> &gt;</td></tr>
 <tr class="memdesc:a47470bc6b087ab3ceab7c3873203a2eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a string to an enum value.  <br /></td></tr>
 <tr class="separator:a47470bc6b087ab3ceab7c3873203a2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a945fab3988ccb5de52589c67ee654e38" id="r_a945fab3988ccb5de52589c67ee654e38"><td class="memTemplParams" colspan="2">template&lt;typename Enum , int Min = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::min), int Max = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::max)&gt; </td></tr>
-<tr class="memitem:a945fab3988ccb5de52589c67ee654e38"><td class="memTemplItemLeft" align="right" valign="top">MGUTILITY_CNSTXPR auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a945fab3988ccb5de52589c67ee654e38">enum_cast</a> (int value) noexcept -&gt; mgutility::optional&lt; Enum &gt;</td></tr>
+<tr class="memitem:a945fab3988ccb5de52589c67ee654e38" id="r_a945fab3988ccb5de52589c67ee654e38"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">Enum</a> , <a class="el" href="structmgutility_1_1pair.html">int</a> Min = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::min), <a class="el" href="structmgutility_1_1pair.html">int</a> Max = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::max)&gt; </td></tr>
+<tr class="memitem:a945fab3988ccb5de52589c67ee654e38"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structmgutility_1_1pair.html">MGUTILITY_CNSTXPR</a> <a class="el" href="structmgutility_1_1pair.html">auto</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a945fab3988ccb5de52589c67ee654e38">enum_cast</a> (<a class="el" href="structmgutility_1_1pair.html">int</a> value) <a class="el" href="structmgutility_1_1pair.html">noexcept</a> -&gt; <a class="el" href="structmgutility_1_1pair.html">mgutility::optional</a>&lt; <a class="el" href="structmgutility_1_1pair.html">Enum</a> &gt;</td></tr>
 <tr class="memdesc:a945fab3988ccb5de52589c67ee654e38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Casts an integer value to an enum value.  <br /></td></tr>
 <tr class="separator:a945fab3988ccb5de52589c67ee654e38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -157,16 +157,16 @@ Functions</h2></td></tr>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Enum , int Min = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::min), int Max = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::max)&gt; </div>
+template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">Enum</a> , <a class="el" href="structmgutility_1_1pair.html">int</a> Min = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::min), <a class="el" href="structmgutility_1_1pair.html">int</a> Max = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::max)&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">MGUTILITY_CNSTXPR auto mgutility::enum_cast </td>
+          <td class="memname"><a class="el" href="structmgutility_1_1pair.html">MGUTILITY_CNSTXPR</a> <a class="el" href="structmgutility_1_1pair.html">auto</a> mgutility::enum_cast </td>
           <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>value</em></span></td><td>)</td>
-          <td> -&gt; mgutility::optional&lt;Enum&gt; </td>
+          <td class="paramtype"><a class="el" href="structmgutility_1_1pair.html">int</a></td>          <td class="paramname"><span class="paramname"><em>value</em></span></td><td>)</td>
+          <td> -&gt; <a class="el" href="structmgutility_1_1pair.html">mgutility::optional</a>&lt;<a class="el" href="structmgutility_1_1pair.html">Enum</a>&gt; </td>
         </tr>
       </table>
   </td>
@@ -201,16 +201,16 @@ template&lt;typename Enum , int Min = static_cast&lt;int&gt;(enum_range&lt;Enum&
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;int Min, int Max, typename Enum &gt; </div>
+template&lt;<a class="el" href="structmgutility_1_1pair.html">int</a> Min, <a class="el" href="structmgutility_1_1pair.html">int</a> Max, <a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">Enum</a> &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">MGUTILITY_CNSTXPR auto mgutility::enum_name </td>
+          <td class="memname"><a class="el" href="structmgutility_1_1pair.html">MGUTILITY_CNSTXPR</a> <a class="el" href="structmgutility_1_1pair.html">auto</a> mgutility::enum_name </td>
           <td>(</td>
-          <td class="paramtype">Enum</td>          <td class="paramname"><span class="paramname"><em>enumValue</em></span></td><td>)</td>
-          <td> -&gt; detail::string_or_view_t&lt;Enum&gt; </td>
+          <td class="paramtype"><a class="el" href="structmgutility_1_1pair.html">Enum</a></td>          <td class="paramname"><span class="paramname"><em>enumValue</em></span></td><td>)</td>
+          <td> -&gt; detail::string_or_view_t&lt;<a class="el" href="structmgutility_1_1pair.html">Enum</a>&gt; </td>
         </tr>
       </table>
   </td>
@@ -254,64 +254,22 @@ template&lt;int Min, int Max, typename Enum &gt; </div>
 
 </div>
 </div>
-<a id="a1b03a039d6f5e963df90cb72a9671aa7" name="a1b03a039d6f5e963df90cb72a9671aa7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b03a039d6f5e963df90cb72a9671aa7">&#9670;&#160;</a></span>enum_to_underlying()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Enum &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto mgutility::enum_to_underlying </td>
-          <td>(</td>
-          <td class="paramtype">Enum</td>          <td class="paramname"><span class="paramname"><em>enumValue</em></span></td><td>)</td>
-          <td> -&gt; detail::underlying_type_t&lt;Enum&gt; </td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Converts an enum value to its underlying integer value. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">Enum</td><td>The enum type. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">e</td><td>The enum value. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The underlying integer value of the enum. </dd></dl>
-
-</div>
-</div>
 <a id="a47470bc6b087ab3ceab7c3873203a2eb" name="a47470bc6b087ab3ceab7c3873203a2eb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a47470bc6b087ab3ceab7c3873203a2eb">&#9670;&#160;</a></span>to_enum()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Enum , int Min = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::min), int Max = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::max), detail::enable_if_t&lt;!<a class="el" href="structmgutility_1_1detail_1_1has__bit__or.html">detail::has_bit_or</a>&lt; Enum &gt;::value, bool &gt;  = true&gt; </div>
+template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">Enum</a> , <a class="el" href="structmgutility_1_1pair.html">int</a> Min = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::min), <a class="el" href="structmgutility_1_1pair.html">int</a> Max = static_cast&lt;int&gt;(enum_range&lt;Enum&gt;::max), detail::enable_if_t&lt;!<a class="el" href="structmgutility_1_1detail_1_1has__bit__or.html">detail::has_bit_or</a>&lt; <a class="el" href="structmgutility_1_1pair.html">Enum</a> &gt;::value, <a class="el" href="structmgutility_1_1pair.html">bool</a> &gt;  = true&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">MGUTILITY_CNSTXPR auto mgutility::to_enum </td>
+          <td class="memname"><a class="el" href="structmgutility_1_1pair.html">MGUTILITY_CNSTXPR</a> <a class="el" href="structmgutility_1_1pair.html">auto</a> mgutility::to_enum </td>
           <td>(</td>
-          <td class="paramtype">mgutility::string_view</td>          <td class="paramname"><span class="paramname"><em>str</em></span></td><td>)</td>
-          <td> -&gt; mgutility::optional&lt;Enum&gt; </td>
+          <td class="paramtype"><a class="el" href="structmgutility_1_1pair.html">mgutility::string_view</a></td>          <td class="paramname"><span class="paramname"><em>str</em></span></td><td>)</td>
+          <td> -&gt; <a class="el" href="structmgutility_1_1pair.html">mgutility::optional</a>&lt;<a class="el" href="structmgutility_1_1pair.html">Enum</a>&gt; </td>
         </tr>
       </table>
   </td>
@@ -353,6 +311,48 @@ template&lt;typename Enum , int Min = static_cast&lt;int&gt;(enum_range&lt;Enum&
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An optional enum bitmask value. </dd></dl>
+
+</div>
+</div>
+<a id="afca3554db8bd05f918d5b1d820a620c1" name="afca3554db8bd05f918d5b1d820a620c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afca3554db8bd05f918d5b1d820a620c1">&#9670;&#160;</a></span>to_underlying()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">Enum</a> , detail::enable_if_t&lt; std::is_enum&lt; <a class="el" href="structmgutility_1_1pair.html">Enum</a> &gt;::value, <a class="el" href="structmgutility_1_1pair.html">bool</a> &gt;  = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmgutility_1_1pair.html">constexpr</a> <a class="el" href="structmgutility_1_1pair.html">auto</a> mgutility::to_underlying </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmgutility_1_1pair.html">Enum</a></td>          <td class="paramname"><span class="paramname"><em>enumValue</em></span></td><td>)</td>
+          <td> -&gt; detail::underlying_type_t&lt;<a class="el" href="structmgutility_1_1pair.html">Enum</a>&gt; </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts an enum value to its underlying integer value. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Enum</td><td>The enum type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">e</td><td>The enum value. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The underlying integer value of the enum. </dd></dl>
 
 </div>
 </div>

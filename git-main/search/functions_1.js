@@ -1,10 +1,7 @@
 var searchData=
 [
-  ['basic_5fcstring_5fview_0',['basic_cstring_view',['../classbasic__cstring__view.html#ab464b2378652892cec4716d3e3d475c7',1,'basic_cstring_view::basic_cstring_view(const Char *s)'],['../classbasic__cstring__view.html#a10b92cc0e3e67789601984099b9ed339',1,'basic_cstring_view::basic_cstring_view(const std::basic_string&lt; Char &gt; &amp;s)']]],
-  ['basic_5fformat_5fargs_1',['basic_format_args',['../classbasic__format__args.html#ac40bdd2deb4a1000df76553387588775',1,'basic_format_args::basic_format_args(const format_arg_store&lt; Context, Args... &gt; &amp;store)'],['../classbasic__format__args.html#a69dd0f6fb0e95f42f57cc3bfb095a397',1,'basic_format_args::basic_format_args(const dynamic_format_arg_store&lt; Context &gt; &amp;store)'],['../classbasic__format__args.html#a1b6a098d11577f454964b51c2d7f9027',1,'basic_format_args::basic_format_args(const format_arg *args, int count)']]],
-  ['basic_5fformat_5fcontext_2',['basic_format_context',['../classbasic__format__context.html#af9f83b3b640bc3cb8d6cb93332bb27a1',1,'basic_format_context']]],
-  ['basic_5fmemory_5fbuffer_3',['basic_memory_buffer',['../classbasic__memory__buffer.html#ade18cff12fc914085665a07af2e8fb7b',1,'basic_memory_buffer']]],
-  ['basic_5fprintf_5fcontext_4',['basic_printf_context',['../classbasic__printf__context.html#a34c89760bb25aa1b6c40b912127a1189',1,'basic_printf_context']]],
-  ['basic_5fstring_5fview_5',['basic_string_view',['../classbasic__string__view.html#aae708273ca864680a424c10441799605',1,'basic_string_view::basic_string_view(const Char *s, size_t count) noexcept'],['../classbasic__string__view.html#a961254412253f97e1273cdaacb1af1a3',1,'basic_string_view::basic_string_view(const Char *s)'],['../classbasic__string__view.html#a05e308de94ccd7f6203ba3ea94f68ebd',1,'basic_string_view::basic_string_view(const std::basic_string&lt; Char, Traits, Alloc &gt; &amp;s) noexcept']]],
-  ['begin_6',['begin',['../classbasic__format__parse__context.html#afb21ddaa0d32b5430f99eed530666ea9',1,'basic_format_parse_context::begin()'],['../classmgutility_1_1enum__for__each.html#a1415f386351d4564317694ea55e29954',1,'mgutility::enum_for_each::begin()']]]
+  ['end_0',['end',['../classmgutility_1_1enum__for__each.html#a6ab0021b410129cbb2d45a21997bb9d5',1,'mgutility::enum_for_each']]],
+  ['enum_5fcast_1',['enum_cast',['../namespacemgutility.html#a945fab3988ccb5de52589c67ee654e38',1,'mgutility']]],
+  ['enum_5ffor_5feach_2',['enum_for_each',['../classmgutility_1_1enum__for__each.html#a136743f726f0af0b04c027dfa3ca08cc',1,'mgutility::enum_for_each']]],
+  ['enum_5fname_3',['enum_name',['../namespacemgutility.html#acd6b8335869248ad4f8525ef4371ea89',1,'mgutility']]]
 ];

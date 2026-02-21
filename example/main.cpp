@@ -7,7 +7,10 @@
 #include <ranges>
 #endif
 
+#if defined(ENUM_NAME_USE_FMT) ||                                              \
+    (defined(MGUTILITY_HAS_HAS_INCLUDE) && __has_include(<fmt/format.h>))
 #include <fmt/format.h>
+#endif
 
 // NOLINTNEXTLINE [performance-enum-size]
 enum class Position {
@@ -90,8 +93,14 @@ int main() {
   for (auto &&elem : mgutility::enum_for_each<Position>()) {
     if (!elem.second.empty() &&
         elem.second.find('|') == mgutility::string_view::npos) {
-      fmt::print("{} \t: {}\n", mgutility::enum_to_underlying(elem.first),
+#if defined(ENUM_NAME_USE_FMT) ||                                              \
+    (defined(MGUTILITY_HAS_HAS_INCLUDE) && __has_include(<fmt/format.h>))
+      fmt::print("{} \t: {}\n", mgutility::to_underlying(elem.first),
                  elem.second);
+#else
+      std::cout << mgutility::to_underlying(elem.first)
+                << " \t: " << elem.second << '\n';
+#endif
     }
   }
 #endif

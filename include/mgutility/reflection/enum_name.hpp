@@ -36,8 +36,10 @@ namespace mgutility {
  * @param e The enum value.
  * @return The underlying integer value of the enum.
  */
-template <typename Enum>
-constexpr auto enum_to_underlying(Enum enumValue) noexcept
+template <typename Enum,
+          // NOLINTNEXTLINE [modernize-type-traits]
+          detail::enable_if_t<std::is_enum<Enum>::value, bool> = true>
+constexpr auto to_underlying(Enum enumValue) noexcept
     -> detail::underlying_type_t<Enum> {
   // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
@@ -160,16 +162,16 @@ template <typename Enum, mgutility::detail::enable_if_t<
                              // NOLINTNEXTLINE [modernize-type-traits]
                              std::is_enum<Enum>::value, bool> = true>
 constexpr auto operator&(const Enum &lhs, const Enum &rhs) -> Enum {
-  return static_cast<Enum>(mgutility::enum_to_underlying(lhs) &
-                           mgutility::enum_to_underlying(rhs));
+  return static_cast<Enum>(mgutility::to_underlying(lhs) &
+                           mgutility::to_underlying(rhs));
 }
 
 template <typename Enum, mgutility::detail::enable_if_t<
                              // NOLINTNEXTLINE [modernize-type-traits]
                              std::is_enum<Enum>::value, bool> = true>
 constexpr auto operator|(const Enum &lhs, const Enum &rhs) -> Enum {
-  return static_cast<Enum>(mgutility::enum_to_underlying(lhs) |
-                           mgutility::enum_to_underlying(rhs));
+  return static_cast<Enum>(mgutility::to_underlying(lhs) |
+                           mgutility::to_underlying(rhs));
 }
 } // namespace operators
 
@@ -219,6 +221,7 @@ struct std::formatter<Enum> : formatter<std::string_view> {
 
 template <class Enum>
 struct fmt::formatter<Enum, char,
+                      // NOLINTNEXTLINE [modernize-type-traits]
                       mgutility::detail::enable_if_t<std::is_enum<Enum>::value>>
     : formatter<string_view> {
   // NOLINTNEXTLINE [readability-identifier-length]

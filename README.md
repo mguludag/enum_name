@@ -14,14 +14,14 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 - Supports enums in namespaces, classes or structs even templated or not
 - Supports full compile-time with C++20 and later
 - Changing enum range with template parameter <sub>(default range: `[0, 256)`)</sub> on each call or with your special function for types or adding specialized `enum_range<Enum>` struct
-- Supports and automatically overloaded `operator<<` and add `std::formatter` specialization for Enum types to direct using with ostream objects and `std::format` (If `fmtlib` is available, simply adding the specialization like this [`template <> struct fmt::formatter<YourEnumType> : ostream_formatter {};`] is enough.)
+- Supports and automatically overloaded `operator<<` and add `std::formatter` specialization for Enum types to direct using with ostream objects,`std::format` and `fmt::format` (when `fmtlib` is available on system and `ENUM_NAME_USE_FMT` needs to be defined if compiler doesn't support `__has_include` macro)
 - Supports custom enum name(s) input/output by explicit specialization of `template <> struct mgutility::custom_enum<Enum>` with `static constexpr mgutility::flat_map<Enum> map{{Enum, const char*},...}` variable.
 - Supports bitmasked enums and auto detect them
 - Supports iterate over enum (names and values) with `mgutility::enum_for_each<T>()` class and it is compatible with standard ranges and views
 
 ## Limitations
 
-- Compiler versions
+- Compiler [versions](#supported-compilers)
 - Wider range can increase compile time so user responsible to adjusting for enum's range
 
 ## Fetch library with CMake
@@ -41,6 +41,16 @@ FetchContent_MakeAvailable(enum_name)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE mgutility::enum_name)
 ```
+
+## CMake options
+
+| Option | Description | Default |
+| --- | --- | --- |
+| ENUM_NAME_BUILD_DOCS | Build documentation | OFF |
+| ENUM_NAME_BUILD_TESTS | Build tests | OFF |
+| ENUM_NAME_BUILD_EXAMPLE | Build example | ON |
+| ENUM_NAME_FETCH_FMT | Fetch fmt library | OFF |
+| ENUM_NAME_INSTALL | Install the enum_name library | OFF |
 
 ## Example usage ([try it!](https://godbolt.org/z/1nqrj78vb))
 

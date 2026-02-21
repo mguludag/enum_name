@@ -6,9 +6,10 @@ project(
   LANGUAGES CXX)
 
 option(ENUM_NAME_BUILD_DOCS "Build documentation" OFF)
+option(ENUM_NAME_BUILD_TESTS "Build tests" OFF)
 option(ENUM_NAME_BUILD_EXAMPLE "Build example" ON)
-option(ENUM_NAME_NO_INSTALL "Skip installation of enum_name" OFF)
-option(ENUM_NAME_NO_TESTS "Skip testing of enum_name" OFF)
+option(ENUM_NAME_FETCH_FMT "Fetch fmt library" OFF)
+option(ENUM_NAME_INSTALL "Install the enum_name library" OFF)
 
 # Define the library
 add_library(enum_name INTERFACE)
@@ -53,7 +54,7 @@ configure_package_config_file(
   "${CMAKE_CURRENT_BINARY_DIR}/enum_nameConfig.cmake"
   INSTALL_DESTINATION lib/cmake/enum_name)
 
-if(NOT ${ENUM_NAME_NO_INSTALL})
+if(${ENUM_NAME_INSTALL})
   # Install the library
   install(
     TARGETS enum_name
@@ -79,7 +80,7 @@ if(NOT ${ENUM_NAME_NO_INSTALL})
     NAMESPACE mgutility::)
 endif()
 
-if(NOT ${ENUM_NAME_NO_TESTS})
+if(${ENUM_NAME_BUILD_TESTS})
   # Enable testing
   enable_testing()
 
@@ -94,6 +95,17 @@ if(NOT ${ENUM_NAME_NO_TESTS})
   # include tests
   add_subdirectory(tests)
 endif()
+
+if(ENUM_NAME_FETCH_FMT)
+  include(FetchContent)
+
+  FetchContent_Declare(
+    fmt
+    GIT_REPOSITORY https://github.com/fmtlib/fmt
+    GIT_TAG 10.2.1) # 10.2.1
+  FetchContent_MakeAvailable(fmt)
+
+endif(ENUM_NAME_FETCH_FMT)
 
 if(${ENUM_NAME_BUILD_EXAMPLE})
   add_subdirectory(example)

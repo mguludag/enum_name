@@ -4,16 +4,12 @@ project(
   VERSION 0.1
   LANGUAGES CXX)
 
-include(FetchContent)
-
-FetchContent_Declare(
-  fmt
-  GIT_REPOSITORY https://github.com/fmtlib/fmt
-  GIT_TAG 10.2.1) # 10.2.1
-FetchContent_MakeAvailable(fmt)
-
-add_compile_definitions(ENUM_NAME_USE_FMT)
-
 add_executable(${PROJECT_NAME} main.cpp)
 
-target_link_libraries(${PROJECT_NAME} mgutility::enum_name fmt::fmt)
+target_link_libraries(${PROJECT_NAME} mgutility::enum_name)
+
+if(ENUM_NAME_FETCH_FMT)
+  add_compile_definitions(ENUM_NAME_USE_FMT)
+
+  target_link_libraries(${PROJECT_NAME} fmt::fmt)
+endif(ENUM_NAME_FETCH_FMT)

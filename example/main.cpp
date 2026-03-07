@@ -83,7 +83,7 @@ int main() {
       });
 
   std::ranges::for_each(positions, [](auto &&pos) {
-    std::println("{} \t: {}", mgutility::enum_to_underlying(pos.first),
+    std::println("{} \t: {}", mgutility::to_underlying(pos.first),
                  pos.second);
   });
 

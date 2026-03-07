@@ -24,7 +24,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -DCMAKE_CXX_STANDARD=${{ matrix.cpp_standard }} ..
+          cmake -DCMAKE_CXX_STANDARD=${{ matrix.cpp_standard }} -DENUM_NAME_BUILD_TESTS=ON ..
           cmake --build . --config Release
           ctest -j2 --output-on-failure -C Release
 
@@ -96,6 +96,7 @@ jobs:
           mkdir -p build && cd build
           cmake .. \
             -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
+            -DENUM_NAME_BUILD_TESTS=ON \
             -DCMAKE_CXX_STANDARD=${{ matrix.config.cppstd }}
           make -j2
           ctest -j2 --output-on-failure

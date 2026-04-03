@@ -297,6 +297,7 @@ MGUTILITY_CNSTXPR auto get_enum_array() noexcept
 #endif
 }
 
+
 /**
  * @brief Converts a string to an enum value.
  *

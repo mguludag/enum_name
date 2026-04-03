@@ -79,112 +79,154 @@ namespace mgutility {
 namespace detail {
 
 struct enum_type {
-  /**
-   * @brief Gets the name of an unscoped enum value.
-   *
-   * @tparam Enum The enum type.
-   * @tparam e The enum value.
-   * @return A string view representing the name of the enum value.
-   */
-  template <
-      typename Enum, Enum e,
-      detail::enable_if_t<!detail::is_scoped_enum<Enum>::value, bool> = true>
-  MGUTILITY_CNSTXPR static auto name() noexcept -> mgutility::string_view {
-    for (const auto &pair : mgutility::custom_enum<Enum>::map) {
-      if (pair.first == e) {
-        return pair.second;
-      }
+   private:
+    // -------------------------------
+    // 1. Custom enum hook (keep simple for now)
+    // -------------------------------
+    template <typename Enum>
+    MGUTILITY_CNSTXPR static mgutility::string_view
+    // NOLINTNEXTLINE [readability-identifier-length]
+    lookup_custom(Enum e) noexcept {
+        for (const auto& pair : mgutility::custom_enum<Enum>::map) {
+            if (pair.first == e) {
+                return pair.second;
+            }
+        }
+        return {};
     }
-    MGUTILITY_CNSTXPR auto str = mgutility::string_view(__PRETTY_FUNCTION__);
-    MGUTILITY_CNSTXPR auto offset = lastidxenumname[0] + lastidxenumname[1];
-    MGUTILITY_CNSTXPR auto index =
-        std::max(str.rfind(lastidxenumname[2], str.size() - offset),
-                 str.rfind(lastidxenumname[3], str.size() - offset));
-    MGUTILITY_CNSTXPR auto result =
-        str.substr(index + 1, str.size() - offset - index);
-    return result[0] == '(' ? "" : result;
-  }
 
-  /**
-   * @brief Gets the name of a scoped enum value.
-   *
-   * @tparam Enum The enum type.
-   * @tparam e The enum value.
-   * @return A string view representing the name of the enum value.
-   */
-  template <
-      typename Enum, Enum e,
-      detail::enable_if_t<detail::is_scoped_enum<Enum>::value, bool> = true>
-  MGUTILITY_CNSTXPR static auto name() noexcept -> mgutility::string_view {
-    for (const auto &pair : mgutility::custom_enum<Enum>::map) {
-      if (pair.first == e) {
-        return pair.second;
-      }
+    // -------------------------------
+    // 2. Extract raw name from compiler
+    // -------------------------------
+    template <typename Enum, Enum e>
+    MGUTILITY_CNSTXPR static mgutility::string_view raw_name() noexcept {
+        return mgutility::string_view(__PRETTY_FUNCTION__,
+                                      sizeof(__PRETTY_FUNCTION__) - 1);
     }
-    MGUTILITY_CNSTXPR auto str = mgutility::string_view(__PRETTY_FUNCTION__);
-    MGUTILITY_CNSTXPR auto index =
-        str.rfind(lastidxenumname[3], str.size() - lastidxenumname[0]) + 1;
-    MGUTILITY_CNSTXPR auto result =
-        str.substr(index, str.size() - lastidxenumname[0] - index);
-    MGUTILITY_CNSTXPR auto is_invalid =
-        result.rfind(lastidxenumname[5]) != mgutility::string_view::npos ||
-        (result.size() > 4 && result[4] == lastidxenumname[4]);
-    return is_invalid ? "" : result;
-  }
 
-private:
-  // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
-  static constexpr int lastidxenumname[] =
+    // -------------------------------
+    // 3. Parse name (compiler-specific)
+    // -------------------------------
+    MGUTILITY_CNSTXPR static mgutility::string_view parse(
+        mgutility::string_view str) noexcept {
+#if defined(__clang__) || defined(__GNUC__)
 #if defined(__clang__)
-      {1,  1, ' ', ':', '(',
-#if __clang_major__ < 13
-       ','
-#else
-       ')'
+        auto end = str.rfind(']');
+#elif defined(__GNUC__) && !defined(__clang__)
+        auto end = str.rfind(';');
 #endif
-  };
+        // Typical form:
+        // "Enum = MyEnum::Value]"
+
+        auto pos = str.rfind('=', end);
+        if (pos == mgutility::string_view::npos) {
+            return {};
+        }
+        pos += 2;  // skip "::"
+
+        auto result = str.substr(pos, end - pos);
+
 #elif defined(_MSC_VER)
-      {21, 0, ',', ':', '<', ')'};
-#elif defined(__GNUC__)
-      {
-#if MGUTILITY_CPLUSPLUS < 201703L
-          163,
+        // MSVC: different format
+        auto pos = str.rfind(',');
+        if (pos == mgutility::string_view::npos) return {};
+
+        ++pos;
+
+        auto end = str.rfind('>');
+        auto result = str.substr(pos, end - pos);
+
 #else
-          157,
+        return {};
 #endif
-          5,   ' ', ':', '(', ')'};
+
+        // -------------------------------
+        // 4. Validate result
+        // -------------------------------
+        if (result.empty()) {
+            return {};
+        }
+
+        // invalid cases look like "(Enum)123"
+        if (result[0] == '(') {
+            return {};
+        }
+
+        return result.substr(result.rfind(':') + 1);
+    }
+
+   public:
+    template <typename Enum, Enum e>
+    MGUTILITY_CNSTXPR static mgutility::string_view name() noexcept {
+        // 1. Custom override first
+        auto custom = lookup_custom(e);
+        if (!custom.empty()) {
+            return custom;
+        }
+
+        // 2. Extract + parse
+        return parse(raw_name<Enum, e>());
+    }
+};
+
+// -------------------------------
+// Cached array per enum type via enum_sequence
+// -------------------------------
+template <typename Enum, typename Seq>
+struct enum_array_cache;
+
+template <typename Enum, Enum... Is>
+struct enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>> {
+#if MGUTILITY_CPLUSPLUS >= 201402L
+    // C++17+: fully constexpr
+    // NOLINTNEXTLINE [readability-redundant-inline-specifier]
+    static inline constexpr std::array<mgutility::string_view,
+                                       sizeof...(Is) + 1>
+    value() {
+        return std::array<mgutility::string_view, sizeof...(Is) + 1>{
+            "", enum_type::template name<Enum, Is>()...};
+    }
+#else
+    // C++11: lazy runtime array
+    static const std::array<mgutility::string_view, sizeof...(Is) + 1>&
+    value() {
+        static std::array<mgutility::string_view, sizeof...(Is) + 1> arr{
+            "", enum_type::template name<Enum, Is>()...};
+        return arr;
+    }
 #endif
 };
 
-/**
- * @brief Generates an array of enum names.
- *
- * @tparam Enum The enum type.
- * @tparam Is The enumeration values.
- * @return An array of string views representing the enum names.
- */
+// -------------------------------
+// Public getter from enum_sequence
+// -------------------------------
 template <typename Enum, Enum... Is>
-MGUTILITY_CNSTXPR inline auto
-get_enum_array(detail::enum_sequence<Enum, Is...> /*unused*/) noexcept
+MGUTILITY_CNSTXPR auto get_enum_array(
+    detail::enum_sequence<Enum, Is...> /*unused*/) noexcept
+#if MGUTILITY_CPLUSPLUS >= 201402L
     -> std::array<mgutility::string_view, sizeof...(Is) + 1> {
-  return std::array<mgutility::string_view, sizeof...(Is) + 1>{
-      "", enum_type::template name<Enum, Is>()...};
+    return enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>>::value();
+#else
+    -> const std::array<mgutility::string_view, sizeof...(Is) + 1>& {
+    return enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>>::value();
+#endif
 }
 
-/**
- * @brief Generates an array of enum names.
- *
- * @tparam Enum The enum type.
- * @tparam Min The minimum enum value.
- * @tparam Max The maximum enum value.
- * @return An array of string views representing the enum names.
- */
+// -------------------------------
+// Public getter from Min/Max range
+// -------------------------------
 template <typename Enum, int Min = mgutility::enum_range<Enum>::min,
           int Max = mgutility::enum_range<Enum>::max>
-MGUTILITY_CNSTXPR inline auto get_enum_array() noexcept
+MGUTILITY_CNSTXPR auto get_enum_array() noexcept
+#if MGUTILITY_CPLUSPLUS >= 201402L
     -> std::array<mgutility::string_view, Max - Min + 2> {
-  return get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
+    return get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
+#else
+    -> const std::array<mgutility::string_view, Max - Min + 2>& {
+    return get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
+#endif
 }
+
 
 /**
  * @brief Converts a string to an enum value.

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['z_203msn3woyd_20try_20it_20a_0',['Example usage (&lt;a href=&quot;https://godbolt.org/z/3Msn3WoYd&quot; &gt;try it!&lt;/a&gt;)',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md7',1,'']]]
+  ['_7eoptional_0',['~optional',['../classmgutility_1_1optional.html#aa8f4cd2aef5f75073cec5489be03096e',1,'mgutility::optional']]]
 ];

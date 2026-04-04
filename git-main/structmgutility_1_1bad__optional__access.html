@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=11" />
     <meta name="generator" content="Doxygen 1.10.0" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>enum_name: mgutility::detail::enum_name_buffer&lt; T &gt; Struct Template Reference</title>
+    <title>enum_name: mgutility::bad_optional_access Struct Reference</title>
     <link href="tabs.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="dynsections.js"></script>
@@ -83,38 +83,66 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="namespacemgutility.html">mgutility</a></li><li class="navelem"><b>detail</b></li><li class="navelem"><a class="el" href="structmgutility_1_1detail_1_1enum__name__buffer.html">enum_name_buffer</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacemgutility.html">mgutility</a></li><li class="navelem"><a class="el" href="structmgutility_1_1bad__optional__access.html">bad_optional_access</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="structmgutility_1_1detail_1_1enum__name__buffer-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">mgutility::detail::enum_name_buffer&lt; T &gt; Struct Template Reference</div></div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="structmgutility_1_1bad__optional__access-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">mgutility::bad_optional_access Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Provides the name buffer size for an enumeration type.  
+<p>Exception thrown when accessing an empty optional.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="mgutility__enum__name_8hpp_source.html">mgutility_enum_name.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for mgutility::bad_optional_access:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="structmgutility_1_1bad__optional__access.png" alt=""/>
+ </div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:a874ea499e3ff17c37d97897f478a87e8" id="r_a874ea499e3ff17c37d97897f478a87e8"><td class="memItemLeft" align="right" valign="top"><a id="a874ea499e3ff17c37d97897f478a87e8" name="a874ea499e3ff17c37d97897f478a87e8"></a>
-<a class="el" href="classmgutility_1_1detail_1_1fixed__string.html">static</a> <a class="el" href="classmgutility_1_1detail_1_1fixed__string.html">constexpr</a> <a class="el" href="classmgutility_1_1detail_1_1fixed__string.html">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> = MGUTILITY_ENUM_NAME_BUFFER_SIZE</td></tr>
-<tr class="separator:a874ea499e3ff17c37d97897f478a87e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:af173560b0b4fa03df95450c19b6445d1" id="r_af173560b0b4fa03df95450c19b6445d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmgutility_1_1pair.html">const</a> <a class="el" href="structmgutility_1_1pair.html">char</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af173560b0b4fa03df95450c19b6445d1">what</a> () <a class="el" href="structmgutility_1_1pair.html">const</a> <a class="el" href="structmgutility_1_1pair.html">noexcept</a> <a class="el" href="structmgutility_1_1pair.html">override</a></td></tr>
+<tr class="memdesc:af173560b0b4fa03df95450c19b6445d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the exception message.  <br /></td></tr>
+<tr class="separator:af173560b0b4fa03df95450c19b6445d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="classmgutility_1_1detail_1_1fixed__string.html">typename</a> <a class="el" href="classmgutility_1_1detail_1_1fixed__string.html">T</a>&gt;<br />
-struct mgutility::detail::enum_name_buffer&lt; T &gt;</div><p>Provides the name buffer size for an enumeration type. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>The enumeration type. </td></tr>
-  </table>
-  </dd>
-</dl>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<div class="textblock"><p>Exception thrown when accessing an empty optional. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="af173560b0b4fa03df95450c19b6445d1" name="af173560b0b4fa03df95450c19b6445d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af173560b0b4fa03df95450c19b6445d1">&#9670;&#160;</a></span>what()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmgutility_1_1pair.html">const</a> <a class="el" href="structmgutility_1_1pair.html">char</a> * mgutility::bad_optional_access::what </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the exception message. </p>
+<dl class="section return"><dt>Returns</dt><dd>A C-string with the exception message. </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/runner/work/enum_name/enum_name/single_include/<a class="el" href="mgutility__enum__name_8hpp_source.html">mgutility_enum_name.hpp</a></li>
 </ul>
 </div><!-- contents -->

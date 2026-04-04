@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['value_0',['value',['../structmgutility_1_1detail_1_1is__scoped__enum.html#a9d832ed49fdbc73243f31b8b138cfaf5',1,'mgutility::detail::is_scoped_enum']]]
+  ['nullopt_0',['nullopt',['../namespacemgutility.html#a2472ad38d80978a9a8c3150e0e2ba43c',1,'mgutility']]]
 ];

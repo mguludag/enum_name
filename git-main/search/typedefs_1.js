@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['value_5ftype_0',['value_type',['../classmgutility_1_1detail_1_1fixed__string.html#a4b0f9dea38acb465bb6580ea00572984',1,'mgutility::detail::fixed_string']]]
+  ['string_5for_5fview_5ft_0',['string_or_view_t',['../namespacemgutility.html#aeed1cf87ebde4a25c6299da43c7ba147',1,'mgutility']]]
 ];

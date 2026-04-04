@@ -17,5 +17,5 @@ var searchData=
   ['enum_5fsequence_5ffrom_5findex_14',['enum_sequence_from_index',['../structmgutility_1_1detail_1_1enum__sequence__from__index.html',1,'mgutility::detail']]],
   ['enum_5fsequence_5ffrom_5findex_3c_20enum_2c_20min_2c_20index_5fsequence_3c_20i_2e_2e_2e_20_3e_20_3e_15',['enum_sequence_from_index&lt; Enum, Min, index_sequence&lt; I... &gt; &gt;',['../structmgutility_1_1detail_1_1enum__sequence__from__index_3_01Enum_00_01Min_00_01index__sequence_3_01I_8_8_8_01_4_01_4.html',1,'mgutility::detail']]],
   ['enum_5ftype_16',['enum_type',['../structmgutility_1_1detail_1_1enum__type.html',1,'mgutility::detail']]],
-  ['example_20usage_20a_20href_20https_3a_20godbolt_20org_20z_20ppeh78dbp_20try_20it_20a_17',['Example usage (&lt;a href=&quot;https://godbolt.org/z/PPEh78dbP&quot; &gt;try it!&lt;/a&gt;)',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md7',1,'']]]
+  ['example_20usage_20a_20href_20https_3a_20godbolt_20org_20z_20wgveyyh1b_20try_20it_20a_17',['Example usage (&lt;a href=&quot;https://godbolt.org/z/WGvEYYh1b&quot; &gt;try it!&lt;/a&gt;)',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md7',1,'']]]
 ];

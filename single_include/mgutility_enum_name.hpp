@@ -1,0 +1,1806 @@
+/*
+MIT License
+
+Copyright (c) 2024 mguludag
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#ifndef MGUTILITY_ENUM_NAME_SINGLE_HEADER_HPP
+#define MGUTILITY_ENUM_NAME_SINGLE_HEADER_HPP
+
+// Include standard headers
+#include <algorithm>
+#include <array>
+#include <cstring>
+#include <iosfwd>
+#include <string>
+#include <type_traits>
+#include <utility>
+
+#if MGUTILITY_CPLUSPLUS > 201402L
+#include <string_view>
+#endif
+
+// Definitions
+/**
+ * @brief Defines the MGUTILITY_CPLUSPLUS macro for MSVC and other compilers.
+ *
+ * For MSVC, it uses _MSVC_LANG. For other compilers, it uses __cplusplus.
+ */
+#ifdef _MSC_VER
+#ifndef MGUTILITY_CPLUSPLUS
+#define MGUTILITY_CPLUSPLUS _MSVC_LANG
+#endif
+#else
+#ifndef MGUTILITY_CPLUSPLUS
+#define MGUTILITY_CPLUSPLUS __cplusplus
+#endif
+#endif
+
+/**
+ * @brief Defines the MGUTILITY_CNSTXPR macro based on the C++ standard.
+ *
+ * If the C++ standard is C++11, MGUTILITY_CNSTXPR is defined as empty.
+ * If the C++ standard is newer than C++11, MGUTILITY_CNSTXPR is defined as
+ * constexpr. If the C++ standard is older than C++11, an error is raised.
+ */
+#if MGUTILITY_CPLUSPLUS == 201103L
+#define MGUTILITY_CNSTXPR
+#elif MGUTILITY_CPLUSPLUS > 201103L
+#define MGUTILITY_CNSTXPR constexpr
+#elif MGUTILITY_CPLUSPLUS < 201103L
+#error "Standards older than C++11 is not supported!"
+#endif
+
+/**
+ * @brief Defines the MGUTILITY_CNSTXPR_CLANG_WA macro based on the C++
+ * standard.
+ *
+ * If the C++ standard is newer than C++17 and the compiler is not Clang,
+ * MGUTILITY_CNSTXPR_CLANG_WA is defined as constexpr. Otherwise, it is defined
+ * as empty.
+ */
+#if (MGUTILITY_CPLUSPLUS >= 201703L && !defined(__clang__)) ||                 \
+    (defined(__clang__) && __clang_major__ > 11 &&                             \
+     MGUTILITY_CPLUSPLUS >= 201703L)
+#define MGUTILITY_CNSTXPR_CLANG_WA constexpr
+#else
+#define MGUTILITY_CNSTXPR_CLANG_WA
+#endif
+
+/**
+ * @brief Defines the MGUTILITY_CNSTEVL macro based on the C++ standard.
+ *
+ * If the C++ standard is newer than C++17, MGUTILITY_CNSTEVL is defined as
+ * consteval. Otherwise, it is defined as empty.
+ */
+#if MGUTILITY_CPLUSPLUS > 201703L
+#define MGUTILITY_CNSTEVL consteval
+#else
+#define MGUTILITY_CNSTEVL
+#endif
+
+/**
+ * @brief Defines the MGUTILITY_HAS_HAS_INCLUDE macro if __has_include is
+ * supported.
+ *
+ * If __has_include is supported, MGUTILITY_HAS_HAS_INCLUDE is defined.
+ */
+#if defined(__has_include) && !defined(MGUTILITY_HAS_HAS_INCLUDE)
+#define MGUTILITY_HAS_HAS_INCLUDE
+#endif
+
+// string_view implementation
+namespace mgutility {
+namespace detail {
+
+/**
+ * @brief Computes the length of a C-string at compile-time.
+ *
+ * @param str The C-string.
+ * @param sz The initial size, default is 0.
+ * @return The length of the C-string.
+ */
+template <std::size_t N>
+MGUTILITY_CNSTXPR std::size_t cstrlen(const char (&str)[N],
+                                      std::size_t sz = 0) {
+  return str[sz] == '\0' ? sz : cstrlen(str, sz + 1);
+}
+
+/**
+ * @brief A simple string_view implementation for C++11.
+ */
+class string_view {
+public:
+  /**
+   * @brief The size type.
+   */
+  using size_type = std::size_t;
+
+  /**
+   * @brief The value type.
+   */
+  using value_type = char;
+
+  /**
+   * @brief The pointer type.
+   */
+  using pointer = const char *;
+
+  /**
+   * @brief The reference type.
+   */
+  using reference = const char &;
+
+  /**
+   * @brief The iterator type.
+   */
+  using iterator = const char *;
+
+  /**
+   * @brief The const iterator type.
+   */
+  using const_iterator = const char *;
+
+  /**
+   * @brief The npos value.
+   */
+  static constexpr size_type npos = size_type(-1);
+
+  /**
+   * @brief Default constructor.
+   */
+  MGUTILITY_CNSTXPR string_view() noexcept : data_(nullptr), size_(0) {}
+
+  /**
+   * @brief Constructor from C-string.
+   *
+   * @param str The C-string.
+   */
+  MGUTILITY_CNSTXPR string_view(const char *str) noexcept
+      : data_(str), size_(str ? cstrlen(str) : 0) {}
+
+  /**
+   * @brief Constructor from C-string and length.
+   *
+   * @param str The C-string.
+   * @param len The length.
+   */
+  MGUTILITY_CNSTXPR string_view(const char *str, size_type len) noexcept
+      : data_(str), size_(len) {}
+
+  /**
+   * @brief Constructor from std::string.
+   *
+   * @param str The std::string.
+   */
+  MGUTILITY_CNSTXPR string_view(const std::string &str) noexcept
+      : data_(str.data()), size_(str.size()) {}
+
+#if MGUTILITY_CPLUSPLUS > 201402L
+  /**
+   * @brief Constructor from std::string_view.
+   *
+   * @param sv The std::string_view.
+   */
+  MGUTILITY_CNSTXPR string_view(const std::string_view &sv) noexcept
+      : data_(sv.data()), size_(sv.size()) {}
+#endif
+
+  /**
+   * @brief Returns the data pointer.
+   *
+   * @return The data pointer.
+   */
+  MGUTILITY_CNSTXPR const char *data() const noexcept { return data_; }
+
+  /**
+   * @brief Returns the size.
+   *
+   * @return The size.
+   */
+  MGUTILITY_CNSTXPR size_type size() const noexcept { return size_; }
+
+  /**
+   * @brief Returns the length.
+   *
+   * @return The length.
+   */
+  MGUTILITY_CNSTXPR size_type length() const noexcept { return size_; }
+
+  /**
+   * @brief Checks if empty.
+   *
+   * @return True if empty.
+   */
+  MGUTILITY_CNSTXPR bool empty() const noexcept { return size_ == 0; }
+
+  /**
+   * @brief Returns the character at index.
+   *
+   * @param pos The position.
+   * @return The character.
+   */
+  MGUTILITY_CNSTXPR char operator[](size_type pos) const noexcept {
+    return data_[pos];
+  }
+
+  /**
+   * @brief Returns the front character.
+   *
+   * @return The front character.
+   */
+  MGUTILITY_CNSTXPR char front() const noexcept { return data_[0]; }
+
+  /**
+   * @brief Returns the back character.
+   *
+   * @return The back character.
+   */
+  MGUTILITY_CNSTXPR char back() const noexcept { return data_[size_ - 1]; }
+
+  /**
+   * @brief Returns the begin iterator.
+   *
+   * @return The begin iterator.
+   */
+  MGUTILITY_CNSTXPR iterator begin() const noexcept { return data_; }
+
+  /**
+   * @brief Returns the end iterator.
+   *
+   * @return The end iterator.
+   */
+  MGUTILITY_CNSTXPR iterator end() const noexcept { return data_ + size_; }
+
+  /**
+   * @brief Returns the const begin iterator.
+   *
+   * @return The const begin iterator.
+   */
+  MGUTILITY_CNSTXPR const_iterator cbegin() const noexcept { return data_; }
+
+  /**
+   * @brief Returns the const end iterator.
+   *
+   * @return The const end iterator.
+   */
+  MGUTILITY_CNSTXPR const_iterator cend() const noexcept {
+    return data_ + size_;
+  }
+
+  /**
+   * @brief Finds a substring.
+   *
+   * @param str The substring.
+   * @param pos The position to start.
+   * @return The position.
+   */
+  MGUTILITY_CNSTXPR size_type find(string_view str,
+                                   size_type pos = 0) const noexcept {
+    if (str.size() > size_ - pos) {
+      return npos;
+    }
+    for (size_type i = pos; i <= size_ - str.size(); ++i) {
+      if (substr(i, str.size()) == str) {
+        return i;
+      }
+    }
+    return npos;
+  }
+
+  /**
+   * @brief Finds a character.
+   *
+   * @param ch The character.
+   * @param pos The position to start.
+   * @return The position.
+   */
+  MGUTILITY_CNSTXPR size_type find(char ch, size_type pos = 0) const noexcept {
+    for (size_type i = pos; i < size_; ++i) {
+      if (data_[i] == ch) {
+        return i;
+      }
+    }
+    return npos;
+  }
+
+  /**
+   * @brief Finds the last occurrence of a character.
+   *
+   * @param ch The character.
+   * @param pos The position to start from the end.
+   * @return The position.
+   */
+  MGUTILITY_CNSTXPR size_type rfind(char ch,
+                                    size_type pos = npos) const noexcept {
+    if (pos >= size_) {
+      pos = size_ - 1;
+    }
+    for (size_type i = pos + 1; i > 0; --i) {
+      if (data_[i - 1] == ch) {
+        return i - 1;
+      }
+    }
+    return npos;
+  }
+
+  /**
+   * @brief Creates a substring.
+   *
+   * @param pos The position.
+   * @param len The length.
+   * @return The substring.
+   */
+  MGUTILITY_CNSTXPR string_view substr(size_type pos = 0,
+                                       size_type len = npos) const noexcept {
+    if (pos > size_) {
+      return {};
+    }
+    if (len > size_ - pos) {
+      len = size_ - pos;
+    }
+    return {data_ + pos, len};
+  }
+
+  /**
+   * @brief Compares with another string_view.
+   *
+   * @param other The other string_view.
+   * @return The comparison result.
+   */
+  MGUTILITY_CNSTXPR int compare(string_view other) const noexcept {
+    size_type len = size_ < other.size_ ? size_ : other.size_;
+    int result = std::memcmp(data_, other.data_, len);
+    if (result != 0) {
+      return result;
+    }
+    if (size_ < other.size_) {
+      return -1;
+    }
+    if (size_ > other.size_) {
+      return 1;
+    }
+    return 0;
+  }
+
+  /**
+   * @brief Equality operator.
+   *
+   * @param lhs The left hand side.
+   * @param rhs The right hand side.
+   * @return True if equal.
+   */
+  friend MGUTILITY_CNSTXPR bool operator==(string_view lhs,
+                                           string_view rhs) noexcept {
+    return lhs.compare(rhs) == 0;
+  }
+
+  /**
+   * @brief Inequality operator.
+   *
+   * @param lhs The left hand side.
+   * @param rhs The right hand side.
+   * @return True if not equal.
+   */
+  friend MGUTILITY_CNSTXPR bool operator!=(string_view lhs,
+                                           string_view rhs) noexcept {
+    return !(lhs == rhs);
+  }
+
+  /**
+   * @brief Less than operator.
+   *
+   * @param lhs The left hand side.
+   * @param rhs The right hand side.
+   * @return True if less than.
+   */
+  friend MGUTILITY_CNSTXPR bool operator<(string_view lhs,
+                                          string_view rhs) noexcept {
+    return lhs.compare(rhs) < 0;
+  }
+
+  /**
+   * @brief Greater than operator.
+   *
+   * @param lhs The left hand side.
+   * @param rhs The right hand side.
+   * @return True if greater than.
+   */
+  friend MGUTILITY_CNSTXPR bool operator>(string_view lhs,
+                                          string_view rhs) noexcept {
+    return lhs.compare(rhs) > 0;
+  }
+
+  /**
+   * @brief Less than or equal operator.
+   *
+   * @param lhs The left hand side.
+   * @param rhs The right hand side.
+   * @return True if less than or equal.
+   */
+  friend MGUTILITY_CNSTXPR bool operator<=(string_view lhs,
+                                           string_view rhs) noexcept {
+    return !(lhs > rhs);
+  }
+
+  /**
+   * @brief Greater than or equal operator.
+   *
+   * @param lhs The left hand side.
+   * @param rhs The right hand side.
+   * @return True if greater than or equal.
+   */
+  friend MGUTILITY_CNSTXPR bool operator>=(string_view lhs,
+                                           string_view rhs) noexcept {
+    return !(lhs < rhs);
+  }
+
+private:
+  const char *data_;
+  size_type size_;
+};
+
+} // namespace detail
+
+/**
+ * @brief Alias for detail::string_view.
+ */
+using string_view = detail::string_view;
+
+} // namespace mgutility
+
+// enum_for_each class
+namespace mgutility {
+
+/**
+ * @brief A class template for iterating over enum values.
+ *
+ * @tparam Enum The enum type.
+ */
+template <typename Enum> class enum_for_each {
+  using value_type = const detail::enum_pair<Enum>;
+  using size_type = std::size_t;
+
+  /**
+   * @brief An iterator for enum values.
+   */
+  struct enum_iter {
+    using const_iter_type = int;
+    using iter_type = detail::remove_const_t<const_iter_type>;
+    using iterator_category = std::forward_iterator_tag;
+    using value_type = const detail::enum_pair<Enum>;
+    using difference_type = std::ptrdiff_t;
+    using pointer = value_type *;
+    using reference = value_type &;
+
+    /**
+     * @brief Default constructor initializing the iterator to the default
+     * position.
+     */
+    enum_iter() : m_pos{} {}
+
+    /**
+     * @brief Constructor initializing the iterator to a specific position.
+     *
+     * @param value The initial position of the iterator.
+     */
+    explicit enum_iter(iter_type value) : m_pos{value} {}
+
+    /**
+     * @brief Pre-increment operator.
+     *
+     * @return A reference to the incremented iterator.
+     */
+    auto operator++() -> enum_iter & {
+      ++m_pos;
+      return *this;
+    }
+
+    /**
+     * @brief Post-increment operator.
+     *
+     * @return A copy of the iterator before incrementing.
+     */
+    auto operator++(int) -> enum_iter {
+      m_pos++;
+      return *this;
+    }
+
+    /**
+     * @brief Inequality comparison operator.
+     *
+     * @param other The other iterator to compare with.
+     * @return True if the iterators are not equal, otherwise false.
+     */
+    auto operator!=(const enum_iter &other) const -> bool {
+      return m_pos != other.m_pos;
+    }
+
+    /**
+     * @brief Equality comparison operator.
+     *
+     * @param other The other iterator to compare with.
+     * @return True if the iterators are equal, otherwise false.
+     */
+    auto operator==(const enum_iter &other) const -> bool {
+      return m_pos == other.m_pos;
+    }
+
+  private:
+    iter_type m_pos; /**< The current position of the iterator. */
+  };
+
+public:
+  /**
+   * @brief Default constructor.
+   */
+  enum_for_each() = default;
+
+  /**
+   * @brief Returns an iterator to the beginning of the enum range.
+   *
+   * @return A reference to the beginning iterator.
+   */
+  auto begin() -> enum_iter & { return m_begin; }
+
+  /**
+   * @brief Returns an iterator to the end of the enum range.
+   *
+   * @return A reference to the end iterator.
+   */
+  auto end() -> enum_iter & { return m_end; }
+
+  /**
+   * @brief Returns the size of the enum range.
+   *
+   * @return The size of the enum range.
+   */
+  auto size() -> std::size_t {
+    return static_cast<int>(enum_range<Enum>::max) -
+           static_cast<int>(enum_range<Enum>::min) + 1;
+  }
+
+private:
+  enum_iter m_begin{
+      static_cast<int>(enum_range<Enum>::min)}; /**< The beginning iterator. */
+  enum_iter m_end{static_cast<int>(enum_range<Enum>::max) +
+                  1}; /**< The end iterator. */
+};
+
+/**
+ * @brief Dereference operator for enum_iter.
+ *
+ * @tparam Enum The enum type.
+ * @return The current enum pair.
+ */
+template <typename Enum>
+auto enum_for_each<Enum>::enum_iter::operator*() const -> value_type {
+  auto value = static_cast<Enum>(m_pos);
+  return detail::enum_pair<Enum>{value, enum_name(value)};
+}
+
+} // namespace mgutility
+
+// optional implementation
+namespace mgutility {
+
+/**
+ * @brief A simple optional implementation for C++11.
+ *
+ * @tparam T The type.
+ */
+template <typename T> class optional {
+public:
+  /**
+   * @brief Default constructor.
+   */
+  MGUTILITY_CNSTXPR optional() noexcept : has_value_(false) {}
+
+  /**
+   * @brief Constructor from value.
+   *
+   * @param value The value.
+   */
+  MGUTILITY_CNSTXPR optional(const T &value) noexcept : has_value_(true) {
+    new (&storage_) T(value);
+  }
+
+  /**
+   * @brief Constructor from rvalue.
+   *
+   * @param value The value.
+   */
+  MGUTILITY_CNSTXPR optional(T &&value) noexcept : has_value_(true) {
+    new (&storage_) T(std::move(value));
+  }
+
+  /**
+   * @brief Copy constructor.
+   *
+   * @param other The other optional.
+   */
+  MGUTILITY_CNSTXPR optional(const optional &other) noexcept
+      : has_value_(other.has_value_) {
+    if (has_value_) {
+      new (&storage_) T(other.value());
+    }
+  }
+
+  /**
+   * @brief Move constructor.
+   *
+   * @param other The other optional.
+   */
+  MGUTILITY_CNSTXPR optional(optional &&other) noexcept
+      : has_value_(other.has_value_) {
+    if (has_value_) {
+      new (&storage_) T(std::move(other.value()));
+      other.reset();
+    }
+  }
+
+  /**
+   * @brief Destructor.
+   */
+  ~optional() { reset(); }
+
+  /**
+   * @brief Copy assignment.
+   *
+   * @param other The other optional.
+   * @return This.
+   */
+  MGUTILITY_CNSTXPR optional &operator=(const optional &other) noexcept {
+    if (this != &other) {
+      reset();
+      has_value_ = other.has_value_;
+      if (has_value_) {
+        new (&storage_) T(other.value());
+      }
+    }
+    return *this;
+  }
+
+  /**
+   * @brief Move assignment.
+   *
+   * @param other The other optional.
+   * @return This.
+   */
+  MGUTILITY_CNSTXPR optional &operator=(optional &&other) noexcept {
+    if (this != &other) {
+      reset();
+      has_value_ = other.has_value_;
+      if (has_value_) {
+        new (&storage_) T(std::move(other.value()));
+        other.reset();
+      }
+    }
+    return *this;
+  }
+
+  /**
+   * @brief Assignment from value.
+   *
+   * @param value The value.
+   * @return This.
+   */
+  MGUTILITY_CNSTXPR optional &operator=(const T &value) noexcept {
+    reset();
+    has_value_ = true;
+    new (&storage_) T(value);
+    return *this;
+  }
+
+  /**
+   * @brief Assignment from rvalue.
+   *
+   * @param value The value.
+   * @return This.
+   */
+  MGUTILITY_CNSTXPR optional &operator=(T &&value) noexcept {
+    reset();
+    has_value_ = true;
+    new (&storage_) T(std::move(value));
+    return *this;
+  }
+
+  /**
+   * @brief Checks if has value.
+   *
+   * @return True if has value.
+   */
+  MGUTILITY_CNSTXPR bool has_value() const noexcept { return has_value_; }
+
+  /**
+   * @brief Checks if has value.
+   *
+   * @return True if has value.
+   */
+  MGUTILITY_CNSTXPR explicit operator bool() const noexcept {
+    return has_value_;
+  }
+
+  /**
+   * @brief Returns the value.
+   *
+   * @return The value.
+   */
+  MGUTILITY_CNSTXPR T &value() noexcept {
+    return *reinterpret_cast<T *>(&storage_);
+  }
+
+  /**
+   * @brief Returns the const value.
+   *
+   * @return The const value.
+   */
+  MGUTILITY_CNSTXPR const T &value() const noexcept {
+    return *reinterpret_cast<const T *>(&storage_);
+  }
+
+  /**
+   * @brief Returns the value or default.
+   *
+   * @param default_value The default value.
+   * @return The value or default.
+   */
+  MGUTILITY_CNSTXPR T value_or(const T &default_value) const noexcept {
+    return has_value_ ? value() : default_value;
+  }
+
+  /**
+   * @brief Resets the optional.
+   */
+  MGUTILITY_CNSTXPR void reset() noexcept {
+    if (has_value_) {
+      value().~T();
+      has_value_ = false;
+    }
+  }
+
+  /**
+   * @brief Emplaces a value.
+   *
+   * @param args The arguments.
+   * @return The value.
+   */
+  template <typename... Args>
+  MGUTILITY_CNSTXPR T &emplace(Args &&...args) noexcept {
+    reset();
+    has_value_ = true;
+    new (&storage_) T(std::forward<Args>(args)...);
+    return value();
+  }
+
+private:
+  bool has_value_;
+  std::aligned_storage_t<sizeof(T), alignof(T)> storage_;
+};
+
+/**
+ * @brief Null optional.
+ */
+inline constexpr struct nullopt_t {
+} nullopt;
+
+/**
+ * @brief Makes an optional.
+ *
+ * @tparam T The type.
+ * @param value The value.
+ * @return The optional.
+ */
+template <typename T>
+MGUTILITY_CNSTXPR optional<std::decay_t<T>> make_optional(T &&value) noexcept {
+  return optional<std::decay_t<T>>(std::forward<T>(value));
+}
+
+} // namespace mgutility
+
+// fixed_string implementation
+namespace mgutility {
+namespace detail {
+
+/**
+ * @brief A fixed-size string class.
+ *
+ * @tparam N The size.
+ */
+template <std::size_t N> class fixed_string {
+public:
+  /**
+   * @brief The size type.
+   */
+  using size_type = std::size_t;
+
+  /**
+   * @brief The value type.
+   */
+  using value_type = char;
+
+  /**
+   * @brief Default constructor.
+   */
+  MGUTILITY_CNSTXPR fixed_string() noexcept : size_(0) { data_[0] = '\0'; }
+
+  /**
+   * @brief Constructor from C-string.
+   *
+   * @param str The C-string.
+   */
+  MGUTILITY_CNSTXPR fixed_string(const char *str) noexcept : size_(0) {
+    append(str);
+  }
+
+  /**
+   * @brief Constructor from string_view.
+   *
+   * @param sv The string_view.
+   */
+  MGUTILITY_CNSTXPR fixed_string(string_view sv) noexcept : size_(0) {
+    append(sv);
+  }
+
+  /**
+   * @brief Returns the data.
+   *
+   * @return The data.
+   */
+  MGUTILITY_CNSTXPR const char *data() const noexcept { return data_; }
+
+  /**
+   * @brief Returns the size.
+   *
+   * @return The size.
+   */
+  MGUTILITY_CNSTXPR size_type size() const noexcept { return size_; }
+
+  /**
+   * @brief Returns the capacity.
+   *
+   * @return The capacity.
+   */
+  MGUTILITY_CNSTXPR size_type capacity() const noexcept { return N - 1; }
+
+  /**
+   * @brief Checks if empty.
+   *
+   * @return True if empty.
+   */
+  MGUTILITY_CNSTXPR bool empty() const noexcept { return size_ == 0; }
+
+  /**
+   * @brief Appends a character.
+   *
+   * @param ch The character.
+   * @return This.
+   */
+  MGUTILITY_CNSTXPR fixed_string &append(char ch) noexcept {
+    if (size_ < capacity()) {
+      data_[size_] = ch;
+      ++size_;
+      data_[size_] = '\0';
+    }
+    return *this;
+  }
+
+  /**
+   * @brief Appends a C-string.
+   *
+   * @param str The C-string.
+   * @return This.
+   */
+  MGUTILITY_CNSTXPR fixed_string &append(const char *str) noexcept {
+    while (*str && size_ < capacity()) {
+      data_[size_] = *str;
+      ++size_;
+      ++str;
+    }
+    data_[size_] = '\0';
+    return *this;
+  }
+
+  /**
+   * @brief Appends a string_view.
+   *
+   * @param sv The string_view.
+   * @return This.
+   */
+  MGUTILITY_CNSTXPR fixed_string &append(string_view sv) noexcept {
+    for (size_type i = 0; i < sv.size() && size_ < capacity(); ++i) {
+      data_[size_] = sv[i];
+      ++size_;
+    }
+    data_[size_] = '\0';
+    return *this;
+  }
+
+  /**
+   * @brief Pops the last character.
+   */
+  MGUTILITY_CNSTXPR void pop_back() noexcept {
+    if (size_ > 0) {
+      --size_;
+      data_[size_] = '\0';
+    }
+  }
+
+  /**
+   * @brief Converts to string_view.
+   *
+   * @return The string_view.
+   */
+  MGUTILITY_CNSTXPR operator string_view() const noexcept {
+    return {data_, size_};
+  }
+
+private:
+  char data_[N];
+  size_type size_;
+};
+
+} // namespace detail
+
+} // namespace mgutility
+
+// Now, the meta.hpp content without guard
+namespace mgutility {
+namespace detail {
+
+/**
+ * @brief Defines the MGUTILITY_ENUM_NAME_BUFFER_SIZE macro.
+ *
+ * This macro defines the size of the buffer used for enum names.
+ */
+#ifndef MGUTILITY_ENUM_NAME_BUFFER_SIZE
+// NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
+#define MGUTILITY_ENUM_NAME_BUFFER_SIZE 128U
+#endif
+
+/**
+ * @brief Trait to check if a type is a scoped enumeration.
+ *
+ * @tparam E The type to check.
+ */
+template <typename E> struct is_scoped_enum {
+  /**
+   * @brief Boolean value indicating if the type is a scoped enumeration.
+   */
+  static constexpr auto value =
+      // NOLINTNEXTLINE [modernize-type-traits]
+      std::is_enum<E>::value &&
+      // NOLINTNEXTLINE [modernize-type-traits]
+      !std::is_convertible<E, typename std::underlying_type<E>::type>::value;
+};
+
+/**
+ * @brief Trait to check if a type supports the bitwise OR operator.
+ *
+ * @tparam T The type to check.
+ * @tparam Enable SFINAE parameter, default is void.
+ */
+template <typename T, typename = void> struct has_bit_or : std::false_type {};
+
+/**
+ * @brief Specialization of has_bit_or for types that support the bitwise OR
+ * operator.
+ *
+ * @tparam T The type to check.
+ */
+template <typename T>
+struct has_bit_or<T, decltype((T{} | T{}), void())> : std::true_type {};
+
+#if MGUTILITY_CPLUSPLUS > 201103L
+/**
+ * @brief Helper variable template for is_scoped_enum.
+ *
+ * @tparam E The type to check.
+ */
+template <typename E>
+static constexpr bool is_scoped_enum_v = is_scoped_enum<E>::value;
+#endif
+
+/**
+ * @brief Alias template for std::enable_if.
+ *
+ * This template is used to conditionally enable a type `T` if the boolean
+ * constant `B` is true. It is a shorthand for `typename std::enable_if<B,
+ * T>::type`.
+ *
+ * @tparam B The compile-time boolean condition.
+ * @tparam T The type to be enabled if `B` is true, default is void.
+ */
+template <bool B, class T = void>
+// NOLINTNEXTLINE [modernize-type-traits]
+using enable_if_t = typename std::enable_if<B, T>::type;
+
+/**
+ * @brief Alias template for std::underlying_type.
+ *
+ * @tparam T The enumeration type.
+ */
+template <typename T>
+// NOLINTNEXTLINE [modernize-type-traits]
+using underlying_type_t = typename std::underlying_type<T>::type;
+
+/**
+ * @brief Alias template for std::remove_const.
+ *
+ * @tparam T The type to remove const from.
+ */
+template <typename T>
+// NOLINTNEXTLINE [modernize-type-traits]
+using remove_const_t = typename std::remove_const<T>::type;
+
+/**
+ * @brief Represents a compile-time sequence of indices.
+ *
+ * @tparam Ints The sequence of indices.
+ */
+template <std::size_t... Ints> struct index_sequence {};
+
+/**
+ * @brief Concatenates two index sequences.
+ *
+ * @tparam Seq1 The first index sequence.
+ * @tparam Seq2 The second index sequence.
+ */
+template <typename Seq1, typename Seq2> struct index_sequence_concat;
+
+template <std::size_t... I1, std::size_t... I2>
+struct index_sequence_concat<index_sequence<I1...>, index_sequence<I2...>> {
+  using type = index_sequence<I1..., (sizeof...(I1) + I2)...>;
+};
+
+/**
+ * @brief Implementation helper for creating index sequences.
+ *
+ * @tparam N The size of the index sequence to create.
+ */
+template <std::size_t N> struct make_index_sequence_impl;
+
+template <std::size_t N> struct make_index_sequence_impl {
+private:
+  static constexpr std::size_t half = N / 2;
+
+  using first = typename make_index_sequence_impl<half>::type;
+  using second = typename make_index_sequence_impl<N - half>::type;
+
+public:
+  using type = typename index_sequence_concat<first, second>::type;
+};
+
+// base cases
+/**
+ * @brief Base case for index sequence of size 0.
+ */
+template <> struct make_index_sequence_impl<0> {
+  using type = index_sequence<>;
+};
+
+/**
+ * @brief Base case for index sequence of size 1.
+ */
+template <> struct make_index_sequence_impl<1> {
+  using type = index_sequence<0>;
+};
+
+/**
+ * @brief Alias for creating an index sequence of size N.
+ *
+ * @tparam N The size of the index sequence.
+ */
+template <std::size_t N>
+using make_index_sequence = typename make_index_sequence_impl<N>::type;
+
+/**
+ * @brief Represents a sequence of enumeration values.
+ *
+ * @tparam Enum The enumeration type.
+ * @tparam Values The enumeration values.
+ */
+template <typename Enum, Enum... Values> struct enum_sequence {};
+
+/**
+ * @brief Helper for creating enum sequences from index sequences.
+ *
+ * @tparam Enum The enumeration type.
+ * @tparam Min The minimum value.
+ * @tparam Seq The index sequence.
+ */
+template <typename Enum, int Min, typename Seq> struct enum_sequence_from_index;
+
+/**
+ * @brief Specialization for creating enum sequences from index sequences.
+ *
+ * @tparam Enum The enumeration type.
+ * @tparam Min The minimum value.
+ * @tparam I The indices.
+ */
+template <typename Enum, int Min, std::size_t... I>
+struct enum_sequence_from_index<Enum, Min, index_sequence<I...>> {
+private:
+  // NOLINTNEXTLINE [readability-identifier-length]
+  static constexpr int offset(std::size_t i) {
+    return Min + static_cast<int>(i);
+  }
+
+public:
+  using type = enum_sequence<Enum, static_cast<Enum>(offset(I))...>;
+};
+
+/**
+ * @brief Alias for creating an enum sequence from a range.
+ *
+ * @tparam Enum The enumeration type.
+ * @tparam Min The minimum value.
+ * @tparam Max The maximum value.
+ */
+template <typename Enum, int Min, int Max>
+using make_enum_sequence = typename enum_sequence_from_index<
+    Enum, Min,
+    make_index_sequence<static_cast<std::size_t>(Max - Min + 1)>>::type;
+
+/**
+ * @brief Provides the range for an enumeration type.
+ *
+ * @tparam T The enumeration type.
+ */
+template <typename T> struct enum_range {
+  static constexpr auto min{0};
+  static constexpr auto max{256};
+};
+
+template <typename T, typename U> struct pair {
+  T first;
+  U second;
+};
+
+template <typename T>
+#if MGUTILITY_CPLUSPLUS > 201402L || defined(__GNUC__) && !defined(__clang__)
+using flat_map = std::initializer_list<pair<T, const char *>>;
+#else
+// NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
+using flat_map = pair<T, const char *>[];
+#endif
+
+/**
+ * @brief Provides the custom names map for an enumeration type.
+ *
+ * @tparam T The enumeration type.
+ */
+template <typename T> struct custom_enum {
+  static constexpr flat_map<T> map = {};
+};
+
+/**
+ * @brief Provides the name buffer size for an enumeration type.
+ *
+ * @tparam T The enumeration type.
+ */
+template <typename T> struct enum_name_buffer {
+  static constexpr auto size = MGUTILITY_ENUM_NAME_BUFFER_SIZE;
+};
+
+/**
+ * @brief Alias template for a string or string view type based on the presence
+ * of a bitwise OR operator.
+ *
+ * If the type T supports the bitwise OR operator, the alias is a std::string.
+ * Otherwise, it is a mgutility::string_view.
+ *
+ * @tparam T The type to check.
+ */
+template <typename T>
+// NOLINTNEXTLINE [modernize-type-traits]
+using string_or_view_t = typename std::conditional<
+    has_bit_or<T>::value, mgutility::fixed_string<enum_name_buffer<T>::size>,
+    mgutility::string_view>::type;
+
+/**
+ * @brief A pair consisting of an enum value and its corresponding string or
+ * string view.
+ *
+ * @tparam Enum The enum type.
+ */
+template <typename Enum>
+using enum_pair = std::pair<Enum, detail::string_or_view_t<Enum>>;
+
+} // namespace detail
+
+} // namespace mgutility
+
+// Now, the enum_for_each.hpp content
+namespace mgutility {
+namespace detail {
+
+/**
+ * @brief Helper for finding an element in an array.
+ *
+ * @tparam T The type.
+ * @tparam N The size.
+ * @param arr The array.
+ * @param value The value.
+ * @return The index or 0.
+ */
+template <typename T, std::size_t N>
+MGUTILITY_CNSTXPR std::size_t find(const std::array<T, N> &arr,
+                                   const T &value) {
+  for (std::size_t i = 0; i < N; ++i) {
+    if (arr[i] == value) {
+      return i;
+    }
+  }
+  return 0;
+}
+
+/**
+ * @brief Checks if a character is a digit.
+ *
+ * @param ch The character.
+ * @return True if digit.
+ */
+MGUTILITY_CNSTXPR bool is_digit(char ch) noexcept {
+  return ch >= '0' && ch <= '9';
+}
+
+} // namespace detail
+
+} // namespace mgutility
+
+// Now, the enum_name_impl.hpp content without guards and includes
+#ifdef _MSC_VER
+#define __PRETTY_FUNCTION__ __FUNCSIG__
+#endif
+
+namespace mgutility {
+namespace detail {
+
+struct enum_type {
+private:
+  /**
+   * @brief Looks up custom enum name for the given value.
+   *
+   * @tparam Enum The enum type.
+   * @param e The enum value.
+   * @return The custom name if found, empty string_view otherwise.
+   */
+  template <typename Enum>
+  MGUTILITY_CNSTXPR static mgutility::string_view
+  // NOLINTNEXTLINE [readability-identifier-length]
+  lookup_custom(Enum e) noexcept {
+    for (const auto &pair : mgutility::custom_enum<Enum>::map) {
+      if (pair.first == e) {
+        return pair.second;
+      }
+    }
+    return {};
+  }
+
+  /**
+   * @brief Extracts raw name from compiler's __PRETTY_FUNCTION__.
+   *
+   * @tparam Enum The enum type.
+   * @tparam e The enum value.
+   * @return The raw string_view from __PRETTY_FUNCTION__.
+   */
+  template <typename Enum, Enum e>
+  MGUTILITY_CNSTXPR static mgutility::string_view raw_name() noexcept {
+    return mgutility::string_view(__PRETTY_FUNCTION__,
+                                  sizeof(__PRETTY_FUNCTION__) - 1);
+  }
+
+  /**
+   * @brief Parses the enum name from the raw string based on compiler.
+   *
+   * @param str The raw string from __PRETTY_FUNCTION__.
+   * @return The parsed enum name.
+   */
+  MGUTILITY_CNSTXPR static mgutility::string_view
+  parse(mgutility::string_view str) noexcept {
+#if defined(__clang__) || defined(__GNUC__)
+#if defined(__clang__)
+    auto end = str.rfind(']');
+#elif defined(__GNUC__) && !defined(__clang__)
+    auto end = str.rfind(';');
+#endif
+    // Typical form:
+    // "Enum = MyEnum::Value]"
+
+    auto pos = str.rfind('=', end);
+    if (pos == mgutility::string_view::npos) {
+      return {};
+    }
+    pos += 2; // skip "::"
+
+    auto result = str.substr(pos, end - pos);
+
+#elif defined(_MSC_VER)
+    // MSVC: different format
+    auto pos = str.rfind(',');
+    if (pos == mgutility::string_view::npos)
+      return {};
+
+    ++pos;
+
+    auto end = str.rfind('>');
+    auto result = str.substr(pos, end - pos);
+
+#else
+    return {};
+#endif
+
+    // -------------------------------
+    // 4. Validate result
+    // -------------------------------
+    if (result.empty()) {
+      return {};
+    }
+
+    // invalid cases look like "(Enum)123"
+    if (result[0] == '(') {
+      return {};
+    }
+
+    return result.substr(result.rfind(':') + 1);
+  }
+
+public:
+  /**
+   * @brief Gets the name of the enum value, checking custom names first.
+   *
+   * @tparam Enum The enum type.
+   * @tparam e The enum value.
+   * @return The name of the enum value.
+   */
+  template <typename Enum, Enum e>
+  MGUTILITY_CNSTXPR static mgutility::string_view name() noexcept {
+    // 1. Custom override first
+    auto custom = lookup_custom(e);
+    if (!custom.empty()) {
+      return custom;
+    }
+
+    // 2. Extract + parse
+    return parse(raw_name<Enum, e>());
+  }
+};
+
+// -------------------------------
+// Cached array per enum type via enum_sequence
+// -------------------------------
+/**
+ * @brief Caches an array of enum names for a given enum sequence.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Seq The enum sequence.
+ */
+template <typename Enum, typename Seq> struct enum_array_cache;
+
+template <typename Enum, Enum... Is>
+struct enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>> {
+#if MGUTILITY_CPLUSPLUS >= 201402L
+  // C++17+: fully constexpr
+  // NOLINTNEXTLINE [readability-redundant-inline-specifier]
+  static inline constexpr std::array<mgutility::string_view, sizeof...(Is) + 1>
+  value() {
+    return std::array<mgutility::string_view, sizeof...(Is) + 1>{
+        "", enum_type::template name<Enum, Is>()...};
+  }
+#else
+  // C++11: lazy runtime array
+  static const std::array<mgutility::string_view, sizeof...(Is) + 1> &value() {
+    static std::array<mgutility::string_view, sizeof...(Is) + 1> arr{
+        "", enum_type::template name<Enum, Is>()...};
+    return arr;
+  }
+#endif
+};
+
+// -------------------------------
+// Public getter from enum_sequence
+// -------------------------------
+/**
+ * @brief Gets an array of enum names for the given sequence.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Is The enum values.
+ * @param unused The enum sequence (unused parameter).
+ * @return An array of string_views containing the enum names.
+ */
+template <typename Enum, Enum... Is>
+MGUTILITY_CNSTXPR auto
+get_enum_array(detail::enum_sequence<Enum, Is...> /*unused*/) noexcept
+#if MGUTILITY_CPLUSPLUS >= 201402L
+    -> std::array<mgutility::string_view, sizeof...(Is) + 1> {
+  return enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>>::value();
+#else
+    -> const std::array<mgutility::string_view, sizeof...(Is) + 1> & {
+  return enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>>::value();
+#endif
+}
+
+// -------------------------------
+// Public getter from Min/Max range
+// -------------------------------
+/**
+ * @brief Gets an array of enum names for the enum type within the specified
+ * range.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Min The minimum enum value.
+ * @tparam Max The maximum enum value.
+ * @return An array of string_views containing the enum names.
+ */
+template <typename Enum, int Min = mgutility::enum_range<Enum>::min,
+          int Max = mgutility::enum_range<Enum>::max>
+MGUTILITY_CNSTXPR auto get_enum_array() noexcept
+#if MGUTILITY_CPLUSPLUS >= 201402L
+    -> std::array<mgutility::string_view, Max - Min + 2> {
+  return get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
+#else
+    -> const std::array<mgutility::string_view, Max - Min + 2> & {
+  return get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
+#endif
+}
+
+/**
+ * @brief Converts a string to an enum value.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Min The minimum enum value.
+ * @tparam Max The maximum enum value.
+ * @param str The string view representing the enum name.
+ * @return An optional enum value.
+ */
+template <typename Enum, int Min, int Max>
+MGUTILITY_CNSTXPR inline auto to_enum_impl(mgutility::string_view str) noexcept
+    -> mgutility::optional<Enum> {
+  MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
+
+  const auto index{detail::find(arr, str)};
+  return index == 0
+             ? mgutility::nullopt
+             : mgutility::optional<Enum>{static_cast<Enum>(index + Min - 1)};
+}
+
+/**
+ * @brief Converts a string to an enum bitmask value.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Min The minimum enum value.
+ * @tparam Max The maximum enum value.
+ * @param str The string view representing the enum name.
+ * @return An optional enum bitmask value.
+ */
+template <typename Enum, int Min, int Max>
+MGUTILITY_CNSTXPR auto to_enum_bitmask_impl(mgutility::string_view str) noexcept
+    -> mgutility::optional<Enum> {
+
+  // Check if the string contains a '|' character
+  if (str.find('|') == mgutility::string_view::npos) {
+    return to_enum_impl<Enum, Min, Max>(str);
+  }
+
+  mgutility::optional<Enum> result{mgutility::nullopt};
+  std::size_t index = 0;
+
+  for (std::size_t i = 0; i < str.size(); ++i) {
+    if (str[i] == '|') {
+      auto name = str.substr(index, i - index);
+      auto maybe_enum = to_enum_impl<Enum, Min, Max>(name);
+
+      if (!name.empty() && maybe_enum) {
+        result.emplace(result ? static_cast<Enum>(*result | *maybe_enum)
+                              : *maybe_enum);
+      }
+
+      index = i + 1;
+    }
+  }
+
+  auto maybe_enum = to_enum_impl<Enum, Min, Max>(str.substr(index));
+  if (result && maybe_enum) {
+    result.emplace(static_cast<Enum>(*result | *maybe_enum));
+  } else {
+    result.reset();
+  }
+
+  return result;
+}
+
+/**
+ * @brief Gets the name of an enum value.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Min The minimum enum value.
+ * @tparam Max The maximum enum value.
+ * @param e The enum value.
+ * @return A string view or string representing the name of the enum value.
+ */
+template <typename Enum, int Min, int Max,
+          detail::enable_if_t<!detail::has_bit_or<Enum>::value, bool> = true>
+MGUTILITY_CNSTXPR auto enum_name_impl(Enum enumValue) noexcept
+    -> mgutility::string_view {
+  MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
+  const auto index{(Min < 0 ? -Min : Min) + static_cast<int>(enumValue) + 1};
+  return arr[(index < Min || index > arr.size() - 1) ? 0 : index];
+}
+
+/**
+ * @brief Gets the name of an enum bitmask value.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Min The minimum enum value.
+ * @tparam Max The maximum enum value.
+ * @param e The enum value.
+ * @return A string view or string representing the name of the enum bitmask
+ * value.
+ */
+// NOLINTNEXTLINE [modernize-use-constraints]
+template <typename Enum, int Min, int Max,
+          detail::enable_if_t<detail::has_bit_or<Enum>::value, bool> = true>
+MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
+    -> mgutility::fixed_string<enum_name_buffer<Enum>::size> {
+
+  // Get the array of enum names
+  MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
+
+  // Calculate the index in the array
+  const auto index = (Min < 0 ? -Min : Min) + static_cast<int>(enumValue) + 1;
+  const auto name =
+      arr[(index < Min || index >= static_cast<int>(arr.size())) ? 0 : index];
+
+  // Return the name if it's valid
+  if (!name.empty() && !is_digit(name[0])) {
+    return mgutility::fixed_string<enum_name_buffer<Enum>::size>{}.append(name);
+  }
+
+  // Construct bitmasked name
+  mgutility::fixed_string<enum_name_buffer<Enum>::size> bitmasked_name;
+  for (auto i = Min; i < Max; ++i) {
+    const auto idx = (Min < 0 ? -Min : Min) + i + 1;
+    if (idx >= 0 && idx < static_cast<int>(arr.size()) && !arr[idx].empty() &&
+        !detail::is_digit(arr[idx][0]) &&
+        (enumValue & static_cast<Enum>(i)) == static_cast<Enum>(i)) {
+      bitmasked_name.append(arr[idx]).append("|");
+    }
+  }
+
+  // Remove the trailing '|' if present
+  if (!bitmasked_name.empty()) {
+    bitmasked_name.pop_back();
+  }
+
+  return bitmasked_name;
+}
+} // namespace detail
+} // namespace mgutility
+
+// Now, the main enum_name.hpp content without guard and includes
+namespace mgutility {
+
+/**
+ * @brief Converts an enum value to its underlying integer value.
+ *
+ * @tparam Enum The enum type.
+ * @param e The enum value.
+ * @return The underlying integer value of the enum.
+ */
+template <typename Enum,
+          // NOLINTNEXTLINE [modernize-type-traits]
+          detail::enable_if_t<std::is_enum<Enum>::value, bool> = true>
+constexpr auto to_underlying(Enum enumValue) noexcept
+    -> detail::underlying_type_t<Enum> {
+  // NOLINTNEXTLINE [modernize-type-traits]
+  static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
+  return static_cast<detail::underlying_type_t<Enum>>(enumValue);
+}
+
+/**
+ * @brief Gets the name of an enum value.
+ *
+ * @tparam Min The minimum enum value.
+ * @tparam Max The maximum enum value.
+ * @tparam Enum The enum type.
+ * @param e The enum value.
+ * @return A string view or string representing the name of the enum value.
+ */
+template <int Min, int Max, typename Enum>
+MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
+    -> detail::string_or_view_t<Enum> {
+  static_assert(Min < Max, "Max must be greater than Min!");
+  // NOLINTNEXTLINE [modernize-type-traits]
+  static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
+  return detail::enum_name_impl<Enum, Min, Max>(enumValue);
+}
+
+/**
+ * @brief Gets the name of an enum value.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Min The minimum enum value, default is enum_range<Enum>::min.
+ * @tparam Max The maximum enum value, default is enum_range<Enum>::max.
+ * @param e The enum value.
+ * @return A string view or string representing the name of the enum value.
+ */
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max)>
+MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
+    -> detail::string_or_view_t<Enum> {
+  static_assert(Min < Max, "Max must be greater than Min!");
+  // NOLINTNEXTLINE [modernize-type-traits]
+  static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
+  return detail::enum_name_impl<Enum, Min, Max>(enumValue);
+}
+
+/**
+ * @brief Gets the enum value and its name.
+ *
+ * @tparam Enum The enum type.
+ * @return A pair of the enum value and its name.
+ */
+template <typename Enum>
+auto enum_for_each<Enum>::enum_iter::operator*() const -> value_type {
+  auto value = static_cast<Enum>(m_pos);
+  return detail::enum_pair<Enum>{value, enum_name(value)};
+}
+
+/**
+ * @brief Converts a string to an enum value.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Min The minimum enum value, default is enum_range<Enum>::min.
+ * @tparam Max The maximum enum value, default is enum_range<Enum>::max.
+ * @param str The string view representing the enum name.
+ * @return An optional enum value.
+ */
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max),
+          detail::enable_if_t<!detail::has_bit_or<Enum>::value, bool> = true>
+MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
+    -> mgutility::optional<Enum> {
+  static_assert(Min < Max, "Max must be greater than Min!");
+  // NOLINTNEXTLINE [modernize-type-traits]
+  static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
+  return detail::to_enum_impl<Enum, Min, Max>(str);
+}
+
+/**
+ * @brief Converts a string to an enum bitmask value.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Min The minimum enum value, default is enum_range<Enum>::min.
+ * @tparam Max The maximum enum value, default is enum_range<Enum>::max.
+ * @param str The string view representing the enum name.
+ * @return An optional enum bitmask value.
+ */
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max),
+          detail::enable_if_t<detail::has_bit_or<Enum>::value, bool> = true>
+MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
+    -> mgutility::optional<Enum> {
+  static_assert(Min < Max, "Max must be greater than Min!");
+  // NOLINTNEXTLINE [modernize-type-traits]
+  static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
+  return detail::to_enum_bitmask_impl<Enum, Min, Max>(str);
+}
+
+/**
+ * @brief Casts an integer value to an enum value.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Min The minimum enum value, default is enum_range<Enum>::min.
+ * @tparam Max The maximum enum value, default is enum_range<Enum>::max.
+ * @param value The integer value to cast.
+ * @return An optional enum value.
+ */
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max)>
+MGUTILITY_CNSTXPR auto enum_cast(int value) noexcept
+    -> mgutility::optional<Enum> {
+  static_assert(Min < Max, "Max must be greater than Min!");
+  // NOLINTNEXTLINE [modernize-type-traits]
+  static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
+  if (enum_name(static_cast<Enum>(value)).empty()) {
+    return mgutility::nullopt;
+  }
+  return static_cast<Enum>(value);
+}
+
+namespace operators {
+template <typename Enum, mgutility::detail::enable_if_t<
+                             // NOLINTNEXTLINE [modernize-type-traits]
+                             std::is_enum<Enum>::value, bool> = true>
+constexpr auto operator&(const Enum &lhs, const Enum &rhs) -> Enum {
+  return static_cast<Enum>(mgutility::to_underlying(lhs) &
+                           mgutility::to_underlying(rhs));
+}
+
+template <typename Enum, mgutility::detail::enable_if_t<
+                             // NOLINTNEXTLINE [modernize-type-traits]
+                             std::is_enum<Enum>::value, bool> = true>
+constexpr auto operator|(const Enum &lhs, const Enum &rhs) -> Enum {
+  return static_cast<Enum>(mgutility::to_underlying(lhs) |
+                           mgutility::to_underlying(rhs));
+}
+} // namespace operators
+
+} // namespace mgutility
+
+/**
+ * @brief Outputs the name of an enum value to an output stream.
+ *
+ * @tparam Enum The enum type.
+ * @param os The output stream.
+ * @param e The enum value.
+ * @return The output stream.
+ */
+template <typename Enum, mgutility::detail::enable_if_t<
+                             // NOLINTNEXTLINE [modernize-type-traits]
+                             std::is_enum<Enum>::value, bool> = true>
+auto operator<<(std::ostream &outStream, Enum enumVal) -> std::ostream & {
+  // NOLINTNEXTLINE [modernize-type-traits]
+  static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
+  outStream << mgutility::enum_name(enumVal);
+  return outStream;
+}
+
+#if defined(__cpp_lib_format)
+
+#include <format>
+
+/**
+ * @brief Formatter for enum types for use with std::format.
+ *
+ * @tparam Enum The enum type.
+ */
+template <typename Enum>
+  requires std::is_enum_v<Enum>
+struct std::formatter<Enum> : formatter<std::string_view> {
+  // NOLINTNEXTLINE [readability-identifier-length]
+  auto constexpr format(Enum e, format_context &ctx) const {
+    return formatter<std::string_view>::format(mgutility::enum_name(e), ctx);
+  }
+};
+
+#endif
+
+#if defined(ENUM_NAME_USE_FMT) ||                                              \
+    (defined(MGUTILITY_HAS_HAS_INCLUDE) && __has_include(<fmt/format.h>))
+#include <fmt/format.h>
+
+template <class Enum>
+struct fmt::formatter<Enum, char,
+                      // NOLINTNEXTLINE [modernize-type-traits]
+                      mgutility::detail::enable_if_t<std::is_enum<Enum>::value>>
+    : formatter<string_view> {
+  // NOLINTNEXTLINE [readability-identifier-length]
+  auto format(const Enum e, format_context &ctx) const -> appender {
+    return formatter<string_view>::format(
+        static_cast<mgutility::string_view>(mgutility::enum_name(e)).data(),
+        ctx);
+  }
+};
+#endif // MGUTILITY_USE_FMT || __has_include(<fmt/format.h>)
+
+#endif // MGUTILITY_ENUM_NAME_SINGLE_HEADER_HPP

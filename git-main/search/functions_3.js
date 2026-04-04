@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['size_0',['size',['../classmgutility_1_1enum__for__each.html#a0d833b4ee26998c4373aee17be12cd90',1,'mgutility::enum_for_each']]]
+  ['data_0',['data',['../classmgutility_1_1basic__string__view.html#ab37f2035ecf1724d175b3b4a553b97ab',1,'mgutility::basic_string_view::data()'],['../classmgutility_1_1detail_1_1fixed__string.html#a86a8618a6c981f22e1dc74487b3543c5',1,'mgutility::detail::fixed_string::data()']]]
 ];

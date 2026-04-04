@@ -136,7 +136,7 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment">// NOLINTNEXTLINE [modernize-type-traits]</span></div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="keyword">using </span>string_or_view_t = <span class="keyword">typename</span> std::conditional&lt;</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    has_bit_or&lt;T&gt;::value, mgutility::fixed_string&lt;enum_name_buffer&lt;T&gt;::size&gt;,</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    mgutility::string_view&gt;::type;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <a class="code hl_class" href="classmgutility_1_1basic__string__view.html">mgutility::string_view</a>&gt;::type;</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum&gt;</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="keyword">using </span>enum_pair = std::pair&lt;Enum, detail::string_or_view_t&lt;Enum&gt;&gt;;</div>
@@ -144,17 +144,17 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
 <div class="foldopen" id="foldopen00067" data-start="{" data-end="};">
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="classmgutility_1_1enum__for__each.html">   67</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum&gt; <span class="keyword">class </span><a class="code hl_class" href="classmgutility_1_1enum__for__each.html">enum_for_each</a> {</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  <span class="keyword">using </span>value_type = <span class="keyword">const</span> detail::enum_pair&lt;Enum&gt;;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  <span class="keyword">using </span><a class="code hl_class" href="classmgutility_1_1detail_1_1fixed__string.html">value_type</a> = <span class="keyword">const</span> <a class="code hl_class" href="classmgutility_1_1detail_1_1fixed__string.html">detail::enum_pair&lt;Enum&gt;</a>;</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <span class="keyword">using </span>size_type = std::size_t;</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  <span class="keyword">struct </span>enum_iter {</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keyword">using </span>const_iter_type = <a class="code hl_struct" href="structmgutility_1_1pair.html">int</a>;</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keyword">using </span>iter_type = detail::remove_const_t&lt;const_iter_type&gt;;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keyword">using </span>const_iter_type = int;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keyword">using </span>iter_type = <a class="code hl_class" href="classmgutility_1_1detail_1_1fixed__string.html">detail::remove_const_t&lt;const_iter_type&gt;</a>;</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keyword">using </span>iterator_category = std::forward_iterator_tag;</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keyword">using </span>value_type = <span class="keyword">const</span> detail::enum_pair&lt;Enum&gt;;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keyword">using </span><a class="code hl_class" href="classmgutility_1_1detail_1_1fixed__string.html">value_type</a> = <span class="keyword">const</span> <a class="code hl_class" href="classmgutility_1_1detail_1_1fixed__string.html">detail::enum_pair&lt;Enum&gt;</a>;</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <span class="keyword">using </span>difference_type = std::ptrdiff_t;</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="keyword">using </span>pointer = value_type *;</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <span class="keyword">using </span>reference = value_type &amp;;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="keyword">using </span>pointer = <a class="code hl_class" href="classmgutility_1_1detail_1_1fixed__string.html">value_type</a> *;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <span class="keyword">using </span>reference = <a class="code hl_class" href="classmgutility_1_1detail_1_1fixed__string.html">value_type</a> &amp;;</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    enum_iter() : m_pos{} {}</div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
@@ -170,15 +170,15 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>      <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    }</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keyword">auto</span> operator!=(<span class="keyword">const</span> enum_iter &amp;<a class="code hl_struct" href="structmgutility_1_1pair.html">other</a>) <span class="keyword">const</span> -&gt; <span class="keywordtype">bool</span> {</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>      <span class="keywordflow">return</span> m_pos != <a class="code hl_struct" href="structmgutility_1_1pair.html">other</a>.m_pos;</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keyword">auto</span> operator!=(<span class="keyword">const</span> enum_iter &amp;other) <span class="keyword">const</span> -&gt; <span class="keywordtype">bool</span> {</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>      <span class="keywordflow">return</span> m_pos != other.m_pos;</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    }</div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    <span class="keyword">auto</span> operator==(<span class="keyword">const</span> enum_iter &amp;<a class="code hl_struct" href="structmgutility_1_1pair.html">other</a>) <span class="keyword">const</span> -&gt; <span class="keywordtype">bool</span> {</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>      <span class="keywordflow">return</span> m_pos == <a class="code hl_struct" href="structmgutility_1_1pair.html">other</a>.m_pos;</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    <span class="keyword">auto</span> operator==(<span class="keyword">const</span> enum_iter &amp;other) <span class="keyword">const</span> -&gt; <span class="keywordtype">bool</span> {</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>      <span class="keywordflow">return</span> m_pos == other.m_pos;</div>
 <div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    }</div>
 <div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <span class="keyword">auto</span> operator*() <span class="keyword">const</span> -&gt; value_type;</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <span class="keyword">auto</span> operator*() <span class="keyword">const</span> -&gt; <a class="code hl_class" href="classmgutility_1_1detail_1_1fixed__string.html">value_type</a>;</div>
 <div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span> </div>
 <div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>  <span class="keyword">private</span>:</div>
 <div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    iter_type m_pos; </div>
@@ -209,6 +209,8 @@ $(function() { codefold.init(0); });
 </div>
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="preprocessor">#endif </span><span class="comment">// DETAIL_ENUM_FOR_EACH_HPP</span></div>
+<div class="ttc" id="aclassmgutility_1_1basic__string__view_html"><div class="ttname"><a href="classmgutility_1_1basic__string__view.html">mgutility::basic_string_view</a></div><div class="ttdoc">A basic string view class template.</div><div class="ttdef"><b>Definition</b> mgutility_enum_name.hpp:181</div></div>
+<div class="ttc" id="aclassmgutility_1_1detail_1_1fixed__string_html"><div class="ttname"><a href="classmgutility_1_1detail_1_1fixed__string.html">mgutility::detail::fixed_string</a></div><div class="ttdoc">A fixed-size string class.</div><div class="ttdef"><b>Definition</b> mgutility_enum_name.hpp:457</div></div>
 <div class="ttc" id="aclassmgutility_1_1enum__for__each_html"><div class="ttname"><a href="classmgutility_1_1enum__for__each.html">mgutility::enum_for_each</a></div><div class="ttdoc">A class template for iterating over enum values.</div><div class="ttdef"><b>Definition</b> enum_for_each.hpp:67</div></div>
 <div class="ttc" id="aclassmgutility_1_1enum__for__each_html_a0d833b4ee26998c4373aee17be12cd90"><div class="ttname"><a href="classmgutility_1_1enum__for__each.html#a0d833b4ee26998c4373aee17be12cd90">mgutility::enum_for_each::size</a></div><div class="ttdeci">auto size() -&gt; std::size_t</div><div class="ttdoc">Returns the size of the enum range.</div><div class="ttdef"><b>Definition</b> enum_for_each.hpp:172</div></div>
 <div class="ttc" id="aclassmgutility_1_1enum__for__each_html_a136743f726f0af0b04c027dfa3ca08cc"><div class="ttname"><a href="classmgutility_1_1enum__for__each.html#a136743f726f0af0b04c027dfa3ca08cc">mgutility::enum_for_each::enum_for_each</a></div><div class="ttdeci">enum_for_each()=default</div><div class="ttdoc">Default constructor.</div></div>
@@ -216,7 +218,6 @@ $(function() { codefold.init(0); });
 <div class="ttc" id="aclassmgutility_1_1enum__for__each_html_a6ab0021b410129cbb2d45a21997bb9d5"><div class="ttname"><a href="classmgutility_1_1enum__for__each.html#a6ab0021b410129cbb2d45a21997bb9d5">mgutility::enum_for_each::end</a></div><div class="ttdeci">auto end() -&gt; enum_iter &amp;</div><div class="ttdoc">Returns an iterator to the end of the enum range.</div><div class="ttdef"><b>Definition</b> enum_for_each.hpp:165</div></div>
 <div class="ttc" id="anamespacemgutility_html"><div class="ttname"><a href="namespacemgutility.html">mgutility</a></div><div class="ttdoc">Checks for MSVC compiler version.</div><div class="ttdef"><b>Definition</b> enum_for_each.hpp:35</div></div>
 <div class="ttc" id="astructmgutility_1_1enum__range_html"><div class="ttname"><a href="structmgutility_1_1enum__range.html">mgutility::enum_range</a></div><div class="ttdoc">Provides the range for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:236</div></div>
-<div class="ttc" id="astructmgutility_1_1pair_html"><div class="ttname"><a href="structmgutility_1_1pair.html">mgutility::pair</a></div><div class="ttdef"><b>Definition</b> meta.hpp:241</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

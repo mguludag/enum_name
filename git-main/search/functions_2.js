@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['name_0',['name',['../structmgutility_1_1detail_1_1enum__type.html#a1a6e5482d8a60df2e38930facca18994',1,'mgutility::detail::enum_type']]]
+  ['capacity_0',['capacity',['../classmgutility_1_1detail_1_1fixed__string.html#a7a36a037040e1c82e70e5e07eb288ae5',1,'mgutility::detail::fixed_string']]]
 ];

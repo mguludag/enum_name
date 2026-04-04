@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['value_0',['value',['../structmgutility_1_1detail_1_1is__scoped__enum.html#a7f124839c728583930588def94fbfec0',1,'mgutility::detail::is_scoped_enum']]]
+  ['to_5fenum_0',['to_enum',['../namespacemgutility.html#a47470bc6b087ab3ceab7c3873203a2eb',1,'mgutility']]],
+  ['to_5funderlying_1',['to_underlying',['../namespacemgutility.html#afca3554db8bd05f918d5b1d820a620c1',1,'mgutility']]],
+  ['try_20it_20a_2',['Example usage (&lt;a href=&quot;https://godbolt.org/z/3Msn3WoYd&quot; &gt;try it!&lt;/a&gt;)',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md7',1,'']]]
 ];

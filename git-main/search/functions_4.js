@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['to_5fenum_0',['to_enum',['../namespacemgutility.html#a47470bc6b087ab3ceab7c3873203a2eb',1,'mgutility']]],
-  ['to_5funderlying_1',['to_underlying',['../namespacemgutility.html#afca3554db8bd05f918d5b1d820a620c1',1,'mgutility']]]
+  ['emplace_0',['emplace',['../classmgutility_1_1optional.html#a4eed038371c46dac7953dff940cc26b8',1,'mgutility::optional']]],
+  ['empty_1',['empty',['../classmgutility_1_1basic__string__view.html#a37b876e4fd007b94772dd289b58a1bce',1,'mgutility::basic_string_view::empty()'],['../classmgutility_1_1detail_1_1fixed__string.html#a1bcffe196678f56fac435f05369c0ac0',1,'mgutility::detail::fixed_string::empty()']]],
+  ['end_2',['end',['../classmgutility_1_1enum__for__each.html#a6ab0021b410129cbb2d45a21997bb9d5',1,'mgutility::enum_for_each::end()'],['../classmgutility_1_1basic__string__view.html#a0b623628e1fed88cd8f2489ec22782cd',1,'mgutility::basic_string_view::end()'],['../classmgutility_1_1enum__for__each.html#a6ab0021b410129cbb2d45a21997bb9d5',1,'mgutility::enum_for_each::end()']]],
+  ['enum_5fcast_3',['enum_cast',['../namespacemgutility.html#a945fab3988ccb5de52589c67ee654e38',1,'mgutility']]],
+  ['enum_5ffor_5feach_4',['enum_for_each',['../classmgutility_1_1enum__for__each.html#a136743f726f0af0b04c027dfa3ca08cc',1,'mgutility::enum_for_each::enum_for_each()=default'],['../classmgutility_1_1enum__for__each.html#a136743f726f0af0b04c027dfa3ca08cc',1,'mgutility::enum_for_each::enum_for_each()=default']]],
+  ['enum_5fname_5',['enum_name',['../namespacemgutility.html#acd6b8335869248ad4f8525ef4371ea89',1,'mgutility']]]
 ];

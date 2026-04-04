@@ -1603,8 +1603,8 @@ get_enum_array(detail::enum_sequence<Enum, Is...> /*unused*/) noexcept
  * @tparam Max The maximum enum value.
  * @return An array of string_views containing the enum names.
  */
-template <typename Enum, int Min = mgutility::enum_range<Enum>::min,
-          int Max = mgutility::enum_range<Enum>::max>
+template <typename Enum, int Min = enum_range<Enum>::min,
+          int Max = enum_range<Enum>::max>
 MGUTILITY_CNSTXPR auto get_enum_array() noexcept
 #if MGUTILITY_CPLUSPLUS >= 201402L
     -> std::array<mgutility::string_view, Max - Min + 2> {
@@ -1713,7 +1713,7 @@ MGUTILITY_CNSTXPR auto enum_name_impl(Enum enumValue) noexcept
 template <typename Enum, int Min, int Max,
           detail::enable_if_t<detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
-    -> mgutility::fixed_string<enum_name_buffer<Enum>::size> {
+    -> fixed_string<enum_name_buffer<Enum>::size> {
 
   // Get the array of enum names
   MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
@@ -1725,11 +1725,11 @@ MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
 
   // Return the name if it's valid
   if (!name.empty() && !is_digit(name[0])) {
-    return mgutility::fixed_string<enum_name_buffer<Enum>::size>{}.append(name);
+    return fixed_string<enum_name_buffer<Enum>::size>{}.append(name);
   }
 
   // Construct bitmasked name
-  mgutility::fixed_string<enum_name_buffer<Enum>::size> bitmasked_name;
+  fixed_string<enum_name_buffer<Enum>::size> bitmasked_name;
   for (auto i = Min; i < Max; ++i) {
     const auto idx = (Min < 0 ? -Min : Min) + i + 1;
     if (idx >= 0 && idx < static_cast<int>(arr.size()) && !arr[idx].empty() &&
@@ -1800,8 +1800,9 @@ MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
  * @param e The enum value.
  * @return A string view or string representing the name of the enum value.
  */
-template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
-          int Max = static_cast<int>(enum_range<Enum>::max)>
+template <typename Enum,
+          int Min = static_cast<int>(detail::enum_range<Enum>::min),
+          int Max = static_cast<int>(detail::enum_range<Enum>::max)>
 MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
     -> detail::string_or_view_t<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
@@ -1831,8 +1832,9 @@ auto enum_for_each<Enum>::enum_iter::operator*() const -> value_type {
  * @param str The string view representing the enum name.
  * @return An optional enum value.
  */
-template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
-          int Max = static_cast<int>(enum_range<Enum>::max),
+template <typename Enum,
+          int Min = static_cast<int>(detail::enum_range<Enum>::min),
+          int Max = static_cast<int>(detail::enum_range<Enum>::max),
           detail::enable_if_t<!detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
     -> mgutility::optional<Enum> {
@@ -1851,8 +1853,9 @@ MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
  * @param str The string view representing the enum name.
  * @return An optional enum bitmask value.
  */
-template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
-          int Max = static_cast<int>(enum_range<Enum>::max),
+template <typename Enum,
+          int Min = static_cast<int>(detail::enum_range<Enum>::min),
+          int Max = static_cast<int>(detail::enum_range<Enum>::max),
           detail::enable_if_t<detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
     -> mgutility::optional<Enum> {
@@ -1871,8 +1874,9 @@ MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
  * @param value The integer value to cast.
  * @return An optional enum value.
  */
-template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
-          int Max = static_cast<int>(enum_range<Enum>::max)>
+template <typename Enum,
+          int Min = static_cast<int>(detail::enum_range<Enum>::min),
+          int Max = static_cast<int>(detail::enum_range<Enum>::max)>
 MGUTILITY_CNSTXPR auto enum_cast(int value) noexcept
     -> mgutility::optional<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");

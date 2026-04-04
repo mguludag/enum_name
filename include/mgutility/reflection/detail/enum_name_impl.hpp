@@ -344,7 +344,8 @@ MGUTILITY_CNSTXPR auto enum_name_impl(Enum enumValue) noexcept
     -> mgutility::string_view {
   MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
   const auto index{(Min < 0 ? -Min : Min) + static_cast<int>(enumValue) + 1};
-  return arr[(index < Min || index > arr.size() - 1) ? 0 : index];
+  return arr[static_cast<size_t>(
+      (index < Min || index > static_cast<int>(arr.size()) - 1) ? 0 : index)];
 }
 
 /**

@@ -118,701 +118,330 @@ namespace detail {
  * @param sz The initial size, default is 0.
  * @return The length of the C-string.
  */
-template <std::size_t N>
-MGUTILITY_CNSTXPR std::size_t cstrlen(const char (&str)[N],
-                                      std::size_t sz = 0) {
-  return str[sz] == '\0' ? sz : cstrlen(str, sz + 1);
+// NOLINTNEXTLINE [readability-identifier-length]
+constexpr auto strlen_constexpr(const char *str, size_t sz = 0) noexcept
+    -> size_t {
+  // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
+  return str[sz] == '\0' ? sz : strlen_constexpr(str, ++sz);
 }
 
 /**
- * @brief A simple string_view implementation for C++11.
+ * @brief Checks if a character is a digit.
+ *
+ * @param character The character to check.
+ * @return True if the character is a digit, otherwise false.
  */
-class string_view {
+constexpr auto is_digit(char character) noexcept -> bool {
+  return character >= '0' && character <= '9';
+}
+
+/**
+ * @brief Compares two C-strings up to a given number of characters.
+ *
+ * @param lhs The left-hand side C-string.
+ * @param rhs The right-hand side C-string.
+ * @param count The maximum number of characters to compare.
+ * @return An integer less than, equal to, or greater than zero if lhs is found,
+ *         respectively, to be less than, to match, or be greater than rhs.
+ */
+MGUTILITY_CNSTXPR int strncmp_constexpr(const char *lhs, const char *rhs,
+                                        size_t count) noexcept {
+  for (size_t i = 0; i < count; ++i) {
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
+    if (lhs[i] != rhs[i] || lhs[i] == '\0' || rhs[i] == '\0') {
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
+      return static_cast<unsigned char>(lhs[i]) -
+             // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
+             static_cast<unsigned char>(rhs[i]);
+    }
+  }
+  return 0;
+}
+
+template <typename Range, typename Pred>
+MGUTILITY_CNSTXPR auto find(const Range &rng, const Pred &pred) -> size_t {
+  for (size_t i = 1; i < rng.size(); ++i) {
+    if (pred == rng[i]) {
+      return i;
+    }
+  }
+  return 0;
+};
+
+} // namespace detail
+
+#if MGUTILITY_CPLUSPLUS < 201703L
+
+/**
+ * @brief A basic string view class template.
+ *
+ * @tparam Char The character type, default is char.
+ */
+// NOLINTNEXTLINE [cppcoreguidelines-special-member-functions]
+template <typename Char = char> class basic_string_view {
 public:
-  /**
-   * @brief The size type.
-   */
-  using size_type = std::size_t;
-
-  /**
-   * @brief The value type.
-   */
-  using value_type = char;
-
-  /**
-   * @brief The pointer type.
-   */
-  using pointer = const char *;
-
-  /**
-   * @brief The reference type.
-   */
-  using reference = const char &;
-
-  /**
-   * @brief The iterator type.
-   */
-  using iterator = const char *;
-
-  /**
-   * @brief The const iterator type.
-   */
-  using const_iterator = const char *;
-
-  /**
-   * @brief The npos value.
-   */
-  static constexpr size_type npos = size_type(-1);
-
   /**
    * @brief Default constructor.
    */
-  MGUTILITY_CNSTXPR string_view() noexcept : data_(nullptr), size_(0) {}
+  // NOLINTNEXTLINE [readability-redundant-inline-specifier]
+  constexpr inline basic_string_view() noexcept : data_(""), size_(0) {}
 
   /**
-   * @brief Constructor from C-string.
+   * @brief Constructs a basic_string_view from a C-string.
    *
    * @param str The C-string.
    */
-  MGUTILITY_CNSTXPR string_view(const char *str) noexcept
-      : data_(str), size_(str ? cstrlen(str) : 0) {}
+  // NOLINTNEXTLINE [google-explicit-constructor]
+  constexpr inline basic_string_view(const Char *str) noexcept
+      : data_(str), size_(detail::strlen_constexpr(str)) {}
 
   /**
-   * @brief Constructor from C-string and length.
-   *
-   * @param str The C-string.
-   * @param len The length.
-   */
-  MGUTILITY_CNSTXPR string_view(const char *str, size_type len) noexcept
-      : data_(str), size_(len) {}
-
-  /**
-   * @brief Constructor from std::string.
+   * @brief Constructs a basic_string_view from a std::string.
    *
    * @param str The std::string.
    */
-  MGUTILITY_CNSTXPR string_view(const std::string &str) noexcept
-      : data_(str.data()), size_(str.size()) {}
-
-#if MGUTILITY_CPLUSPLUS > 201402L
-  /**
-   * @brief Constructor from std::string_view.
-   *
-   * @param sv The std::string_view.
-   */
-  MGUTILITY_CNSTXPR string_view(const std::string_view &sv) noexcept
-      : data_(sv.data()), size_(sv.size()) {}
-#endif
+  // NOLINTNEXTLINE [google-explicit-constructor]
+  constexpr basic_string_view(const std::basic_string<Char> &str) noexcept
+      : data_(str.c_str()), size_(str.size()) {}
 
   /**
-   * @brief Returns the data pointer.
+   * @brief Constructs a basic_string_view from a C-string and length.
    *
-   * @return The data pointer.
+   * @param str The C-string.
+   * @param len The length of the string.
    */
-  MGUTILITY_CNSTXPR const char *data() const noexcept { return data_; }
+  constexpr basic_string_view(const Char *str, size_t len) noexcept
+      : data_(str), size_(len) {}
 
   /**
-   * @brief Returns the size.
+   * @brief Copy constructor.
    *
-   * @return The size.
+   * @param other The other basic_string_view to copy.
    */
-  MGUTILITY_CNSTXPR size_type size() const noexcept { return size_; }
+  constexpr basic_string_view(const basic_string_view &other)
+      : data_(other.data_), size_(other.size_) {}
 
   /**
-   * @brief Returns the length.
+   * @brief Move constructor.
    *
-   * @return The length.
+   * @param other The other basic_string_view to move.
    */
-  MGUTILITY_CNSTXPR size_type length() const noexcept { return size_; }
+  constexpr basic_string_view(basic_string_view &&other) noexcept
+      : data_(std::move(other.data_)), size_(other.size_) {}
 
   /**
-   * @brief Checks if empty.
+   * @brief Copy assignment operator.
    *
-   * @return True if empty.
+   * @param other The other basic_string_view to copy.
+   * @return A reference to this object.
    */
-  MGUTILITY_CNSTXPR bool empty() const noexcept { return size_ == 0; }
+  MGUTILITY_CNSTXPR inline basic_string_view<Char> &
+  operator=(const basic_string_view &other) noexcept = default;
 
   /**
-   * @brief Returns the character at index.
+   * @brief Move assignment operator.
    *
-   * @param pos The position.
-   * @return The character.
+   * @param other The other basic_string_view to move.
+   * @return A reference to this object.
    */
-  MGUTILITY_CNSTXPR char operator[](size_type pos) const noexcept {
-    return data_[pos];
+  MGUTILITY_CNSTXPR inline basic_string_view<Char> &
+  operator=(basic_string_view &&other) noexcept {
+    data_ = std::move(other.data_);
+    size_ = other.size_;
+    return *this;
   }
 
   /**
-   * @brief Returns the front character.
+   * @brief Accesses the character at the given index.
    *
-   * @return The front character.
+   * @param index The index.
+   * @return The character at the index.
    */
-  MGUTILITY_CNSTXPR char front() const noexcept { return data_[0]; }
-
-  /**
-   * @brief Returns the back character.
-   *
-   * @return The back character.
-   */
-  MGUTILITY_CNSTXPR char back() const noexcept { return data_[size_ - 1]; }
-
-  /**
-   * @brief Returns the begin iterator.
-   *
-   * @return The begin iterator.
-   */
-  MGUTILITY_CNSTXPR iterator begin() const noexcept { return data_; }
-
-  /**
-   * @brief Returns the end iterator.
-   *
-   * @return The end iterator.
-   */
-  MGUTILITY_CNSTXPR iterator end() const noexcept { return data_ + size_; }
-
-  /**
-   * @brief Returns the const begin iterator.
-   *
-   * @return The const begin iterator.
-   */
-  MGUTILITY_CNSTXPR const_iterator cbegin() const noexcept { return data_; }
-
-  /**
-   * @brief Returns the const end iterator.
-   *
-   * @return The const end iterator.
-   */
-  MGUTILITY_CNSTXPR const_iterator cend() const noexcept {
-    return data_ + size_;
+  // NOLINTNEXTLINE [readability-const-return-type]
+  constexpr const Char operator[](size_t index) const noexcept {
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
+    return data_[index];
   }
 
   /**
-   * @brief Finds a substring.
+   * @brief Returns an iterator to the beginning of the string.
    *
-   * @param str The substring.
-   * @param pos The position to start.
-   * @return The position.
+   * @return A pointer to the first character.
    */
-  MGUTILITY_CNSTXPR size_type find(string_view str,
-                                   size_type pos = 0) const noexcept {
-    if (str.size() > size_ - pos) {
-      return npos;
-    }
-    for (size_type i = pos; i <= size_ - str.size(); ++i) {
-      if (substr(i, str.size()) == str) {
-        return i;
-      }
-    }
-    return npos;
-  }
+  constexpr const Char *begin() const noexcept { return data_; }
 
   /**
-   * @brief Finds a character.
+   * @brief Returns an iterator to the end of the string.
    *
-   * @param ch The character.
-   * @param pos The position to start.
-   * @return The position.
+   * @return A pointer to one past the last character.
    */
-  MGUTILITY_CNSTXPR size_type find(char ch, size_type pos = 0) const noexcept {
-    for (size_type i = pos; i < size_; ++i) {
-      if (data_[i] == ch) {
-        return i;
-      }
-    }
-    return npos;
+  constexpr const Char *end() const noexcept { return (data_ + size_); }
+
+  /**
+   * @brief Checks if the string is empty.
+   *
+   * @return True if the string is empty, otherwise false.
+   */
+  constexpr bool empty() const noexcept { return size_ < 1; }
+
+  /**
+   * @brief Returns the size of the string.
+   *
+   * @return The size of the string.
+   */
+  constexpr size_t size() const noexcept { return size_; }
+
+  /**
+   * @brief Returns a pointer to the underlying data.
+   *
+   * @return A pointer to the data.
+   */
+  constexpr const Char *data() const noexcept { return data_; }
+
+  /**
+   * @brief Returns a substring view.
+   *
+   * @param begin The starting position.
+   * @param len The length of the substring.
+   * @return A basic_string_view representing the substring.
+   */
+  constexpr basic_string_view<Char> substr(size_t begin,
+                                           size_t len = 0U) const noexcept {
+    return basic_string_view<Char>(data_ + begin,
+                                   len == 0U ? size_ - begin : len);
   }
 
   /**
    * @brief Finds the last occurrence of a character.
    *
-   * @param ch The character.
-   * @param pos The position to start from the end.
-   * @return The position.
+   * @param c The character to find.
+   * @param pos The position to start from, default is npos.
+   * @return The position of the character or npos if not found.
    */
-  MGUTILITY_CNSTXPR size_type rfind(char ch,
-                                    size_type pos = npos) const noexcept {
-    if (pos >= size_) {
-      pos = size_ - 1;
-    }
-    for (size_type i = pos + 1; i > 0; --i) {
-      if (data_[i - 1] == ch) {
-        return i - 1;
-      }
-    }
-    return npos;
+  // NOLINTNEXTLINE [readability-identifier-length]
+  constexpr size_t rfind(Char c, size_t pos = npos) const noexcept {
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
+    return (pos == npos ? pos = size_ : pos = pos),
+           c == data_[pos] ? pos
+           // NOLINTNEXTLINE [readability-avoid-nested-conditional-operator]
+           : pos == 0U ? npos
+                       : rfind(c, --pos);
   }
 
   /**
-   * @brief Creates a substring.
+   * @brief Finds the first occurrence of a character.
    *
-   * @param pos The position.
-   * @param len The length.
-   * @return The substring.
+   * @param c The character to find.
+   * @param pos The position to start from, default is 0.
+   * @return The position of the character or npos if not found.
    */
-  MGUTILITY_CNSTXPR string_view substr(size_type pos = 0,
-                                       size_type len = npos) const noexcept {
-    if (pos > size_) {
-      return {};
-    }
-    if (len > size_ - pos) {
-      len = size_ - pos;
-    }
-    return {data_ + pos, len};
-  }
-
-  /**
-   * @brief Compares with another string_view.
-   *
-   * @param other The other string_view.
-   * @return The comparison result.
-   */
-  MGUTILITY_CNSTXPR int compare(string_view other) const noexcept {
-    size_type len = size_ < other.size_ ? size_ : other.size_;
-    int result = std::memcmp(data_, other.data_, len);
-    if (result != 0) {
-      return result;
-    }
-    if (size_ < other.size_) {
-      return -1;
-    }
-    if (size_ > other.size_) {
-      return 1;
-    }
-    return 0;
+  // NOLINTNEXTLINE [readability-identifier-length]
+  constexpr size_t find(Char c, size_t pos = 0) const noexcept {
+    // NOLINTNEXTLINE [readability-avoid-nested-conditional-operator]
+    return c == data_[pos] ? pos : pos < size_ ? find(c, ++pos) : npos;
   }
 
   /**
    * @brief Equality operator.
    *
-   * @param lhs The left hand side.
-   * @param rhs The right hand side.
-   * @return True if equal.
+   * @param lhs The left-hand side basic_string_view.
+   * @param rhs The right-hand side basic_string_view.
+   * @return True if the strings are equal, otherwise false.
    */
-  friend MGUTILITY_CNSTXPR bool operator==(string_view lhs,
-                                           string_view rhs) noexcept {
-    return lhs.compare(rhs) == 0;
+  MGUTILITY_CNSTXPR friend bool
+  operator==(basic_string_view<Char> lhs,
+             basic_string_view<Char> rhs) noexcept {
+    return (lhs.size_ == rhs.size_) &&
+           detail::strncmp_constexpr(lhs.data_, rhs.data_, lhs.size_) == 0;
+  }
+
+  /**
+   * @brief Equality operator.
+   *
+   * @param lhs The left-hand side basic_string_view.
+   * @param rhs The right-hand side C-string.
+   * @return True if the strings are equal, otherwise false.
+   */
+  MGUTILITY_CNSTXPR friend bool operator==(basic_string_view<Char> lhs,
+                                           const Char *rhs) noexcept {
+    return ((lhs.size_ == detail::strlen_constexpr(rhs)) &&
+            (detail::strncmp_constexpr(lhs.data_, rhs, lhs.size_) == 0));
   }
 
   /**
    * @brief Inequality operator.
    *
-   * @param lhs The left hand side.
-   * @param rhs The right hand side.
-   * @return True if not equal.
+   * @param lhs The left-hand side basic_string_view.
+   * @param rhs The right-hand side basic_string_view.
+   * @return True if the strings are not equal, otherwise false.
    */
-  friend MGUTILITY_CNSTXPR bool operator!=(string_view lhs,
-                                           string_view rhs) noexcept {
+  MGUTILITY_CNSTXPR friend bool
+  operator!=(basic_string_view<Char> lhs,
+             basic_string_view<Char> rhs) noexcept {
     return !(lhs == rhs);
   }
 
   /**
-   * @brief Less than operator.
+   * @brief Inequality operator.
    *
-   * @param lhs The left hand side.
-   * @param rhs The right hand side.
-   * @return True if less than.
+   * @param lhs The left-hand side basic_string_view.
+   * @param rhs The right-hand side C-string.
+   * @return True if the strings are not equal, otherwise false.
    */
-  friend MGUTILITY_CNSTXPR bool operator<(string_view lhs,
-                                          string_view rhs) noexcept {
-    return lhs.compare(rhs) < 0;
+  MGUTILITY_CNSTXPR friend bool operator!=(basic_string_view<Char> lhs,
+                                           const Char *rhs) noexcept {
+    return !(lhs == rhs);
   }
 
   /**
-   * @brief Greater than operator.
+   * @brief Converts the string view to an std::string.
    *
-   * @param lhs The left hand side.
-   * @param rhs The right hand side.
-   * @return True if greater than.
+   * @return An std::string representing the same string.
    */
-  friend MGUTILITY_CNSTXPR bool operator>(string_view lhs,
-                                          string_view rhs) noexcept {
-    return lhs.compare(rhs) > 0;
-  }
+  // NOLINTNEXTLINE [google-explicit-constructor]
+  operator std::string() { return std::string(data_, size_); }
 
   /**
-   * @brief Less than or equal operator.
+   * @brief Converts the string view to an std::string (const version).
    *
-   * @param lhs The left hand side.
-   * @param rhs The right hand side.
-   * @return True if less than or equal.
+   * @return An std::string representing the same string.
    */
-  friend MGUTILITY_CNSTXPR bool operator<=(string_view lhs,
-                                           string_view rhs) noexcept {
-    return !(lhs > rhs);
-  }
+  // NOLINTNEXTLINE [google-explicit-constructor]
+  operator std::string() const { return std::string(data_, size_); }
 
   /**
-   * @brief Greater than or equal operator.
+   * @brief Stream insertion operator.
    *
-   * @param lhs The left hand side.
-   * @param rhs The right hand side.
-   * @return True if greater than or equal.
+   * @param os The output stream.
+   * @param sv The basic_string_view.
+   * @return A reference to the output stream.
    */
-  friend MGUTILITY_CNSTXPR bool operator>=(string_view lhs,
-                                           string_view rhs) noexcept {
-    return !(lhs < rhs);
+  // NOLINTNEXTLINE [readability-identifier-length]
+  friend std::ostream &
+  operator<<(std::ostream &os,
+             // NOLINTNEXTLINE [readability-identifier-length]
+             const basic_string_view<Char> &sv) {
+    // NOLINTNEXTLINE [readability-identifier-length]
+    for (auto c : sv) {
+      os << c;
+    }
+    return os;
   }
+
+  static constexpr auto npos = -1;
 
 private:
-  const char *data_;
-  size_type size_;
+  size_t size_;
+  const Char *data_;
 };
 
-} // namespace detail
+using string_view = basic_string_view<char>;
 
-/**
- * @brief Alias for detail::string_view.
- */
-using string_view = detail::string_view;
+#else
 
-} // namespace mgutility
+using string_view = std::string_view;
 
-// enum_for_each class
-namespace mgutility {
-
-/**
- * @brief A class template for iterating over enum values.
- *
- * @tparam Enum The enum type.
- */
-template <typename Enum> class enum_for_each {
-  using value_type = const detail::enum_pair<Enum>;
-  using size_type = std::size_t;
-
-  /**
-   * @brief An iterator for enum values.
-   */
-  struct enum_iter {
-    using const_iter_type = int;
-    using iter_type = detail::remove_const_t<const_iter_type>;
-    using iterator_category = std::forward_iterator_tag;
-    using value_type = const detail::enum_pair<Enum>;
-    using difference_type = std::ptrdiff_t;
-    using pointer = value_type *;
-    using reference = value_type &;
-
-    /**
-     * @brief Default constructor initializing the iterator to the default
-     * position.
-     */
-    enum_iter() : m_pos{} {}
-
-    /**
-     * @brief Constructor initializing the iterator to a specific position.
-     *
-     * @param value The initial position of the iterator.
-     */
-    explicit enum_iter(iter_type value) : m_pos{value} {}
-
-    /**
-     * @brief Pre-increment operator.
-     *
-     * @return A reference to the incremented iterator.
-     */
-    auto operator++() -> enum_iter & {
-      ++m_pos;
-      return *this;
-    }
-
-    /**
-     * @brief Post-increment operator.
-     *
-     * @return A copy of the iterator before incrementing.
-     */
-    auto operator++(int) -> enum_iter {
-      m_pos++;
-      return *this;
-    }
-
-    /**
-     * @brief Inequality comparison operator.
-     *
-     * @param other The other iterator to compare with.
-     * @return True if the iterators are not equal, otherwise false.
-     */
-    auto operator!=(const enum_iter &other) const -> bool {
-      return m_pos != other.m_pos;
-    }
-
-    /**
-     * @brief Equality comparison operator.
-     *
-     * @param other The other iterator to compare with.
-     * @return True if the iterators are equal, otherwise false.
-     */
-    auto operator==(const enum_iter &other) const -> bool {
-      return m_pos == other.m_pos;
-    }
-
-  private:
-    iter_type m_pos; /**< The current position of the iterator. */
-  };
-
-public:
-  /**
-   * @brief Default constructor.
-   */
-  enum_for_each() = default;
-
-  /**
-   * @brief Returns an iterator to the beginning of the enum range.
-   *
-   * @return A reference to the beginning iterator.
-   */
-  auto begin() -> enum_iter & { return m_begin; }
-
-  /**
-   * @brief Returns an iterator to the end of the enum range.
-   *
-   * @return A reference to the end iterator.
-   */
-  auto end() -> enum_iter & { return m_end; }
-
-  /**
-   * @brief Returns the size of the enum range.
-   *
-   * @return The size of the enum range.
-   */
-  auto size() -> std::size_t {
-    return static_cast<int>(enum_range<Enum>::max) -
-           static_cast<int>(enum_range<Enum>::min) + 1;
-  }
-
-private:
-  enum_iter m_begin{
-      static_cast<int>(enum_range<Enum>::min)}; /**< The beginning iterator. */
-  enum_iter m_end{static_cast<int>(enum_range<Enum>::max) +
-                  1}; /**< The end iterator. */
-};
-
-/**
- * @brief Dereference operator for enum_iter.
- *
- * @tparam Enum The enum type.
- * @return The current enum pair.
- */
-template <typename Enum>
-auto enum_for_each<Enum>::enum_iter::operator*() const -> value_type {
-  auto value = static_cast<Enum>(m_pos);
-  return detail::enum_pair<Enum>{value, enum_name(value)};
-}
-
-} // namespace mgutility
-
-// optional implementation
-namespace mgutility {
-
-/**
- * @brief A simple optional implementation for C++11.
- *
- * @tparam T The type.
- */
-template <typename T> class optional {
-public:
-  /**
-   * @brief Default constructor.
-   */
-  MGUTILITY_CNSTXPR optional() noexcept : has_value_(false) {}
-
-  /**
-   * @brief Constructor from value.
-   *
-   * @param value The value.
-   */
-  MGUTILITY_CNSTXPR optional(const T &value) noexcept : has_value_(true) {
-    new (&storage_) T(value);
-  }
-
-  /**
-   * @brief Constructor from rvalue.
-   *
-   * @param value The value.
-   */
-  MGUTILITY_CNSTXPR optional(T &&value) noexcept : has_value_(true) {
-    new (&storage_) T(std::move(value));
-  }
-
-  /**
-   * @brief Copy constructor.
-   *
-   * @param other The other optional.
-   */
-  MGUTILITY_CNSTXPR optional(const optional &other) noexcept
-      : has_value_(other.has_value_) {
-    if (has_value_) {
-      new (&storage_) T(other.value());
-    }
-  }
-
-  /**
-   * @brief Move constructor.
-   *
-   * @param other The other optional.
-   */
-  MGUTILITY_CNSTXPR optional(optional &&other) noexcept
-      : has_value_(other.has_value_) {
-    if (has_value_) {
-      new (&storage_) T(std::move(other.value()));
-      other.reset();
-    }
-  }
-
-  /**
-   * @brief Destructor.
-   */
-  ~optional() { reset(); }
-
-  /**
-   * @brief Copy assignment.
-   *
-   * @param other The other optional.
-   * @return This.
-   */
-  MGUTILITY_CNSTXPR optional &operator=(const optional &other) noexcept {
-    if (this != &other) {
-      reset();
-      has_value_ = other.has_value_;
-      if (has_value_) {
-        new (&storage_) T(other.value());
-      }
-    }
-    return *this;
-  }
-
-  /**
-   * @brief Move assignment.
-   *
-   * @param other The other optional.
-   * @return This.
-   */
-  MGUTILITY_CNSTXPR optional &operator=(optional &&other) noexcept {
-    if (this != &other) {
-      reset();
-      has_value_ = other.has_value_;
-      if (has_value_) {
-        new (&storage_) T(std::move(other.value()));
-        other.reset();
-      }
-    }
-    return *this;
-  }
-
-  /**
-   * @brief Assignment from value.
-   *
-   * @param value The value.
-   * @return This.
-   */
-  MGUTILITY_CNSTXPR optional &operator=(const T &value) noexcept {
-    reset();
-    has_value_ = true;
-    new (&storage_) T(value);
-    return *this;
-  }
-
-  /**
-   * @brief Assignment from rvalue.
-   *
-   * @param value The value.
-   * @return This.
-   */
-  MGUTILITY_CNSTXPR optional &operator=(T &&value) noexcept {
-    reset();
-    has_value_ = true;
-    new (&storage_) T(std::move(value));
-    return *this;
-  }
-
-  /**
-   * @brief Checks if has value.
-   *
-   * @return True if has value.
-   */
-  MGUTILITY_CNSTXPR bool has_value() const noexcept { return has_value_; }
-
-  /**
-   * @brief Checks if has value.
-   *
-   * @return True if has value.
-   */
-  MGUTILITY_CNSTXPR explicit operator bool() const noexcept {
-    return has_value_;
-  }
-
-  /**
-   * @brief Returns the value.
-   *
-   * @return The value.
-   */
-  MGUTILITY_CNSTXPR T &value() noexcept {
-    return *reinterpret_cast<T *>(&storage_);
-  }
-
-  /**
-   * @brief Returns the const value.
-   *
-   * @return The const value.
-   */
-  MGUTILITY_CNSTXPR const T &value() const noexcept {
-    return *reinterpret_cast<const T *>(&storage_);
-  }
-
-  /**
-   * @brief Returns the value or default.
-   *
-   * @param default_value The default value.
-   * @return The value or default.
-   */
-  MGUTILITY_CNSTXPR T value_or(const T &default_value) const noexcept {
-    return has_value_ ? value() : default_value;
-  }
-
-  /**
-   * @brief Resets the optional.
-   */
-  MGUTILITY_CNSTXPR void reset() noexcept {
-    if (has_value_) {
-      value().~T();
-      has_value_ = false;
-    }
-  }
-
-  /**
-   * @brief Emplaces a value.
-   *
-   * @param args The arguments.
-   * @return The value.
-   */
-  template <typename... Args>
-  MGUTILITY_CNSTXPR T &emplace(Args &&...args) noexcept {
-    reset();
-    has_value_ = true;
-    new (&storage_) T(std::forward<Args>(args)...);
-    return value();
-  }
-
-private:
-  bool has_value_;
-  std::aligned_storage_t<sizeof(T), alignof(T)> storage_;
-};
-
-/**
- * @brief Null optional.
- */
-inline constexpr struct nullopt_t {
-} nullopt;
-
-/**
- * @brief Makes an optional.
- *
- * @tparam T The type.
- * @param value The value.
- * @return The optional.
- */
-template <typename T>
-MGUTILITY_CNSTXPR optional<std::decay_t<T>> make_optional(T &&value) noexcept {
-  return optional<std::decay_t<T>>(std::forward<T>(value));
-}
+#endif
 
 } // namespace mgutility
 
@@ -1212,9 +841,10 @@ template <typename T> struct enum_name_buffer {
  */
 template <typename T>
 // NOLINTNEXTLINE [modernize-type-traits]
-using string_or_view_t = typename std::conditional<
-    has_bit_or<T>::value, mgutility::fixed_string<enum_name_buffer<T>::size>,
-    mgutility::string_view>::type;
+using string_or_view_t =
+    typename std::conditional<has_bit_or<T>::value,
+                              fixed_string<enum_name_buffer<T>::size>,
+                              mgutility::string_view>::type;
 
 /**
  * @brief A pair consisting of an enum value and its corresponding string or
@@ -1226,6 +856,351 @@ template <typename Enum>
 using enum_pair = std::pair<Enum, detail::string_or_view_t<Enum>>;
 
 } // namespace detail
+
+} // namespace mgutility
+
+// enum_for_each class
+namespace mgutility {
+
+/**
+ * @brief A class template for iterating over enum values.
+ *
+ * @tparam Enum The enum type.
+ */
+template <typename Enum> class enum_for_each {
+  using value_type = const detail::enum_pair<Enum>;
+  using size_type = std::size_t;
+
+  /**
+   * @brief An iterator for enum values.
+   */
+  struct enum_iter {
+    using const_iter_type = int;
+    using iter_type = detail::remove_const_t<const_iter_type>;
+    using iterator_category = std::forward_iterator_tag;
+    using value_type = const detail::enum_pair<Enum>;
+    using difference_type = std::ptrdiff_t;
+    using pointer = value_type *;
+    using reference = value_type &;
+
+    /**
+     * @brief Default constructor initializing the iterator to the default
+     * position.
+     */
+    enum_iter() : m_pos{} {}
+
+    /**
+     * @brief Constructor initializing the iterator to a specific position.
+     *
+     * @param value The initial position of the iterator.
+     */
+    explicit enum_iter(iter_type value) : m_pos{value} {}
+
+    /**
+     * @brief Pre-increment operator.
+     *
+     * @return A reference to the incremented iterator.
+     */
+    auto operator++() -> enum_iter & {
+      ++m_pos;
+      return *this;
+    }
+
+    /**
+     * @brief Post-increment operator.
+     *
+     * @return A copy of the iterator before incrementing.
+     */
+    auto operator++(int) -> enum_iter {
+      m_pos++;
+      return *this;
+    }
+
+    /**
+     * @brief Inequality comparison operator.
+     *
+     * @param other The other iterator to compare with.
+     * @return True if the iterators are not equal, otherwise false.
+     */
+    auto operator!=(const enum_iter &other) const -> bool {
+      return m_pos != other.m_pos;
+    }
+
+    /**
+     * @brief Equality comparison operator.
+     *
+     * @param other The other iterator to compare with.
+     * @return True if the iterators are equal, otherwise false.
+     */
+    auto operator==(const enum_iter &other) const -> bool {
+      return m_pos == other.m_pos;
+    }
+
+    /**
+     * @brief Dereference operator for enum_iter.
+     *
+     * @tparam Enum The enum type.
+     * @return The current enum pair.
+     */
+    auto operator*() const -> value_type;
+
+  private:
+    iter_type m_pos; /**< The current position of the iterator. */
+  };
+
+public:
+  /**
+   * @brief Default constructor.
+   */
+  enum_for_each() = default;
+
+  /**
+   * @brief Returns an iterator to the beginning of the enum range.
+   *
+   * @return A reference to the beginning iterator.
+   */
+  auto begin() -> enum_iter & { return m_begin; }
+
+  /**
+   * @brief Returns an iterator to the end of the enum range.
+   *
+   * @return A reference to the end iterator.
+   */
+  auto end() -> enum_iter & { return m_end; }
+
+  /**
+   * @brief Returns the size of the enum range.
+   *
+   * @return The size of the enum range.
+   */
+  auto size() -> std::size_t {
+    return static_cast<int>(detail::enum_range<Enum>::max) -
+           static_cast<int>(detail::enum_range<Enum>::min) + 1;
+  }
+
+private:
+  enum_iter m_begin{static_cast<int>(
+      detail::enum_range<Enum>::min)}; /**< The beginning iterator. */
+  enum_iter m_end{static_cast<int>(detail::enum_range<Enum>::max) +
+                  1}; /**< The end iterator. */
+};
+
+} // namespace mgutility
+
+// optional implementation
+namespace mgutility {
+
+/**
+ * @brief A simple optional implementation for C++11.
+ *
+ * @tparam T The type.
+ */
+template <typename T> class optional {
+public:
+  /**
+   * @brief Default constructor.
+   */
+  MGUTILITY_CNSTXPR optional() noexcept : has_value_(false) {}
+
+  /**
+   * @brief Constructor from value.
+   *
+   * @param value The value.
+   */
+  MGUTILITY_CNSTXPR optional(const T &value) noexcept : has_value_(true) {
+    new (&storage_) T(value);
+  }
+
+  /**
+   * @brief Constructor from rvalue.
+   *
+   * @param value The value.
+   */
+  MGUTILITY_CNSTXPR optional(T &&value) noexcept : has_value_(true) {
+    new (&storage_) T(std::move(value));
+  }
+
+  /**
+   * @brief Copy constructor.
+   *
+   * @param other The other optional.
+   */
+  MGUTILITY_CNSTXPR optional(const optional &other) noexcept
+      : has_value_(other.has_value_) {
+    if (has_value_) {
+      new (&storage_) T(other.value());
+    }
+  }
+
+  /**
+   * @brief Move constructor.
+   *
+   * @param other The other optional.
+   */
+  MGUTILITY_CNSTXPR optional(optional &&other) noexcept
+      : has_value_(other.has_value_) {
+    if (has_value_) {
+      new (&storage_) T(std::move(other.value()));
+      other.reset();
+    }
+  }
+
+  /**
+   * @brief Destructor.
+   */
+  ~optional() { reset(); }
+
+  /**
+   * @brief Copy assignment.
+   *
+   * @param other The other optional.
+   * @return This.
+   */
+  MGUTILITY_CNSTXPR optional &operator=(const optional &other) noexcept {
+    if (this != &other) {
+      reset();
+      has_value_ = other.has_value_;
+      if (has_value_) {
+        new (&storage_) T(other.value());
+      }
+    }
+    return *this;
+  }
+
+  /**
+   * @brief Move assignment.
+   *
+   * @param other The other optional.
+   * @return This.
+   */
+  MGUTILITY_CNSTXPR optional &operator=(optional &&other) noexcept {
+    if (this != &other) {
+      reset();
+      has_value_ = other.has_value_;
+      if (has_value_) {
+        new (&storage_) T(std::move(other.value()));
+        other.reset();
+      }
+    }
+    return *this;
+  }
+
+  /**
+   * @brief Assignment from value.
+   *
+   * @param value The value.
+   * @return This.
+   */
+  MGUTILITY_CNSTXPR optional &operator=(const T &value) noexcept {
+    reset();
+    has_value_ = true;
+    new (&storage_) T(value);
+    return *this;
+  }
+
+  /**
+   * @brief Assignment from rvalue.
+   *
+   * @param value The value.
+   * @return This.
+   */
+  MGUTILITY_CNSTXPR optional &operator=(T &&value) noexcept {
+    reset();
+    has_value_ = true;
+    new (&storage_) T(std::move(value));
+    return *this;
+  }
+
+  /**
+   * @brief Checks if has value.
+   *
+   * @return True if has value.
+   */
+  MGUTILITY_CNSTXPR bool has_value() const noexcept { return has_value_; }
+
+  /**
+   * @brief Checks if has value.
+   *
+   * @return True if has value.
+   */
+  MGUTILITY_CNSTXPR explicit operator bool() const noexcept {
+    return has_value_;
+  }
+
+  /**
+   * @brief Returns the value.
+   *
+   * @return The value.
+   */
+  MGUTILITY_CNSTXPR T &value() noexcept {
+    return *reinterpret_cast<T *>(&storage_);
+  }
+
+  /**
+   * @brief Returns the const value.
+   *
+   * @return The const value.
+   */
+  MGUTILITY_CNSTXPR const T &value() const noexcept {
+    return *reinterpret_cast<const T *>(&storage_);
+  }
+
+  /**
+   * @brief Returns the value or default.
+   *
+   * @param default_value The default value.
+   * @return The value or default.
+   */
+  MGUTILITY_CNSTXPR T value_or(const T &default_value) const noexcept {
+    return has_value_ ? value() : default_value;
+  }
+
+  /**
+   * @brief Resets the optional.
+   */
+  MGUTILITY_CNSTXPR void reset() noexcept {
+    if (has_value_) {
+      value().~T();
+      has_value_ = false;
+    }
+  }
+
+  /**
+   * @brief Emplaces a value.
+   *
+   * @param args The arguments.
+   * @return The value.
+   */
+  template <typename... Args>
+  MGUTILITY_CNSTXPR T &emplace(Args &&...args) noexcept {
+    reset();
+    has_value_ = true;
+    new (&storage_) T(std::forward<Args>(args)...);
+    return value();
+  }
+
+private:
+  bool has_value_;
+  std::aligned_storage_t<sizeof(T), alignof(T)> storage_;
+};
+
+/**
+ * @brief Null optional.
+ */
+inline constexpr struct nullopt_t {
+} nullopt;
+
+/**
+ * @brief Makes an optional.
+ *
+ * @tparam T The type.
+ * @param value The value.
+ * @return The optional.
+ */
+template <typename T>
+MGUTILITY_CNSTXPR optional<std::decay_t<T>> make_optional(T &&value) noexcept {
+  return optional<std::decay_t<T>>(std::forward<T>(value));
+}
 
 } // namespace mgutility
 
@@ -1253,16 +1228,6 @@ MGUTILITY_CNSTXPR std::size_t find(const std::array<T, N> &arr,
   return 0;
 }
 
-/**
- * @brief Checks if a character is a digit.
- *
- * @param ch The character.
- * @return True if digit.
- */
-MGUTILITY_CNSTXPR bool is_digit(char ch) noexcept {
-  return ch >= '0' && ch <= '9';
-}
-
 } // namespace detail
 
 } // namespace mgutility
@@ -1288,7 +1253,7 @@ private:
   MGUTILITY_CNSTXPR static mgutility::string_view
   // NOLINTNEXTLINE [readability-identifier-length]
   lookup_custom(Enum e) noexcept {
-    for (const auto &pair : mgutility::custom_enum<Enum>::map) {
+    for (const auto &pair : custom_enum<Enum>::map) {
       if (pair.first == e) {
         return pair.second;
       }
@@ -1451,8 +1416,8 @@ get_enum_array(detail::enum_sequence<Enum, Is...> /*unused*/) noexcept
  * @tparam Max The maximum enum value.
  * @return An array of string_views containing the enum names.
  */
-template <typename Enum, int Min = mgutility::enum_range<Enum>::min,
-          int Max = mgutility::enum_range<Enum>::max>
+template <typename Enum, int Min = enum_range<Enum>::min,
+          int Max = enum_range<Enum>::max>
 MGUTILITY_CNSTXPR auto get_enum_array() noexcept
 #if MGUTILITY_CPLUSPLUS >= 201402L
     -> std::array<mgutility::string_view, Max - Min + 2> {
@@ -1560,7 +1525,7 @@ MGUTILITY_CNSTXPR auto enum_name_impl(Enum enumValue) noexcept
 template <typename Enum, int Min, int Max,
           detail::enable_if_t<detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
-    -> mgutility::fixed_string<enum_name_buffer<Enum>::size> {
+    -> fixed_string<enum_name_buffer<Enum>::size> {
 
   // Get the array of enum names
   MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
@@ -1572,11 +1537,11 @@ MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
 
   // Return the name if it's valid
   if (!name.empty() && !is_digit(name[0])) {
-    return mgutility::fixed_string<enum_name_buffer<Enum>::size>{}.append(name);
+    return fixed_string<enum_name_buffer<Enum>::size>{}.append(name);
   }
 
   // Construct bitmasked name
-  mgutility::fixed_string<enum_name_buffer<Enum>::size> bitmasked_name;
+  fixed_string<enum_name_buffer<Enum>::size> bitmasked_name;
   for (auto i = Min; i < Max; ++i) {
     const auto idx = (Min < 0 ? -Min : Min) + i + 1;
     if (idx >= 0 && idx < static_cast<int>(arr.size()) && !arr[idx].empty() &&
@@ -1643,8 +1608,9 @@ MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
  * @param e The enum value.
  * @return A string view or string representing the name of the enum value.
  */
-template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
-          int Max = static_cast<int>(enum_range<Enum>::max)>
+template <typename Enum,
+          int Min = static_cast<int>(detail::enum_range<Enum>::min),
+          int Max = static_cast<int>(detail::enum_range<Enum>::max)>
 MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
     -> detail::string_or_view_t<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
@@ -1674,8 +1640,9 @@ auto enum_for_each<Enum>::enum_iter::operator*() const -> value_type {
  * @param str The string view representing the enum name.
  * @return An optional enum value.
  */
-template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
-          int Max = static_cast<int>(enum_range<Enum>::max),
+template <typename Enum,
+          int Min = static_cast<int>(detail::enum_range<Enum>::min),
+          int Max = static_cast<int>(detail::enum_range<Enum>::max),
           detail::enable_if_t<!detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
     -> mgutility::optional<Enum> {
@@ -1694,8 +1661,9 @@ MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
  * @param str The string view representing the enum name.
  * @return An optional enum bitmask value.
  */
-template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
-          int Max = static_cast<int>(enum_range<Enum>::max),
+template <typename Enum,
+          int Min = static_cast<int>(detail::enum_range<Enum>::min),
+          int Max = static_cast<int>(detail::enum_range<Enum>::max),
           detail::enable_if_t<detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
     -> mgutility::optional<Enum> {
@@ -1714,8 +1682,9 @@ MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
  * @param value The integer value to cast.
  * @return An optional enum value.
  */
-template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
-          int Max = static_cast<int>(enum_range<Enum>::max)>
+template <typename Enum,
+          int Min = static_cast<int>(detail::enum_range<Enum>::min),
+          int Max = static_cast<int>(detail::enum_range<Enum>::max)>
 MGUTILITY_CNSTXPR auto enum_cast(int value) noexcept
     -> mgutility::optional<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");

@@ -284,7 +284,7 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>};</div>
 <div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span> </div>
 <div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span><span class="preprocessor">#if MGUTILITY_CPLUSPLUS &gt; 201402L || defined(__GNUC__) &amp;&amp; !defined(__clang__)</span></div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span><span class="preprocessor">#if MGUTILITY_CPLUSPLUS &gt;= 201402L || defined(__GNUC__) &amp;&amp; !defined(__clang__)</span></div>
 <div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span><span class="keyword">using </span>flat_map = std::initializer_list&lt;pair&lt;T, const char *&gt;&gt;;</div>
 <div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span><span class="preprocessor">#else</span></div>
 <div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span><span class="comment">// NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]</span></div>

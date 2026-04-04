@@ -264,27 +264,26 @@ template <typename T, typename U> struct pair {
 };
 
 template <typename T>
-// #if MGUTILITY_CPLUSPLUS > 201402L || defined(__GNUC__) && !defined(__clang__)
+#if MGUTILITY_CPLUSPLUS >= 201402L || defined(__GNUC__) && !defined(__clang__)
 using flat_map = std::initializer_list<pair<T, const char *>>;
-// #else
-// // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
-// using flat_map = pair<T, const char *>[];
-// #endif
+#else
+// NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
+using flat_map = pair<T, const char *>[];
+#endif
 
 /**
  * @brief Provides the custom names map for an enumeration type.
  *
  * @tparam T The enumeration type.
  */
-template <typename T>
-struct custom_enum {
-#if MGUTILITY_CPLUSPLUS > 201402L
-static constexpr flat_map<T> map = {};
-#else
-    static constexpr flat_map<T> map() noexcept {
-        return {}; // default: empty map
-    }
-#endif
+template <typename T> struct custom_enum {
+  // #if MGUTILITY_CPLUSPLUS > 201402L
+  static constexpr flat_map<T> map = {};
+  // #else
+  //     static constexpr flat_map<T> map() noexcept {
+  //         return {}; // default: empty map
+  //     }
+  // #endif
 };
 
 /**

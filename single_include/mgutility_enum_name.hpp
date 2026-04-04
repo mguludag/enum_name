@@ -341,12 +341,12 @@ template <typename T, typename U> struct pair {
 };
 
 template <typename T>
-// #if MGUTILITY_CPLUSPLUS > 201402L || defined(__GNUC__) && !defined(__clang__)
+#if MGUTILITY_CPLUSPLUS > 201402L || defined(__GNUC__) && !defined(__clang__)
 using flat_map = std::initializer_list<pair<T, const char *>>;
-// #else
-// // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
-// using flat_map = pair<T, const char *>[];
-// #endif
+#else
+// NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
+using flat_map = pair<T, const char *>[];
+#endif
 
 /**
  * @brief Provides the custom names map for an enumeration type.
@@ -354,13 +354,13 @@ using flat_map = std::initializer_list<pair<T, const char *>>;
  * @tparam T The enumeration type.
  */
 template <typename T> struct custom_enum {
-#if MGUTILITY_CPLUSPLUS > 201402L
+  // #if MGUTILITY_CPLUSPLUS > 201402L
   static constexpr flat_map<T> map = {};
-#else
-  static constexpr flat_map<T> map() noexcept {
-    return {}; // default: empty map
-  }
-#endif
+  // #else
+  //   static constexpr flat_map<T> map() noexcept {
+  //     return {}; // default: empty map
+  //   }
+  // #endif
 };
 
 /**
@@ -1576,9 +1576,7 @@ struct enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>> {
           std::array<mgutility::string_view, sizeof...(Is) + 1> tmp{
               "", enum_type::template name<Enum, Is>()...};
 
-          constexpr auto map = mgutility::custom_enum<Enum>::map;
-
-          for (const auto &pair : map) {
+          for (const auto &pair : mgutility::custom_enum<Enum>::map) {
             auto idx =
                 static_cast<size_t>(static_cast<int>(pair.first) -
                                     mgutility::enum_range<Enum>::min + 1);

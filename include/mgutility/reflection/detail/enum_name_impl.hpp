@@ -238,9 +238,7 @@ struct enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>> {
           std::array<mgutility::string_view, sizeof...(Is) + 1> tmp{
               "", enum_type::template name<Enum, Is>()...};
 
-          constexpr auto map = mgutility::custom_enum<Enum>::map;
-
-          for (const auto &pair : map) {
+          for (const auto &pair : mgutility::custom_enum<Enum>::map) {
             auto idx =
                 static_cast<size_t>(static_cast<int>(pair.first) -
                                     mgutility::enum_range<Enum>::min + 1);

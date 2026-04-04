@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=11" />
     <meta name="generator" content="Doxygen 1.10.0" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>enum_name: mgutility::detail::enum_sequence_helper&lt; Enum, Min, Max, Next &gt; Struct Template Reference</title>
+    <title>enum_name: mgutility::detail::index_sequence&lt; Ints &gt; Struct Template Reference</title>
     <link href="tabs.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="dynsections.js"></script>
@@ -83,27 +83,24 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="namespacemgutility.html">mgutility</a></li><li class="navelem"><b>detail</b></li><li class="navelem"><a class="el" href="structmgutility_1_1detail_1_1enum__sequence__helper.html">enum_sequence_helper</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacemgutility.html">mgutility</a></li><li class="navelem"><b>detail</b></li><li class="navelem"><a class="el" href="structmgutility_1_1detail_1_1index__sequence.html">index_sequence</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="headertitle"><div class="title">mgutility::detail::enum_sequence_helper&lt; Enum, Min, Max, Next &gt; Struct Template Reference</div></div>
+  <div class="headertitle"><div class="title">mgutility::detail::index_sequence&lt; Ints &gt; Struct Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Helper for generating a sequence of enumeration values.  
+<p>Represents a compile-time sequence of indices.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="meta_8hpp_source.html">meta.hpp</a>&gt;</code></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">Enum</a>, <a class="el" href="structmgutility_1_1pair.html">int</a> Min, <a class="el" href="structmgutility_1_1pair.html">int</a> Max, int... Next&gt;<br />
-struct mgutility::detail::enum_sequence_helper&lt; Enum, Min, Max, Next &gt;</div><p>Helper for generating a sequence of enumeration values. </p>
+<div class="textblock"><div class="compoundTemplParams">template&lt;std::size_t... Ints&gt;<br />
+struct mgutility::detail::index_sequence&lt; Ints &gt;</div><p>Represents a compile-time sequence of indices. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">Enum</td><td>The enumeration type. </td></tr>
-    <tr><td class="paramname">Min</td><td>The minimum value in the sequence. </td></tr>
-    <tr><td class="paramname">Max</td><td>The maximum value in the sequence. </td></tr>
-    <tr><td class="paramname">...Next</td><td>The next values in the sequence. </td></tr>
+    <tr><td class="paramname">Ints</td><td>The sequence of indices. </td></tr>
   </table>
   </dd>
 </dl>

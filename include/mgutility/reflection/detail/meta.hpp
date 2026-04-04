@@ -118,77 +118,114 @@ template <typename T>
 // NOLINTNEXTLINE [modernize-type-traits]
 using remove_const_t = typename std::remove_const<T>::type;
 
-template <std::size_t... Ints>
-struct index_sequence {};
+/**
+ * @brief Represents a compile-time sequence of indices.
+ *
+ * @tparam Ints The sequence of indices.
+ */
+template <std::size_t... Ints> struct index_sequence {};
 
-template <typename Seq1, typename Seq2>
-struct index_sequence_concat;
+/**
+ * @brief Concatenates two index sequences.
+ *
+ * @tparam Seq1 The first index sequence.
+ * @tparam Seq2 The second index sequence.
+ */
+template <typename Seq1, typename Seq2> struct index_sequence_concat;
 
 template <std::size_t... I1, std::size_t... I2>
-struct index_sequence_concat<
-    index_sequence<I1...>,
-    index_sequence<I2...>
-> {
-    using type = index_sequence<I1..., (sizeof...(I1) + I2)...>;
+struct index_sequence_concat<index_sequence<I1...>, index_sequence<I2...>> {
+  using type = index_sequence<I1..., (sizeof...(I1) + I2)...>;
 };
 
-template <std::size_t N>
-struct make_index_sequence_impl;
+/**
+ * @brief Implementation helper for creating index sequences.
+ *
+ * @tparam N The size of the index sequence to create.
+ */
+template <std::size_t N> struct make_index_sequence_impl;
 
-template <std::size_t N>
-struct make_index_sequence_impl {
+template <std::size_t N> struct make_index_sequence_impl {
 private:
-    static constexpr std::size_t half = N / 2;
+  static constexpr std::size_t half = N / 2;
 
-    using first  = typename make_index_sequence_impl<half>::type;
-    using second = typename make_index_sequence_impl<N - half>::type;
+  using first = typename make_index_sequence_impl<half>::type;
+  using second = typename make_index_sequence_impl<N - half>::type;
 
 public:
-    using type = typename index_sequence_concat<first, second>::type;
+  using type = typename index_sequence_concat<first, second>::type;
 };
 
 // base cases
-template <>
-struct make_index_sequence_impl<0> {
-    using type = index_sequence<>;
+/**
+ * @brief Base case for index sequence of size 0.
+ */
+template <> struct make_index_sequence_impl<0> {
+  using type = index_sequence<>;
 };
 
-template <>
-struct make_index_sequence_impl<1> {
-    using type = index_sequence<0>;
+/**
+ * @brief Base case for index sequence of size 1.
+ */
+template <> struct make_index_sequence_impl<1> {
+  using type = index_sequence<0>;
 };
 
+/**
+ * @brief Alias for creating an index sequence of size N.
+ *
+ * @tparam N The size of the index sequence.
+ */
 template <std::size_t N>
 using make_index_sequence = typename make_index_sequence_impl<N>::type;
 
-template <typename Enum, Enum... Values>
-struct enum_sequence {};
+/**
+ * @brief Represents a sequence of enumeration values.
+ *
+ * @tparam Enum The enumeration type.
+ * @tparam Values The enumeration values.
+ */
+template <typename Enum, Enum... Values> struct enum_sequence {};
 
-template <typename Enum, int Min, typename Seq>
-struct enum_sequence_from_index;
+/**
+ * @brief Helper for creating enum sequences from index sequences.
+ *
+ * @tparam Enum The enumeration type.
+ * @tparam Min The minimum value.
+ * @tparam Seq The index sequence.
+ */
+template <typename Enum, int Min, typename Seq> struct enum_sequence_from_index;
 
+/**
+ * @brief Specialization for creating enum sequences from index sequences.
+ *
+ * @tparam Enum The enumeration type.
+ * @tparam Min The minimum value.
+ * @tparam I The indices.
+ */
 template <typename Enum, int Min, std::size_t... I>
 struct enum_sequence_from_index<Enum, Min, index_sequence<I...>> {
 private:
-// NOLINTNEXTLINE [readability-identifier-length]
-    static constexpr int offset(std::size_t i) {
-        return Min + static_cast<int>(i);
-    }
+  // NOLINTNEXTLINE [readability-identifier-length]
+  static constexpr int offset(std::size_t i) {
+    return Min + static_cast<int>(i);
+  }
 
 public:
-    using type = enum_sequence<
-        Enum,
-        static_cast<Enum>(offset(I))...
-    >;
+  using type = enum_sequence<Enum, static_cast<Enum>(offset(I))...>;
 };
 
+/**
+ * @brief Alias for creating an enum sequence from a range.
+ *
+ * @tparam Enum The enumeration type.
+ * @tparam Min The minimum value.
+ * @tparam Max The maximum value.
+ */
 template <typename Enum, int Min, int Max>
-using make_enum_sequence =
-    typename enum_sequence_from_index<
-        Enum,
-        Min,
-        make_index_sequence<static_cast<std::size_t>(Max - Min + 1)>
-    >::type;
+using make_enum_sequence = typename enum_sequence_from_index<
+    Enum, Min,
+    make_index_sequence<static_cast<std::size_t>(Max - Min + 1)>>::type;
 } // namespace detail
 
 /**

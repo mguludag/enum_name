@@ -78,155 +78,191 @@ SOFTWARE.
 namespace mgutility {
 namespace detail {
 
+/**
+ * @brief Provides functionality to extract and parse enum names at
+ * compile-time.
+ */
 struct enum_type {
-   private:
-    // -------------------------------
-    // 1. Custom enum hook (keep simple for now)
-    // -------------------------------
-    template <typename Enum>
-    MGUTILITY_CNSTXPR static mgutility::string_view
-    // NOLINTNEXTLINE [readability-identifier-length]
-    lookup_custom(Enum e) noexcept {
-        for (const auto& pair : mgutility::custom_enum<Enum>::map) {
-            if (pair.first == e) {
-                return pair.second;
-            }
-        }
-        return {};
+private:
+  /**
+   * @brief Looks up custom enum name for the given value.
+   *
+   * @tparam Enum The enum type.
+   * @param e The enum value.
+   * @return The custom name if found, empty string_view otherwise.
+   */
+  template <typename Enum>
+  MGUTILITY_CNSTXPR static mgutility::string_view
+  // NOLINTNEXTLINE [readability-identifier-length]
+  lookup_custom(Enum e) noexcept {
+    for (const auto &pair : mgutility::custom_enum<Enum>::map) {
+      if (pair.first == e) {
+        return pair.second;
+      }
     }
+    return {};
+  }
 
-    // -------------------------------
-    // 2. Extract raw name from compiler
-    // -------------------------------
-    template <typename Enum, Enum e>
-    MGUTILITY_CNSTXPR static mgutility::string_view raw_name() noexcept {
-        return mgutility::string_view(__PRETTY_FUNCTION__,
-                                      sizeof(__PRETTY_FUNCTION__) - 1);
-    }
+  /**
+   * @brief Extracts raw name from compiler's __PRETTY_FUNCTION__.
+   *
+   * @tparam Enum The enum type.
+   * @tparam e The enum value.
+   * @return The raw string_view from __PRETTY_FUNCTION__.
+   */
+  template <typename Enum, Enum e>
+  MGUTILITY_CNSTXPR static mgutility::string_view raw_name() noexcept {
+    return mgutility::string_view(__PRETTY_FUNCTION__,
+                                  sizeof(__PRETTY_FUNCTION__) - 1);
+  }
 
-    // -------------------------------
-    // 3. Parse name (compiler-specific)
-    // -------------------------------
-    MGUTILITY_CNSTXPR static mgutility::string_view parse(
-        mgutility::string_view str) noexcept {
+  /**
+   * @brief Parses the enum name from the raw string based on compiler.
+   *
+   * @param str The raw string from __PRETTY_FUNCTION__.
+   * @return The parsed enum name.
+   */
+  MGUTILITY_CNSTXPR static mgutility::string_view
+  parse(mgutility::string_view str) noexcept {
 #if defined(__clang__) || defined(__GNUC__)
 #if defined(__clang__)
-        auto end = str.rfind(']');
+    auto end = str.rfind(']');
 #elif defined(__GNUC__) && !defined(__clang__)
-        auto end = str.rfind(';');
+    auto end = str.rfind(';');
 #endif
-        // Typical form:
-        // "Enum = MyEnum::Value]"
+    // Typical form:
+    // "Enum = MyEnum::Value]"
 
-        auto pos = str.rfind('=', end);
-        if (pos == mgutility::string_view::npos) {
-            return {};
-        }
-        pos += 2;  // skip "::"
+    auto pos = str.rfind('=', end);
+    if (pos == mgutility::string_view::npos) {
+      return {};
+    }
+    pos += 2; // skip "::"
 
-        auto result = str.substr(pos, end - pos);
+    auto result = str.substr(pos, end - pos);
 
 #elif defined(_MSC_VER)
-        // MSVC: different format
-        auto pos = str.rfind(',');
-        if (pos == mgutility::string_view::npos) return {};
+    // MSVC: different format
+    auto pos = str.rfind(',');
+    if (pos == mgutility::string_view::npos)
+      return {};
 
-        ++pos;
+    ++pos;
 
-        auto end = str.rfind('>');
-        auto result = str.substr(pos, end - pos);
+    auto end = str.rfind('>');
+    auto result = str.substr(pos, end - pos);
 
 #else
-        return {};
+    return {};
 #endif
 
-        // -------------------------------
-        // 4. Validate result
-        // -------------------------------
-        if (result.empty()) {
-            return {};
-        }
-
-        // invalid cases look like "(Enum)123"
-        if (result[0] == '(') {
-            return {};
-        }
-
-        return result.substr(result.rfind(':') + 1);
+    if (result.empty()) {
+      return {};
     }
 
-   public:
-    template <typename Enum, Enum e>
-    MGUTILITY_CNSTXPR static mgutility::string_view name() noexcept {
-        // 1. Custom override first
-        auto custom = lookup_custom(e);
-        if (!custom.empty()) {
-            return custom;
-        }
-
-        // 2. Extract + parse
-        return parse(raw_name<Enum, e>());
+    // invalid cases look like "(Enum)123"
+    if (result[0] == '(') {
+      return {};
     }
+
+    return result.substr(result.rfind(':') + 1);
+  }
+
+public:
+  /**
+   * @brief Gets the name of the enum value, checking custom names first.
+   *
+   * @tparam Enum The enum type.
+   * @tparam e The enum value.
+   * @return The name of the enum value.
+   */
+  template <typename Enum, Enum e>
+  MGUTILITY_CNSTXPR static mgutility::string_view name() noexcept {
+    // 1. Custom override first
+    auto custom = lookup_custom(e);
+    if (!custom.empty()) {
+      return custom;
+    }
+
+    // 2. Extract + parse
+    return parse(raw_name<Enum, e>());
+  }
 };
 
-// -------------------------------
-// Cached array per enum type via enum_sequence
-// -------------------------------
-template <typename Enum, typename Seq>
-struct enum_array_cache;
+/**
+ * @brief Caches an array of enum names for a given enum sequence.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Seq The enum sequence.
+ */
+template <typename Enum, typename Seq> struct enum_array_cache;
 
+/**
+ * @brief Specialization of enum_array_cache for enum_sequence.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Is The enum values.
+ */
 template <typename Enum, Enum... Is>
 struct enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>> {
 #if MGUTILITY_CPLUSPLUS >= 201402L
-    // C++17+: fully constexpr
-    // NOLINTNEXTLINE [readability-redundant-inline-specifier]
-    static inline constexpr std::array<mgutility::string_view,
-                                       sizeof...(Is) + 1>
-    value() {
-        return std::array<mgutility::string_view, sizeof...(Is) + 1>{
-            "", enum_type::template name<Enum, Is>()...};
-    }
+  // C++17+: fully constexpr
+  // NOLINTNEXTLINE [readability-redundant-inline-specifier]
+  static inline constexpr std::array<mgutility::string_view, sizeof...(Is) + 1>
+  value() {
+    return std::array<mgutility::string_view, sizeof...(Is) + 1>{
+        "", enum_type::template name<Enum, Is>()...};
+  }
 #else
-    // C++11: lazy runtime array
-    static const std::array<mgutility::string_view, sizeof...(Is) + 1>&
-    value() {
-        static std::array<mgutility::string_view, sizeof...(Is) + 1> arr{
-            "", enum_type::template name<Enum, Is>()...};
-        return arr;
-    }
+  // C++11: lazy runtime array
+  static const std::array<mgutility::string_view, sizeof...(Is) + 1> &value() {
+    static std::array<mgutility::string_view, sizeof...(Is) + 1> arr{
+        "", enum_type::template name<Enum, Is>()...};
+    return arr;
+  }
 #endif
 };
 
-// -------------------------------
-// Public getter from enum_sequence
-// -------------------------------
+/**
+ * @brief Gets an array of enum names for the given sequence.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Is The enum values.
+ * @param unused The enum sequence (unused parameter).
+ * @return An array of string_views containing the enum names.
+ */
 template <typename Enum, Enum... Is>
-MGUTILITY_CNSTXPR auto get_enum_array(
-    detail::enum_sequence<Enum, Is...> /*unused*/) noexcept
+MGUTILITY_CNSTXPR auto
+get_enum_array(detail::enum_sequence<Enum, Is...> /*unused*/) noexcept
 #if MGUTILITY_CPLUSPLUS >= 201402L
     -> std::array<mgutility::string_view, sizeof...(Is) + 1> {
-    return enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>>::value();
+  return enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>>::value();
 #else
-    -> const std::array<mgutility::string_view, sizeof...(Is) + 1>& {
-    return enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>>::value();
+    -> const std::array<mgutility::string_view, sizeof...(Is) + 1> & {
+  return enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>>::value();
 #endif
 }
 
-// -------------------------------
-// Public getter from Min/Max range
-// -------------------------------
+/**
+ * @brief Gets an array of enum names for the enum type within the specified
+ * range.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Min The minimum enum value.
+ * @tparam Max The maximum enum value.
+ * @return An array of string_views containing the enum names.
+ */
 template <typename Enum, int Min = mgutility::enum_range<Enum>::min,
           int Max = mgutility::enum_range<Enum>::max>
 MGUTILITY_CNSTXPR auto get_enum_array() noexcept
 #if MGUTILITY_CPLUSPLUS >= 201402L
     -> std::array<mgutility::string_view, Max - Min + 2> {
-    return get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
+  return get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
 #else
-    -> const std::array<mgutility::string_view, Max - Min + 2>& {
-    return get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
+    -> const std::array<mgutility::string_view, Max - Min + 2> & {
+  return get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
 #endif
 }
-
 
 /**
  * @brief Converts a string to an enum value.

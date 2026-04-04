@@ -143,14 +143,6 @@ template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a cl
 <tr class="memitem:aea6bbfddbe02eddc036eefa015bb81cd" id="r_aea6bbfddbe02eddc036eefa015bb81cd"><td class="memItemLeft" align="right" valign="top"><a id="aea6bbfddbe02eddc036eefa015bb81cd" name="aea6bbfddbe02eddc036eefa015bb81cd"></a>
 <a class="el" href="structmgutility_1_1pair.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>string_view</b> = <a class="el" href="classmgutility_1_1basic__string__view.html">basic_string_view</a>&lt;<a class="el" href="structmgutility_1_1pair.html">char</a>&gt;</td></tr>
 <tr class="separator:aea6bbfddbe02eddc036eefa015bb81cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeed1cf87ebde4a25c6299da43c7ba147" id="r_aeed1cf87ebde4a25c6299da43c7ba147"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">T</a> &gt; </td></tr>
-<tr class="memitem:aeed1cf87ebde4a25c6299da43c7ba147"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structmgutility_1_1pair.html">using</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#aeed1cf87ebde4a25c6299da43c7ba147">string_or_view_t</a></td></tr>
-<tr class="memdesc:aeed1cf87ebde4a25c6299da43c7ba147"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alias template for a string or string view type based on the presence of a bitwise OR operator.  <br /></td></tr>
-<tr class="separator:aeed1cf87ebde4a25c6299da43c7ba147"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e3f8aabb72b815b1cdbaa071e025108" id="r_a9e3f8aabb72b815b1cdbaa071e025108"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">Enum</a> &gt; </td></tr>
-<tr class="memitem:a9e3f8aabb72b815b1cdbaa071e025108"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structmgutility_1_1pair.html">using</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a9e3f8aabb72b815b1cdbaa071e025108">enum_pair</a> = std::pair&lt;<a class="el" href="structmgutility_1_1pair.html">Enum</a>, <a class="el" href="#aeed1cf87ebde4a25c6299da43c7ba147">string_or_view_t</a>&lt;<a class="el" href="structmgutility_1_1pair.html">Enum</a>&gt;&gt;</td></tr>
-<tr class="memdesc:a9e3f8aabb72b815b1cdbaa071e025108"><td class="mdescLeft">&#160;</td><td class="mdescRight">A pair consisting of an enum value and its corresponding string or string view.  <br /></td></tr>
-<tr class="separator:a9e3f8aabb72b815b1cdbaa071e025108"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -180,67 +172,10 @@ Variables</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Checks for MSVC compiler version. </p>
-<p>Defines the MGUTILITY_HAS_HAS_INCLUDE macro if __has_include is supported.</p>
 <p>If the MSVC version is less than 2017, an error is raised.</p>
 <p>Defines the MGUTILITY_CPLUSPLUS macro for MSVC and other compilers.</p>
-<p>For MSVC, it uses _MSVC_LANG. For other compilers, it uses __cplusplus.</p>
-<p>If __has_include is supported, MGUTILITY_HAS_HAS_INCLUDE is defined. </p>
-</div><h2 class="groupheader">Typedef Documentation</h2>
-<a id="a9e3f8aabb72b815b1cdbaa071e025108" name="a9e3f8aabb72b815b1cdbaa071e025108"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e3f8aabb72b815b1cdbaa071e025108">&#9670;&#160;</a></span>enum_pair</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">Enum</a> &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structmgutility_1_1pair.html">using</a> <a class="el" href="#a9e3f8aabb72b815b1cdbaa071e025108">mgutility::enum_pair</a> = std::pair&lt;<a class="el" href="structmgutility_1_1pair.html">Enum</a>, <a class="el" href="#aeed1cf87ebde4a25c6299da43c7ba147">string_or_view_t</a>&lt;<a class="el" href="structmgutility_1_1pair.html">Enum</a>&gt;&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>A pair consisting of an enum value and its corresponding string or string view. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">Enum</td><td>The enum type. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="aeed1cf87ebde4a25c6299da43c7ba147" name="aeed1cf87ebde4a25c6299da43c7ba147"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeed1cf87ebde4a25c6299da43c7ba147">&#9670;&#160;</a></span>string_or_view_t</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">T</a> &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structmgutility_1_1pair.html">using</a> <a class="el" href="#aeed1cf87ebde4a25c6299da43c7ba147">mgutility::string_or_view_t</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> </div>
-<div class="line">    <span class="keyword">typename</span> std::conditional&lt;detail::has_bit_or&lt;T&gt;::value,</div>
-<div class="line">                              fixed_string&lt;enum_name_buffer&lt;T&gt;::size&gt;,</div>
-<div class="line">                              <a class="code hl_class" href="classmgutility_1_1basic__string__view.html">mgutility::string_view</a>&gt;::type</div>
-<div class="ttc" id="aclassmgutility_1_1basic__string__view_html"><div class="ttname"><a href="classmgutility_1_1basic__string__view.html">mgutility::basic_string_view</a></div><div class="ttdoc">A basic string view class template.</div><div class="ttdef"><b>Definition</b> mgutility_enum_name.hpp:181</div></div>
-</div><!-- fragment -->
-<p>Alias template for a string or string view type based on the presence of a bitwise OR operator. </p>
-<p>If the type T supports the bitwise OR operator, the alias is a std::string. Otherwise, it is a mgutility::string_view.</p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>The type to check. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<h2 class="groupheader">Function Documentation</h2>
+<p>For MSVC, it uses _MSVC_LANG. For other compilers, it uses __cplusplus. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="a945fab3988ccb5de52589c67ee654e38" name="a945fab3988ccb5de52589c67ee654e38"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a945fab3988ccb5de52589c67ee654e38">&#9670;&#160;</a></span>enum_cast()</h2>
 

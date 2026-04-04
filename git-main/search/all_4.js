@@ -9,13 +9,12 @@ var searchData=
   ['enum_5ffor_5feach_6',['enum_for_each',['../classmgutility_1_1enum__for__each.html',1,'mgutility::enum_for_each&lt; Enum &gt;'],['../classmgutility_1_1enum__for__each.html#a136743f726f0af0b04c027dfa3ca08cc',1,'mgutility::enum_for_each::enum_for_each()=default'],['../classmgutility_1_1enum__for__each.html#a136743f726f0af0b04c027dfa3ca08cc',1,'mgutility::enum_for_each::enum_for_each()=default']]],
   ['enum_5fname_7',['enum_name',['../namespacemgutility.html#acd6b8335869248ad4f8525ef4371ea89',1,'mgutility::enum_name()'],['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html',1,'enum_name']]],
   ['enum_5fname_5fbuffer_8',['enum_name_buffer',['../structmgutility_1_1enum__name__buffer.html',1,'mgutility']]],
-  ['enum_5fpair_9',['enum_pair',['../namespacemgutility.html#a9e3f8aabb72b815b1cdbaa071e025108',1,'mgutility']]],
-  ['enum_5frange_10',['enum_range',['../structmgutility_1_1enum__range.html',1,'mgutility']]],
-  ['enum_5frange_3c_20color_20_3e_11',['enum_range&lt; color &gt;',['../structmgutility_1_1enum__range_3_01color_01_4.html',1,'mgutility']]],
-  ['enum_5frange_3c_20position_20_3e_12',['enum_range&lt; Position &gt;',['../structmgutility_1_1enum__range_3_01Position_01_4.html',1,'mgutility']]],
-  ['enum_5fsequence_13',['enum_sequence',['../structmgutility_1_1detail_1_1enum__sequence.html',1,'mgutility::detail']]],
-  ['enum_5fsequence_5ffrom_5findex_14',['enum_sequence_from_index',['../structmgutility_1_1detail_1_1enum__sequence__from__index.html',1,'mgutility::detail']]],
-  ['enum_5fsequence_5ffrom_5findex_3c_20enum_2c_20min_2c_20index_5fsequence_3c_20i_2e_2e_2e_20_3e_20_3e_15',['enum_sequence_from_index&lt; Enum, Min, index_sequence&lt; I... &gt; &gt;',['../structmgutility_1_1detail_1_1enum__sequence__from__index_3_01Enum_00_01Min_00_01index__sequence_3_01I_8_8_8_01_4_01_4.html',1,'mgutility::detail']]],
-  ['enum_5ftype_16',['enum_type',['../structmgutility_1_1detail_1_1enum__type.html',1,'mgutility::detail']]],
-  ['example_20usage_20a_20href_20https_3a_20godbolt_20org_20z_20wgveyyh1b_20try_20it_20a_17',['Example usage (&lt;a href=&quot;https://godbolt.org/z/WGvEYYh1b&quot; &gt;try it!&lt;/a&gt;)',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md7',1,'']]]
+  ['enum_5frange_9',['enum_range',['../structmgutility_1_1enum__range.html',1,'mgutility']]],
+  ['enum_5frange_3c_20color_20_3e_10',['enum_range&lt; color &gt;',['../structmgutility_1_1enum__range_3_01color_01_4.html',1,'mgutility']]],
+  ['enum_5frange_3c_20position_20_3e_11',['enum_range&lt; Position &gt;',['../structmgutility_1_1enum__range_3_01Position_01_4.html',1,'mgutility']]],
+  ['enum_5fsequence_12',['enum_sequence',['../structmgutility_1_1detail_1_1enum__sequence.html',1,'mgutility::detail']]],
+  ['enum_5fsequence_5ffrom_5findex_13',['enum_sequence_from_index',['../structmgutility_1_1detail_1_1enum__sequence__from__index.html',1,'mgutility::detail']]],
+  ['enum_5fsequence_5ffrom_5findex_3c_20enum_2c_20min_2c_20index_5fsequence_3c_20i_2e_2e_2e_20_3e_20_3e_14',['enum_sequence_from_index&lt; Enum, Min, index_sequence&lt; I... &gt; &gt;',['../structmgutility_1_1detail_1_1enum__sequence__from__index_3_01Enum_00_01Min_00_01index__sequence_3_01I_8_8_8_01_4_01_4.html',1,'mgutility::detail']]],
+  ['enum_5ftype_15',['enum_type',['../structmgutility_1_1detail_1_1enum__type.html',1,'mgutility::detail']]],
+  ['example_20usage_20a_20href_20https_3a_20godbolt_20org_20z_20wgveyyh1b_20try_20it_20a_16',['Example usage (&lt;a href=&quot;https://godbolt.org/z/WGvEYYh1b&quot; &gt;try it!&lt;/a&gt;)',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md7',1,'']]]
 ];

@@ -33,6 +33,26 @@ SOFTWARE.
 namespace mgutility {
 namespace detail {
 
+#ifndef MGUTILITY_ENUM_RANGE_MIN
+/**
+ * @brief Defines the MGUTILITY_ENUM_RANGE_MIN macro.
+ *
+ * This macro defines the minimum value for enum range. Default is 0.
+ */
+// NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
+#define MGUTILITY_ENUM_RANGE_MIN 0
+#endif
+
+#ifndef MGUTILITY_ENUM_RANGE_MAX
+/**
+ * @brief Defines the MGUTILITY_ENUM_RANGE_MAX macro.
+ *
+ * This macro defines the maximum value for enum range. Default is 256.
+ */
+// NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
+#define MGUTILITY_ENUM_RANGE_MAX 256
+#endif
+
 /**
  * @brief Defines the MGUTILITY_ENUM_NAME_BUFFER_SIZE macro.
  *
@@ -234,8 +254,8 @@ using make_enum_sequence = typename enum_sequence_from_index<
  * @tparam T The enumeration type.
  */
 template <typename T> struct enum_range {
-  static constexpr auto min{0};
-  static constexpr auto max{256};
+  static constexpr auto min{MGUTILITY_ENUM_RANGE_MIN};
+  static constexpr auto max{MGUTILITY_ENUM_RANGE_MAX};
 };
 
 template <typename T, typename U> struct pair {
@@ -244,20 +264,27 @@ template <typename T, typename U> struct pair {
 };
 
 template <typename T>
-#if MGUTILITY_CPLUSPLUS > 201402L || defined(__GNUC__) && !defined(__clang__)
+// #if MGUTILITY_CPLUSPLUS > 201402L || defined(__GNUC__) && !defined(__clang__)
 using flat_map = std::initializer_list<pair<T, const char *>>;
-#else
-// NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
-using flat_map = pair<T, const char *>[];
-#endif
+// #else
+// // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
+// using flat_map = pair<T, const char *>[];
+// #endif
 
 /**
  * @brief Provides the custom names map for an enumeration type.
  *
  * @tparam T The enumeration type.
  */
-template <typename T> struct custom_enum {
-  static constexpr flat_map<T> map = {};
+template <typename T>
+struct custom_enum {
+#if MGUTILITY_CPLUSPLUS > 201402L
+static constexpr flat_map<T> map = {};
+#else
+    static constexpr flat_map<T> map() noexcept {
+        return {}; // default: empty map
+    }
+#endif
 };
 
 /**

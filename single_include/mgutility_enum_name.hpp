@@ -22,23 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef MGUTILITY_ENUM_NAME_SINGLE_HEADER_HPP
-#define MGUTILITY_ENUM_NAME_SINGLE_HEADER_HPP
+#ifndef MGUTILITY_COMMON_DEFINITIONS_HPP
+#define MGUTILITY_COMMON_DEFINITIONS_HPP
 
-// Include standard headers
-#include <algorithm>
-#include <array>
-#include <cstring>
-#include <iosfwd>
-#include <string>
-#include <type_traits>
-#include <utility>
+/**
+ * @file definitions.hpp
+ * @brief Defines macros for compiler and standard support detection.
+ */
 
-#if MGUTILITY_CPLUSPLUS > 201402L
-#include <string_view>
-#endif
-
-// Definitions
 /**
  * @brief Defines the MGUTILITY_CPLUSPLUS macro for MSVC and other compilers.
  *
@@ -107,7 +98,297 @@ SOFTWARE.
 #define MGUTILITY_HAS_HAS_INCLUDE
 #endif
 
-// string_view implementation
+#endif // MGUTILITY_COMMON_DEFINITIONS_HPP
+
+#ifndef DETAIL_META_HPP
+#define DETAIL_META_HPP
+
+#include <initializer_list>
+#include <type_traits>
+#include <utility>
+
+namespace mgutility {
+namespace detail {
+
+#ifndef MGUTILITY_ENUM_RANGE_MIN
+/**
+ * @brief Defines the MGUTILITY_ENUM_RANGE_MIN macro.
+ *
+ * This macro defines the minimum value for enum range. Default is 0.
+ */
+// NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
+#define MGUTILITY_ENUM_RANGE_MIN 0
+#endif
+
+#ifndef MGUTILITY_ENUM_RANGE_MAX
+/**
+ * @brief Defines the MGUTILITY_ENUM_RANGE_MAX macro.
+ *
+ * This macro defines the maximum value for enum range. Default is 256.
+ */
+// NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
+#define MGUTILITY_ENUM_RANGE_MAX 256
+#endif
+
+/**
+ * @brief Defines the MGUTILITY_ENUM_NAME_BUFFER_SIZE macro.
+ *
+ * This macro defines the size of the buffer used for enum names.
+ */
+#ifndef MGUTILITY_ENUM_NAME_BUFFER_SIZE
+// NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
+#define MGUTILITY_ENUM_NAME_BUFFER_SIZE 128U
+#endif
+
+/**
+ * @brief Trait to check if a type is a scoped enumeration.
+ *
+ * @tparam E The type to check.
+ */
+template <typename E> struct is_scoped_enum {
+  /**
+   * @brief Boolean value indicating if the type is a scoped enumeration.
+   */
+  static constexpr auto value =
+      // NOLINTNEXTLINE [modernize-type-traits]
+      std::is_enum<E>::value &&
+      // NOLINTNEXTLINE [modernize-type-traits]
+      !std::is_convertible<E, typename std::underlying_type<E>::type>::value;
+};
+
+/**
+ * @brief Trait to check if a type supports the bitwise OR operator.
+ *
+ * @tparam T The type to check.
+ * @tparam Enable SFINAE parameter, default is void.
+ */
+template <typename T, typename = void> struct has_bit_or : std::false_type {};
+
+/**
+ * @brief Specialization of has_bit_or for types that support the bitwise OR
+ * operator.
+ *
+ * @tparam T The type to check.
+ */
+template <typename T>
+struct has_bit_or<T, decltype((T{} | T{}), void())> : std::true_type {};
+
+#if MGUTILITY_CPLUSPLUS > 201103L
+/**
+ * @brief Helper variable template for is_scoped_enum.
+ *
+ * @tparam E The type to check.
+ */
+template <typename E>
+static constexpr bool is_scoped_enum_v = is_scoped_enum<E>::value;
+#endif
+
+/**
+ * @brief Alias template for std::enable_if.
+ *
+ * This template is used to conditionally enable a type `T` if the boolean
+ * constant `B` is true. It is a shorthand for `typename std::enable_if<B,
+ * T>::type`.
+ *
+ * @tparam B The compile-time boolean condition.
+ * @tparam T The type to be enabled if `B` is true, default is void.
+ */
+template <bool B, class T = void>
+// NOLINTNEXTLINE [modernize-type-traits]
+using enable_if_t = typename std::enable_if<B, T>::type;
+
+/**
+ * @brief Alias template for std::underlying_type.
+ *
+ * @tparam T The enumeration type.
+ */
+template <typename T>
+// NOLINTNEXTLINE [modernize-type-traits]
+using underlying_type_t = typename std::underlying_type<T>::type;
+
+/**
+ * @brief Alias template for std::remove_const.
+ *
+ * @tparam T The type to remove const from.
+ */
+template <typename T>
+// NOLINTNEXTLINE [modernize-type-traits]
+using remove_const_t = typename std::remove_const<T>::type;
+
+/**
+ * @brief Represents a compile-time sequence of indices.
+ *
+ * @tparam Ints The sequence of indices.
+ */
+template <std::size_t... Ints> struct index_sequence {};
+
+/**
+ * @brief Concatenates two index sequences.
+ *
+ * @tparam Seq1 The first index sequence.
+ * @tparam Seq2 The second index sequence.
+ */
+template <typename Seq1, typename Seq2> struct index_sequence_concat;
+
+template <std::size_t... I1, std::size_t... I2>
+struct index_sequence_concat<index_sequence<I1...>, index_sequence<I2...>> {
+  using type = index_sequence<I1..., (sizeof...(I1) + I2)...>;
+};
+
+/**
+ * @brief Implementation helper for creating index sequences.
+ *
+ * @tparam N The size of the index sequence to create.
+ */
+template <std::size_t N> struct make_index_sequence_impl;
+
+template <std::size_t N> struct make_index_sequence_impl {
+private:
+  static constexpr std::size_t half = N / 2;
+
+  using first = typename make_index_sequence_impl<half>::type;
+  using second = typename make_index_sequence_impl<N - half>::type;
+
+public:
+  using type = typename index_sequence_concat<first, second>::type;
+};
+
+// base cases
+/**
+ * @brief Base case for index sequence of size 0.
+ */
+template <> struct make_index_sequence_impl<0> {
+  using type = index_sequence<>;
+};
+
+/**
+ * @brief Base case for index sequence of size 1.
+ */
+template <> struct make_index_sequence_impl<1> {
+  using type = index_sequence<0>;
+};
+
+/**
+ * @brief Alias for creating an index sequence of size N.
+ *
+ * @tparam N The size of the index sequence.
+ */
+template <std::size_t N>
+using make_index_sequence = typename make_index_sequence_impl<N>::type;
+
+/**
+ * @brief Represents a sequence of enumeration values.
+ *
+ * @tparam Enum The enumeration type.
+ * @tparam Values The enumeration values.
+ */
+template <typename Enum, Enum... Values> struct enum_sequence {};
+
+/**
+ * @brief Helper for creating enum sequences from index sequences.
+ *
+ * @tparam Enum The enumeration type.
+ * @tparam Min The minimum value.
+ * @tparam Seq The index sequence.
+ */
+template <typename Enum, int Min, typename Seq> struct enum_sequence_from_index;
+
+/**
+ * @brief Specialization for creating enum sequences from index sequences.
+ *
+ * @tparam Enum The enumeration type.
+ * @tparam Min The minimum value.
+ * @tparam I The indices.
+ */
+template <typename Enum, int Min, std::size_t... I>
+struct enum_sequence_from_index<Enum, Min, index_sequence<I...>> {
+private:
+  // NOLINTNEXTLINE [readability-identifier-length]
+  static constexpr int offset(std::size_t i) {
+    return Min + static_cast<int>(i);
+  }
+
+public:
+  using type = enum_sequence<Enum, static_cast<Enum>(offset(I))...>;
+};
+
+/**
+ * @brief Alias for creating an enum sequence from a range.
+ *
+ * @tparam Enum The enumeration type.
+ * @tparam Min The minimum value.
+ * @tparam Max The maximum value.
+ */
+template <typename Enum, int Min, int Max>
+using make_enum_sequence = typename enum_sequence_from_index<
+    Enum, Min,
+    make_index_sequence<static_cast<std::size_t>(Max - Min + 1)>>::type;
+} // namespace detail
+
+/**
+ * @brief Provides the range for an enumeration type.
+ *
+ * @tparam T The enumeration type.
+ */
+template <typename T> struct enum_range {
+  static constexpr auto min{MGUTILITY_ENUM_RANGE_MIN};
+  static constexpr auto max{MGUTILITY_ENUM_RANGE_MAX};
+};
+
+template <typename T, typename U> struct pair {
+  T first;
+  U second;
+};
+
+template <typename T>
+// #if MGUTILITY_CPLUSPLUS > 201402L || defined(__GNUC__) && !defined(__clang__)
+using flat_map = std::initializer_list<pair<T, const char *>>;
+// #else
+// // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
+// using flat_map = pair<T, const char *>[];
+// #endif
+
+/**
+ * @brief Provides the custom names map for an enumeration type.
+ *
+ * @tparam T The enumeration type.
+ */
+template <typename T> struct custom_enum {
+#if MGUTILITY_CPLUSPLUS > 201402L
+  static constexpr flat_map<T> map = {};
+#else
+  static constexpr flat_map<T> map() noexcept {
+    return {}; // default: empty map
+  }
+#endif
+};
+
+/**
+ * @brief Provides the name buffer size for an enumeration type.
+ *
+ * @tparam T The enumeration type.
+ */
+template <typename T> struct enum_name_buffer {
+  static constexpr auto size = MGUTILITY_ENUM_NAME_BUFFER_SIZE;
+};
+
+} // namespace mgutility
+
+#endif // DETAIL_META_HPP
+
+#ifndef MGUTILITY_STRING_VIEW_HPP
+#define MGUTILITY_STRING_VIEW_HPP
+
+#include <cstring>
+// NOLINTNEXTLINE [unused-includes]
+#include <iosfwd>
+#include <string>
+#include <utility>
+
+#if MGUTILITY_CPLUSPLUS > 201402L
+#include <string_view>
+#endif
+
 namespace mgutility {
 namespace detail {
 
@@ -445,7 +726,11 @@ using string_view = std::string_view;
 
 } // namespace mgutility
 
-// fixed_string implementation
+#endif // STRING_STRING_VIEW_HPP
+
+#ifndef MGUTILITY_FIXED_STRING_HPP
+#define MGUTILITY_FIXED_STRING_HPP
+
 namespace mgutility {
 
 template <size_t N = 0> class fixed_string {
@@ -609,407 +894,18 @@ struct fmt::formatter<mgutility::fixed_string<N>> : formatter<string_view> {
 };
 #endif // MGUTILITY_USE_FMT || __has_include(<fmt/format.h>)
 
-// Now, the meta.hpp content without guard
-namespace mgutility {
-namespace detail {
+#endif // MGUTILITY_FIXED_STRING_HPP
 
-/**
- * @brief Defines the MGUTILITY_ENUM_NAME_BUFFER_SIZE macro.
- *
- * This macro defines the size of the buffer used for enum names.
- */
-#ifndef MGUTILITY_ENUM_NAME_BUFFER_SIZE
-// NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
-#define MGUTILITY_ENUM_NAME_BUFFER_SIZE 128U
-#endif
+#ifndef DETAIL_OPTIONAL_HPP
+#define DETAIL_OPTIONAL_HPP
 
-/**
- * @brief Trait to check if a type is a scoped enumeration.
- *
- * @tparam E The type to check.
- */
-template <typename E> struct is_scoped_enum {
-  /**
-   * @brief Boolean value indicating if the type is a scoped enumeration.
-   */
-  static constexpr auto value =
-      // NOLINTNEXTLINE [modernize-type-traits]
-      std::is_enum<E>::value &&
-      // NOLINTNEXTLINE [modernize-type-traits]
-      !std::is_convertible<E, typename std::underlying_type<E>::type>::value;
-};
-
-/**
- * @brief Trait to check if a type supports the bitwise OR operator.
- *
- * @tparam T The type to check.
- * @tparam Enable SFINAE parameter, default is void.
- */
-template <typename T, typename = void> struct has_bit_or : std::false_type {};
-
-/**
- * @brief Specialization of has_bit_or for types that support the bitwise OR
- * operator.
- *
- * @tparam T The type to check.
- */
-template <typename T>
-struct has_bit_or<T, decltype((T{} | T{}), void())> : std::true_type {};
-
-#if MGUTILITY_CPLUSPLUS > 201103L
-/**
- * @brief Helper variable template for is_scoped_enum.
- *
- * @tparam E The type to check.
- */
-template <typename E>
-static constexpr bool is_scoped_enum_v = is_scoped_enum<E>::value;
-#endif
-
-/**
- * @brief Alias template for std::enable_if.
- *
- * This template is used to conditionally enable a type `T` if the boolean
- * constant `B` is true. It is a shorthand for `typename std::enable_if<B,
- * T>::type`.
- *
- * @tparam B The compile-time boolean condition.
- * @tparam T The type to be enabled if `B` is true, default is void.
- */
-template <bool B, class T = void>
-// NOLINTNEXTLINE [modernize-type-traits]
-using enable_if_t = typename std::enable_if<B, T>::type;
-
-/**
- * @brief Alias template for std::underlying_type.
- *
- * @tparam T The enumeration type.
- */
-template <typename T>
-// NOLINTNEXTLINE [modernize-type-traits]
-using underlying_type_t = typename std::underlying_type<T>::type;
-
-/**
- * @brief Alias template for std::remove_const.
- *
- * @tparam T The type to remove const from.
- */
-template <typename T>
-// NOLINTNEXTLINE [modernize-type-traits]
-using remove_const_t = typename std::remove_const<T>::type;
-
-/**
- * @brief Represents a compile-time sequence of indices.
- *
- * @tparam Ints The sequence of indices.
- */
-template <std::size_t... Ints> struct index_sequence {};
-
-/**
- * @brief Concatenates two index sequences.
- *
- * @tparam Seq1 The first index sequence.
- * @tparam Seq2 The second index sequence.
- */
-template <typename Seq1, typename Seq2> struct index_sequence_concat;
-
-template <std::size_t... I1, std::size_t... I2>
-struct index_sequence_concat<index_sequence<I1...>, index_sequence<I2...>> {
-  using type = index_sequence<I1..., (sizeof...(I1) + I2)...>;
-};
-
-/**
- * @brief Implementation helper for creating index sequences.
- *
- * @tparam N The size of the index sequence to create.
- */
-template <std::size_t N> struct make_index_sequence_impl;
-
-template <std::size_t N> struct make_index_sequence_impl {
-private:
-  static constexpr std::size_t half = N / 2;
-
-  using first = typename make_index_sequence_impl<half>::type;
-  using second = typename make_index_sequence_impl<N - half>::type;
-
-public:
-  using type = typename index_sequence_concat<first, second>::type;
-};
-
-// base cases
-/**
- * @brief Base case for index sequence of size 0.
- */
-template <> struct make_index_sequence_impl<0> {
-  using type = index_sequence<>;
-};
-
-/**
- * @brief Base case for index sequence of size 1.
- */
-template <> struct make_index_sequence_impl<1> {
-  using type = index_sequence<0>;
-};
-
-/**
- * @brief Alias for creating an index sequence of size N.
- *
- * @tparam N The size of the index sequence.
- */
-template <std::size_t N>
-using make_index_sequence = typename make_index_sequence_impl<N>::type;
-
-/**
- * @brief Represents a sequence of enumeration values.
- *
- * @tparam Enum The enumeration type.
- * @tparam Values The enumeration values.
- */
-template <typename Enum, Enum... Values> struct enum_sequence {};
-
-/**
- * @brief Helper for creating enum sequences from index sequences.
- *
- * @tparam Enum The enumeration type.
- * @tparam Min The minimum value.
- * @tparam Seq The index sequence.
- */
-template <typename Enum, int Min, typename Seq> struct enum_sequence_from_index;
-
-/**
- * @brief Specialization for creating enum sequences from index sequences.
- *
- * @tparam Enum The enumeration type.
- * @tparam Min The minimum value.
- * @tparam I The indices.
- */
-template <typename Enum, int Min, std::size_t... I>
-struct enum_sequence_from_index<Enum, Min, index_sequence<I...>> {
-private:
-  // NOLINTNEXTLINE [readability-identifier-length]
-  static constexpr int offset(std::size_t i) {
-    return Min + static_cast<int>(i);
-  }
-
-public:
-  using type = enum_sequence<Enum, static_cast<Enum>(offset(I))...>;
-};
-
-/**
- * @brief Alias for creating an enum sequence from a range.
- *
- * @tparam Enum The enumeration type.
- * @tparam Min The minimum value.
- * @tparam Max The maximum value.
- */
-template <typename Enum, int Min, int Max>
-using make_enum_sequence = typename enum_sequence_from_index<
-    Enum, Min,
-    make_index_sequence<static_cast<std::size_t>(Max - Min + 1)>>::type;
-
-} // namespace detail
-
-/**
- * @brief Provides the range for an enumeration type.
- *
- * @tparam T The enumeration type.
- */
-template <typename T> struct enum_range {
-  static constexpr auto min{0};
-  static constexpr auto max{256};
-};
-
-template <typename T, typename U> struct pair {
-  T first;
-  U second;
-};
-
-template <typename T>
-#if MGUTILITY_CPLUSPLUS > 201402L || defined(__GNUC__) && !defined(__clang__)
-using flat_map = std::initializer_list<pair<T, const char *>>;
-#else
-// NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
-using flat_map = pair<T, const char *>[];
-#endif
-
-/**
- * @brief Provides the custom names map for an enumeration type.
- *
- * @tparam T The enumeration type.
- */
-template <typename T> struct custom_enum {
-  static constexpr flat_map<T> map = {};
-};
-
-/**
- * @brief Provides the name buffer size for an enumeration type.
- *
- * @tparam T The enumeration type.
- */
-template <typename T> struct enum_name_buffer {
-  static constexpr auto size = MGUTILITY_ENUM_NAME_BUFFER_SIZE;
-};
-
-/**
- * @brief Alias template for a string or string view type based on the presence
- * of a bitwise OR operator.
- *
- * If the type T supports the bitwise OR operator, the alias is a std::string.
- * Otherwise, it is a mgutility::string_view.
- *
- * @tparam T The type to check.
- */
-template <typename T>
-// NOLINTNEXTLINE [modernize-type-traits]
-using string_or_view_t =
-    typename std::conditional<detail::has_bit_or<T>::value,
-                              fixed_string<enum_name_buffer<T>::size>,
-                              mgutility::string_view>::type;
-
-/**
- * @brief A pair consisting of an enum value and its corresponding string or
- * string view.
- *
- * @tparam Enum The enum type.
- */
-template <typename Enum>
-using enum_pair = std::pair<Enum, string_or_view_t<Enum>>;
-
-} // namespace mgutility
-
-// enum_for_each class
-namespace mgutility {
-
-/**
- * @brief A class template for iterating over enum values.
- *
- * @tparam Enum The enum type.
- */
-template <typename Enum> class enum_for_each {
-  using value_type = const enum_pair<Enum>;
-  using size_type = std::size_t;
-
-  /**
-   * @brief An iterator for enum values.
-   */
-  struct enum_iter {
-    using const_iter_type = int;
-    using iter_type = detail::remove_const_t<const_iter_type>;
-    using iterator_category = std::forward_iterator_tag;
-    using value_type = const enum_pair<Enum>;
-    using difference_type = std::ptrdiff_t;
-    using pointer = value_type *;
-    using reference = value_type &;
-
-    /**
-     * @brief Default constructor initializing the iterator to the default
-     * position.
-     */
-    enum_iter() : m_pos{} {}
-
-    /**
-     * @brief Constructor initializing the iterator to a specific position.
-     *
-     * @param value The initial position of the iterator.
-     */
-    explicit enum_iter(iter_type value) : m_pos{value} {}
-
-    /**
-     * @brief Pre-increment operator.
-     *
-     * @return A reference to the incremented iterator.
-     */
-    auto operator++() -> enum_iter & {
-      ++m_pos;
-      return *this;
-    }
-
-    /**
-     * @brief Post-increment operator.
-     *
-     * @return A copy of the iterator before incrementing.
-     */
-    auto operator++(int) -> enum_iter {
-      m_pos++;
-      return *this;
-    }
-
-    /**
-     * @brief Inequality comparison operator.
-     *
-     * @param other The other iterator to compare with.
-     * @return True if the iterators are not equal, otherwise false.
-     */
-    auto operator!=(const enum_iter &other) const -> bool {
-      return m_pos != other.m_pos;
-    }
-
-    /**
-     * @brief Equality comparison operator.
-     *
-     * @param other The other iterator to compare with.
-     * @return True if the iterators are equal, otherwise false.
-     */
-    auto operator==(const enum_iter &other) const -> bool {
-      return m_pos == other.m_pos;
-    }
-
-    /**
-     * @brief Dereference operator for enum_iter.
-     *
-     * @tparam Enum The enum type.
-     * @return The current enum pair.
-     */
-    auto operator*() const -> value_type;
-
-  private:
-    iter_type m_pos; /**< The current position of the iterator. */
-  };
-
-public:
-  /**
-   * @brief Default constructor.
-   */
-  enum_for_each() = default;
-
-  /**
-   * @brief Returns an iterator to the beginning of the enum range.
-   *
-   * @return A reference to the beginning iterator.
-   */
-  auto begin() -> enum_iter & { return m_begin; }
-
-  /**
-   * @brief Returns an iterator to the end of the enum range.
-   *
-   * @return A reference to the end iterator.
-   */
-  auto end() -> enum_iter & { return m_end; }
-
-  /**
-   * @brief Returns the size of the enum range.
-   *
-   * @return The size of the enum range.
-   */
-  auto size() -> std::size_t {
-    return static_cast<int>(enum_range<Enum>::max) -
-           static_cast<int>(enum_range<Enum>::min) + 1;
-  }
-
-private:
-  enum_iter m_begin{
-      static_cast<int>(enum_range<Enum>::min)}; /**< The beginning iterator. */
-  enum_iter m_end{static_cast<int>(enum_range<Enum>::max) +
-                  1}; /**< The end iterator. */
-};
-
-} // namespace mgutility
+// NOLINTNEXTLINE [unused-includes]
+#include <exception>
 
 #if MGUTILITY_CPLUSPLUS >= 201703L
 #include <optional>
 #endif
 
-// optional implementation
 namespace mgutility {
 
 #if MGUTILITY_CPLUSPLUS < 201703L
@@ -1309,8 +1205,41 @@ inline constexpr auto nullopt{std::nullopt};
 #endif
 } // namespace mgutility
 
-// enum_for_each class
+#endif // DETAIL_OPTIONAL_HPP
+
+#ifndef DETAIL_ENUM_FOR_EACH_HPP
+#define DETAIL_ENUM_FOR_EACH_HPP
+
+// NOLINTNEXTLINE [unused-includes]
+#include <cstdint>
+#include <utility>
+
 namespace mgutility {
+namespace detail {
+/**
+ * @brief Alias template for a string or string view type based on the presence
+ * of a bitwise OR operator.
+ *
+ * If the type T supports the bitwise OR operator, the alias is a std::string.
+ * Otherwise, it is a mgutility::string_view.
+ *
+ * @tparam T The type to check.
+ */
+template <typename T>
+// NOLINTNEXTLINE [modernize-type-traits]
+using string_or_view_t = typename std::conditional<
+    has_bit_or<T>::value, mgutility::fixed_string<enum_name_buffer<T>::size>,
+    mgutility::string_view>::type;
+
+/**
+ * @brief A pair consisting of an enum value and its corresponding string or
+ * string view.
+ *
+ * @tparam Enum The enum type.
+ */
+template <typename Enum>
+using enum_pair = std::pair<Enum, detail::string_or_view_t<Enum>>;
+} // namespace detail
 
 /**
  * @brief A class template for iterating over enum values.
@@ -1387,9 +1316,8 @@ template <typename Enum> class enum_for_each {
     }
 
     /**
-     * @brief Dereference operator for enum_iter.
+     * @brief Dereference operator.
      *
-     * @tparam Enum The enum type.
      * @return The current enum pair.
      */
     auto operator*() const -> value_type;
@@ -1424,293 +1352,81 @@ public:
    * @return The size of the enum range.
    */
   auto size() -> std::size_t {
-    return static_cast<int>(detail::enum_range<Enum>::max) -
-           static_cast<int>(detail::enum_range<Enum>::min) + 1;
+    return static_cast<int>(enum_range<Enum>::max) -
+           static_cast<int>(enum_range<Enum>::min) + 1;
   }
 
 private:
-  enum_iter m_begin{static_cast<int>(
-      detail::enum_range<Enum>::min)}; /**< The beginning iterator. */
-  enum_iter m_end{static_cast<int>(detail::enum_range<Enum>::max) +
+  enum_iter m_begin{
+      static_cast<int>(enum_range<Enum>::min)}; /**< The beginning iterator. */
+  enum_iter m_end{static_cast<int>(enum_range<Enum>::max) +
                   1}; /**< The end iterator. */
 };
-
 } // namespace mgutility
 
-// optional implementation
-namespace mgutility {
+#endif // DETAIL_ENUM_FOR_EACH_HPP
+
+#ifndef MGUTILITY_REFLECTION_DETAIL_ENUM_NAME_IMPL_HPP
+#define MGUTILITY_REFLECTION_DETAIL_ENUM_NAME_IMPL_HPP
+
+// NOLINTNEXTLINE [unused-includes]
+#include <algorithm>
+#include <array>
 
 /**
- * @brief A simple optional implementation for C++11.
+ * @brief Checks for MSVC compiler version.
  *
- * @tparam T The type.
+ * If the MSVC version is less than 2017, an error is raised.
  */
-template <typename T> class optional {
-public:
-  /**
-   * @brief Default constructor.
-   */
-  MGUTILITY_CNSTXPR optional() noexcept : has_value_(false) {}
-
-  /**
-   * @brief Constructor from value.
-   *
-   * @param value The value.
-   */
-  MGUTILITY_CNSTXPR optional(const T &value) noexcept : has_value_(true) {
-    new (&storage_) T(value);
-  }
-
-  /**
-   * @brief Constructor from rvalue.
-   *
-   * @param value The value.
-   */
-  MGUTILITY_CNSTXPR optional(T &&value) noexcept : has_value_(true) {
-    new (&storage_) T(std::move(value));
-  }
-
-  /**
-   * @brief Copy constructor.
-   *
-   * @param other The other optional.
-   */
-  MGUTILITY_CNSTXPR optional(const optional &other) noexcept
-      : has_value_(other.has_value_) {
-    if (has_value_) {
-      new (&storage_) T(other.value());
-    }
-  }
-
-  /**
-   * @brief Move constructor.
-   *
-   * @param other The other optional.
-   */
-  MGUTILITY_CNSTXPR optional(optional &&other) noexcept
-      : has_value_(other.has_value_) {
-    if (has_value_) {
-      new (&storage_) T(std::move(other.value()));
-      other.reset();
-    }
-  }
-
-  /**
-   * @brief Destructor.
-   */
-  ~optional() { reset(); }
-
-  /**
-   * @brief Copy assignment.
-   *
-   * @param other The other optional.
-   * @return This.
-   */
-  MGUTILITY_CNSTXPR optional &operator=(const optional &other) noexcept {
-    if (this != &other) {
-      reset();
-      has_value_ = other.has_value_;
-      if (has_value_) {
-        new (&storage_) T(other.value());
-      }
-    }
-    return *this;
-  }
-
-  /**
-   * @brief Move assignment.
-   *
-   * @param other The other optional.
-   * @return This.
-   */
-  MGUTILITY_CNSTXPR optional &operator=(optional &&other) noexcept {
-    if (this != &other) {
-      reset();
-      has_value_ = other.has_value_;
-      if (has_value_) {
-        new (&storage_) T(std::move(other.value()));
-        other.reset();
-      }
-    }
-    return *this;
-  }
-
-  /**
-   * @brief Assignment from value.
-   *
-   * @param value The value.
-   * @return This.
-   */
-  MGUTILITY_CNSTXPR optional &operator=(const T &value) noexcept {
-    reset();
-    has_value_ = true;
-    new (&storage_) T(value);
-    return *this;
-  }
-
-  /**
-   * @brief Assignment from rvalue.
-   *
-   * @param value The value.
-   * @return This.
-   */
-  MGUTILITY_CNSTXPR optional &operator=(T &&value) noexcept {
-    reset();
-    has_value_ = true;
-    new (&storage_) T(std::move(value));
-    return *this;
-  }
-
-  /**
-   * @brief Checks if has value.
-   *
-   * @return True if has value.
-   */
-  MGUTILITY_CNSTXPR bool has_value() const noexcept { return has_value_; }
-
-  /**
-   * @brief Checks if has value.
-   *
-   * @return True if has value.
-   */
-  MGUTILITY_CNSTXPR explicit operator bool() const noexcept {
-    return has_value_;
-  }
-
-  /**
-   * @brief Returns the value.
-   *
-   * @return The value.
-   */
-  MGUTILITY_CNSTXPR T &value() noexcept {
-    return *reinterpret_cast<T *>(&storage_);
-  }
-
-  /**
-   * @brief Returns the const value.
-   *
-   * @return The const value.
-   */
-  MGUTILITY_CNSTXPR const T &value() const noexcept {
-    return *reinterpret_cast<const T *>(&storage_);
-  }
-
-  /**
-   * @brief Returns the value or default.
-   *
-   * @param default_value The default value.
-   * @return The value or default.
-   */
-  MGUTILITY_CNSTXPR T value_or(const T &default_value) const noexcept {
-    return has_value_ ? value() : default_value;
-  }
-
-  /**
-   * @brief Resets the optional.
-   */
-  MGUTILITY_CNSTXPR void reset() noexcept {
-    if (has_value_) {
-      value().~T();
-      has_value_ = false;
-    }
-  }
-
-  /**
-   * @brief Emplaces a value.
-   *
-   * @param args The arguments.
-   * @return The value.
-   */
-  template <typename... Args>
-  MGUTILITY_CNSTXPR T &emplace(Args &&...args) noexcept {
-    reset();
-    has_value_ = true;
-    new (&storage_) T(std::forward<Args>(args)...);
-    return value();
-  }
-
-private:
-  bool has_value_;
-  std::aligned_storage_t<sizeof(T), alignof(T)> storage_;
-};
-
+#if defined(_MSC_VER) && _MSC_VER < 1910
+#error "Requires MSVC 2017 or newer!"
 /**
- * @brief Null optional.
- */
-inline constexpr struct nullopt_t {
-} nullopt;
-
-/**
- * @brief Makes an optional.
+ * @brief Checks for Clang compiler version.
  *
- * @tparam T The type.
- * @param value The value.
- * @return The optional.
+ * If the Clang version is less than 6, an error is raised.
  */
-template <typename T>
-MGUTILITY_CNSTXPR optional<std::decay_t<T>> make_optional(T &&value) noexcept {
-  return optional<std::decay_t<T>>(std::forward<T>(value));
-}
-
-} // namespace mgutility
-
-// Now, the enum_for_each.hpp content
-namespace mgutility {
-namespace detail {
+#elif defined(__clang__) && __clang_major__ < 6
+#error "Requires clang 6 or newer!"
+/**
+ * @brief Checks for GCC compiler version.
+ *
+ * If the GCC version is less than 9 and it is not Clang, an error is raised.
+ */
+#elif defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 9
+#error "Requires gcc 9 or newer!"
+/**
+ * @brief Checks for unsupported compilers.
+ *
+ * If the compiler is not MSVC, Clang, or GCC, an error is raised.
+ */
+#elif !defined(_MSC_VER) && !defined(__clang__) && !defined(__GNUC__)
+#error "Your compiler is not supported!"
+#endif
 
 /**
- * @brief Helper for finding an element in an array.
+ * @brief Defines the MGUTILITY_CPLUSPLUS macro for MSVC and other compilers.
  *
- * @tparam T The type.
- * @tparam N The size.
- * @param arr The array.
- * @param value The value.
- * @return The index or 0.
+ * For MSVC, it uses _MSVC_LANG. For other compilers, it uses __cplusplus.
  */
-template <typename T, std::size_t N>
-MGUTILITY_CNSTXPR std::size_t find(const std::array<T, N> &arr,
-                                   const T &value) {
-  for (std::size_t i = 0; i < N; ++i) {
-    if (arr[i] == value) {
-      return i;
-    }
-  }
-  return 0;
-}
-
-} // namespace detail
-
-} // namespace mgutility
-
-// Now, the enum_name_impl.hpp content without guards and includes
 #ifdef _MSC_VER
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
 
+// NOLINTNEXTLINE [modernize-concat-nested-namespaces]
 namespace mgutility {
 namespace detail {
 
+#ifndef MGUTILITY_STRLEN
+// NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
+#define MGUTILITY_STRLEN(x) sizeof(x) - 1
+#endif
+
+/**
+ * @brief Provides functionality to extract and parse enum names at
+ * compile-time.
+ */
 struct enum_type {
 private:
-  /**
-   * @brief Looks up custom enum name for the given value.
-   *
-   * @tparam Enum The enum type.
-   * @param e The enum value.
-   * @return The custom name if found, empty string_view otherwise.
-   */
-  template <typename Enum>
-  MGUTILITY_CNSTXPR static mgutility::string_view
-  // NOLINTNEXTLINE [readability-identifier-length]
-  lookup_custom(Enum e) noexcept {
-    for (const auto &pair : custom_enum<Enum>::map) {
-      if (pair.first == e) {
-        return pair.second;
-      }
-    }
-    return {};
-  }
-
   /**
    * @brief Extracts raw name from compiler's __PRETTY_FUNCTION__.
    *
@@ -1720,8 +1436,32 @@ private:
    */
   template <typename Enum, Enum e>
   MGUTILITY_CNSTXPR static mgutility::string_view raw_name() noexcept {
-    return mgutility::string_view(__PRETTY_FUNCTION__,
-                                  sizeof(__PRETTY_FUNCTION__) - 1);
+#if defined(__GNUC__) && !defined(__clang__) && MGUTILITY_CPLUSPLUS >= 201402L
+#define PREFIX                                                                 \
+  MGUTILITY_STRLEN("static constexpr mgutility::string_view "                  \
+                   "mgutility::detail::enum_type::raw_name()")
+#elif defined(__clang__) || defined(__GNUC__)
+#define PREFIX                                                                 \
+  MGUTILITY_STRLEN("static mgutility::string_view "                            \
+                   "mgutility::detail::enum_type::raw_name()")
+#elif defined(_MSC_VER)
+#if MGUTILITY_CPLUSPLUS > 201402L
+#define PREFIX                                                                 \
+  MGUTILITY_STRLEN(                                                            \
+      "class std::basic_string_view<char,struct std::char_traits<char> > "     \
+      "__cdecl mgutility::detail::enum_type::raw_name")
+#else
+#define PREFIX                                                                 \
+  MGUTILITY_STRLEN("class mgutility::basic_string_view<char> __cdecl "         \
+                   "mgutility::detail::enum_type::raw_name")
+#endif
+#else
+#define PREFIX 0
+#endif
+
+    return mgutility::string_view(__PRETTY_FUNCTION__ + PREFIX,
+                                  MGUTILITY_STRLEN(__PRETTY_FUNCTION__) -
+                                      PREFIX + 1);
   }
 
   /**
@@ -1764,9 +1504,6 @@ private:
     return {};
 #endif
 
-    // -------------------------------
-    // 4. Validate result
-    // -------------------------------
     if (result.empty()) {
       return {};
     }
@@ -1789,20 +1526,10 @@ public:
    */
   template <typename Enum, Enum e>
   MGUTILITY_CNSTXPR static mgutility::string_view name() noexcept {
-    // 1. Custom override first
-    auto custom = lookup_custom(e);
-    if (!custom.empty()) {
-      return custom;
-    }
-
-    // 2. Extract + parse
     return parse(raw_name<Enum, e>());
   }
 };
 
-// -------------------------------
-// Cached array per enum type via enum_sequence
-// -------------------------------
 /**
  * @brief Caches an array of enum names for a given enum sequence.
  *
@@ -1811,6 +1538,12 @@ public:
  */
 template <typename Enum, typename Seq> struct enum_array_cache;
 
+/**
+ * @brief Specialization of enum_array_cache for enum_sequence.
+ *
+ * @tparam Enum The enum type.
+ * @tparam Is The enum values.
+ */
 template <typename Enum, Enum... Is>
 struct enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>> {
 #if MGUTILITY_CPLUSPLUS >= 201402L
@@ -1818,22 +1551,51 @@ struct enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>> {
   // NOLINTNEXTLINE [readability-redundant-inline-specifier]
   static inline constexpr std::array<mgutility::string_view, sizeof...(Is) + 1>
   value() {
-    return std::array<mgutility::string_view, sizeof...(Is) + 1>{
+    std::array<mgutility::string_view, sizeof...(Is) + 1> arr{
         "", enum_type::template name<Enum, Is>()...};
+
+    constexpr auto map = mgutility::custom_enum<Enum>::map;
+
+    for (const auto &pair : map) {
+      const int raw = static_cast<int>(pair.first);
+      const auto idx =
+          static_cast<size_t>(raw - mgutility::enum_range<Enum>::min + 1);
+
+      if (idx >= 1 && idx < arr.size()) {
+        arr[idx] = pair.second;
+      }
+    }
+
+    return arr;
   }
 #else
   // C++11: lazy runtime array
   static const std::array<mgutility::string_view, sizeof...(Is) + 1> &value() {
-    static std::array<mgutility::string_view, sizeof...(Is) + 1> arr{
-        "", enum_type::template name<Enum, Is>()...};
+    static const std::array<mgutility::string_view, sizeof...(Is) + 1> arr =
+        [] {
+          std::array<mgutility::string_view, sizeof...(Is) + 1> tmp{
+              "", enum_type::template name<Enum, Is>()...};
+
+          constexpr auto map = mgutility::custom_enum<Enum>::map;
+
+          for (const auto &pair : map) {
+            auto idx =
+                static_cast<size_t>(static_cast<int>(pair.first) -
+                                    mgutility::enum_range<Enum>::min + 1);
+
+            if (idx >= 1 && idx < tmp.size()) {
+              tmp[idx] = pair.second;
+            }
+          }
+
+          return tmp;
+        }();
+
     return arr;
   }
 #endif
 };
 
-// -------------------------------
-// Public getter from enum_sequence
-// -------------------------------
 /**
  * @brief Gets an array of enum names for the given sequence.
  *
@@ -1854,9 +1616,6 @@ get_enum_array(detail::enum_sequence<Enum, Is...> /*unused*/) noexcept
 #endif
 }
 
-// -------------------------------
-// Public getter from Min/Max range
-// -------------------------------
 /**
  * @brief Gets an array of enum names for the enum type within the specified
  * range.
@@ -1866,8 +1625,8 @@ get_enum_array(detail::enum_sequence<Enum, Is...> /*unused*/) noexcept
  * @tparam Max The maximum enum value.
  * @return An array of string_views containing the enum names.
  */
-template <typename Enum, int Min = enum_range<Enum>::min,
-          int Max = enum_range<Enum>::max>
+template <typename Enum, int Min = mgutility::enum_range<Enum>::min,
+          int Max = mgutility::enum_range<Enum>::max>
 MGUTILITY_CNSTXPR auto get_enum_array() noexcept
 #if MGUTILITY_CPLUSPLUS >= 201402L
     -> std::array<mgutility::string_view, Max - Min + 2> {
@@ -1950,7 +1709,7 @@ MGUTILITY_CNSTXPR auto to_enum_bitmask_impl(mgutility::string_view str) noexcept
  * @tparam Min The minimum enum value.
  * @tparam Max The maximum enum value.
  * @param e The enum value.
- * @return A string view or string representing the name of the enum value.
+ * @return A string view representing the name of the enum value.
  */
 template <typename Enum, int Min, int Max,
           detail::enable_if_t<!detail::has_bit_or<Enum>::value, bool> = true>
@@ -1958,7 +1717,8 @@ MGUTILITY_CNSTXPR auto enum_name_impl(Enum enumValue) noexcept
     -> mgutility::string_view {
   MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
   const auto index{(Min < 0 ? -Min : Min) + static_cast<int>(enumValue) + 1};
-  return arr[(index < Min || index > arr.size() - 1) ? 0 : index];
+  return arr[static_cast<size_t>(
+      (index < Min || index > static_cast<int>(arr.size()) - 1) ? 0 : index)];
 }
 
 /**
@@ -1975,7 +1735,7 @@ MGUTILITY_CNSTXPR auto enum_name_impl(Enum enumValue) noexcept
 template <typename Enum, int Min, int Max,
           detail::enable_if_t<detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
-    -> fixed_string<enum_name_buffer<Enum>::size> {
+    -> mgutility::fixed_string<enum_name_buffer<Enum>::size> {
 
   // Get the array of enum names
   MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
@@ -1987,11 +1747,11 @@ MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
 
   // Return the name if it's valid
   if (!name.empty() && !is_digit(name[0])) {
-    return fixed_string<enum_name_buffer<Enum>::size>{}.append(name);
+    return mgutility::fixed_string<enum_name_buffer<Enum>::size>{}.append(name);
   }
 
   // Construct bitmasked name
-  fixed_string<enum_name_buffer<Enum>::size> bitmasked_name;
+  mgutility::fixed_string<enum_name_buffer<Enum>::size> bitmasked_name;
   for (auto i = Min; i < Max; ++i) {
     const auto idx = (Min < 0 ? -Min : Min) + i + 1;
     if (idx >= 0 && idx < static_cast<int>(arr.size()) && !arr[idx].empty() &&
@@ -2011,7 +1771,11 @@ MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
 } // namespace detail
 } // namespace mgutility
 
-// Now, the main enum_name.hpp content without guard and includes
+#endif // MGUTILITY_REFLECTION_DETAIL_ENUM_NAME_IMPL_HPP
+
+#ifndef MGUTILITY_ENUM_NAME_HPP
+#define MGUTILITY_ENUM_NAME_HPP
+
 namespace mgutility {
 
 /**
@@ -2042,7 +1806,7 @@ constexpr auto to_underlying(Enum enumValue) noexcept
  */
 template <int Min, int Max, typename Enum>
 MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
-    -> string_or_view_t<Enum> {
+    -> detail::string_or_view_t<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
   // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
@@ -2058,11 +1822,10 @@ MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
  * @param e The enum value.
  * @return A string view or string representing the name of the enum value.
  */
-template <typename Enum,
-          int Min = static_cast<int>(detail::enum_range<Enum>::min),
-          int Max = static_cast<int>(detail::enum_range<Enum>::max)>
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max)>
 MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
-    -> string_or_view_t<Enum> {
+    -> detail::string_or_view_t<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
   // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
@@ -2078,7 +1841,7 @@ MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
 template <typename Enum>
 auto enum_for_each<Enum>::enum_iter::operator*() const -> value_type {
   auto value = static_cast<Enum>(m_pos);
-  return enum_pair<Enum>{value, enum_name(value)};
+  return detail::enum_pair<Enum>{value, enum_name(value)};
 }
 
 /**
@@ -2090,9 +1853,8 @@ auto enum_for_each<Enum>::enum_iter::operator*() const -> value_type {
  * @param str The string view representing the enum name.
  * @return An optional enum value.
  */
-template <typename Enum,
-          int Min = static_cast<int>(detail::enum_range<Enum>::min),
-          int Max = static_cast<int>(detail::enum_range<Enum>::max),
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max),
           detail::enable_if_t<!detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
     -> mgutility::optional<Enum> {
@@ -2111,9 +1873,8 @@ MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
  * @param str The string view representing the enum name.
  * @return An optional enum bitmask value.
  */
-template <typename Enum,
-          int Min = static_cast<int>(detail::enum_range<Enum>::min),
-          int Max = static_cast<int>(detail::enum_range<Enum>::max),
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max),
           detail::enable_if_t<detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
     -> mgutility::optional<Enum> {
@@ -2132,9 +1893,8 @@ MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
  * @param value The integer value to cast.
  * @return An optional enum value.
  */
-template <typename Enum,
-          int Min = static_cast<int>(detail::enum_range<Enum>::min),
-          int Max = static_cast<int>(detail::enum_range<Enum>::max)>
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max)>
 MGUTILITY_CNSTXPR auto enum_cast(int value) noexcept
     -> mgutility::optional<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
@@ -2222,4 +1982,4 @@ struct fmt::formatter<Enum, char,
 };
 #endif // MGUTILITY_USE_FMT || __has_include(<fmt/format.h>)
 
-#endif // MGUTILITY_ENUM_NAME_SINGLE_HEADER_HPP
+#endif // MGUTILITY_ENUM_NAME_HPP

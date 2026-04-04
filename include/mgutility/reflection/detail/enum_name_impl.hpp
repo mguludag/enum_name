@@ -78,31 +78,17 @@ SOFTWARE.
 namespace mgutility {
 namespace detail {
 
+#ifndef MGUTILITY_STRLEN
+// NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
+#define MGUTILITY_STRLEN(x) sizeof(x) - 1
+#endif
+
 /**
  * @brief Provides functionality to extract and parse enum names at
  * compile-time.
  */
 struct enum_type {
 private:
-  /**
-   * @brief Looks up custom enum name for the given value.
-   *
-   * @tparam Enum The enum type.
-   * @param e The enum value.
-   * @return The custom name if found, empty string_view otherwise.
-   */
-  template <typename Enum>
-  MGUTILITY_CNSTXPR static mgutility::string_view
-  // NOLINTNEXTLINE [readability-identifier-length]
-  lookup_custom(Enum e) noexcept {
-    for (const auto &pair : mgutility::custom_enum<Enum>::map) {
-      if (pair.first == e) {
-        return pair.second;
-      }
-    }
-    return {};
-  }
-
   /**
    * @brief Extracts raw name from compiler's __PRETTY_FUNCTION__.
    *
@@ -112,8 +98,32 @@ private:
    */
   template <typename Enum, Enum e>
   MGUTILITY_CNSTXPR static mgutility::string_view raw_name() noexcept {
-    return mgutility::string_view(__PRETTY_FUNCTION__,
-                                  sizeof(__PRETTY_FUNCTION__) - 1);
+#if defined(__GNUC__) && !defined(__clang__) && MGUTILITY_CPLUSPLUS >= 201402L
+#define PREFIX                                                                 \
+  MGUTILITY_STRLEN("static constexpr mgutility::string_view "                  \
+                   "mgutility::detail::enum_type::raw_name()")
+#elif defined(__clang__) || defined(__GNUC__)
+#define PREFIX                                                                 \
+  MGUTILITY_STRLEN("static mgutility::string_view "                            \
+                   "mgutility::detail::enum_type::raw_name()")
+#elif defined(_MSC_VER)
+#if MGUTILITY_CPLUSPLUS > 201402L
+#define PREFIX                                                                 \
+  MGUTILITY_STRLEN(                                                            \
+      "class std::basic_string_view<char,struct std::char_traits<char> > "     \
+      "__cdecl mgutility::detail::enum_type::raw_name")
+#else
+#define PREFIX                                                                 \
+  MGUTILITY_STRLEN("class mgutility::basic_string_view<char> __cdecl "         \
+                   "mgutility::detail::enum_type::raw_name")
+#endif
+#else
+#define PREFIX 0
+#endif
+
+    return mgutility::string_view(__PRETTY_FUNCTION__ + PREFIX,
+                                  MGUTILITY_STRLEN(__PRETTY_FUNCTION__) -
+                                      PREFIX + 1);
   }
 
   /**
@@ -178,13 +188,6 @@ public:
    */
   template <typename Enum, Enum e>
   MGUTILITY_CNSTXPR static mgutility::string_view name() noexcept {
-    // 1. Custom override first
-    auto custom = lookup_custom(e);
-    if (!custom.empty()) {
-      return custom;
-    }
-
-    // 2. Extract + parse
     return parse(raw_name<Enum, e>());
   }
 };
@@ -210,14 +213,46 @@ struct enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>> {
   // NOLINTNEXTLINE [readability-redundant-inline-specifier]
   static inline constexpr std::array<mgutility::string_view, sizeof...(Is) + 1>
   value() {
-    return std::array<mgutility::string_view, sizeof...(Is) + 1>{
+    std::array<mgutility::string_view, sizeof...(Is) + 1> arr{
         "", enum_type::template name<Enum, Is>()...};
+
+    constexpr auto map = mgutility::custom_enum<Enum>::map;
+
+    for (const auto &pair : map) {
+      const int raw = static_cast<int>(pair.first);
+      const auto idx =
+          static_cast<size_t>(raw - mgutility::enum_range<Enum>::min + 1);
+
+      if (idx >= 1 && idx < arr.size()) {
+        arr[idx] = pair.second;
+      }
+    }
+
+    return arr;
   }
 #else
   // C++11: lazy runtime array
   static const std::array<mgutility::string_view, sizeof...(Is) + 1> &value() {
-    static std::array<mgutility::string_view, sizeof...(Is) + 1> arr{
-        "", enum_type::template name<Enum, Is>()...};
+    static const std::array<mgutility::string_view, sizeof...(Is) + 1> arr =
+        [] {
+          std::array<mgutility::string_view, sizeof...(Is) + 1> tmp{
+              "", enum_type::template name<Enum, Is>()...};
+
+          constexpr auto map = mgutility::custom_enum<Enum>::map;
+
+          for (const auto &pair : map) {
+            auto idx =
+                static_cast<size_t>(static_cast<int>(pair.first) -
+                                    mgutility::enum_range<Enum>::min + 1);
+
+            if (idx >= 1 && idx < tmp.size()) {
+              tmp[idx] = pair.second;
+            }
+          }
+
+          return tmp;
+        }();
+
     return arr;
   }
 #endif

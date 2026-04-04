@@ -335,50 +335,51 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>    -&gt; <a class="code hl_struct" href="structmgutility_1_1pair.html">mgutility::string_view</a> {</div>
 <div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>  MGUTILITY_CNSTXPR_CLANG_WA <span class="keyword">auto</span> arr = get_enum_array&lt;Enum, Min, Max&gt;();</div>
 <div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>  <span class="keyword">const</span> <span class="keyword">auto</span> index{(Min &lt; 0 ? -Min : Min) + <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(enumValue) + 1};</div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>  <span class="keywordflow">return</span> arr[(index &lt; Min || index &gt; arr.size() - 1) ? 0 : index];</div>
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>}</div>
-<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span> </div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span><span class="comment">// NOLINTNEXTLINE [modernize-use-constraints]</span></div>
-<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, <span class="keywordtype">int</span> Min, <span class="keywordtype">int</span> Max,</div>
-<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>          detail::enable_if_t&lt;detail::has_bit_or&lt;Enum&gt;::value, <span class="keywordtype">bool</span>&gt; = <span class="keyword">true</span>&gt;</div>
-<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>MGUTILITY_CNSTXPR_CLANG_WA <span class="keyword">auto</span> enum_name_impl(Enum enumValue) <span class="keyword">noexcept</span></div>
-<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>    -&gt; <a class="code hl_struct" href="structmgutility_1_1pair.html">mgutility::fixed_string&lt;enum_name_buffer&lt;Enum&gt;::size</a>&gt; {</div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span> </div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>  <span class="comment">// Get the array of enum names</span></div>
-<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>  MGUTILITY_CNSTXPR_CLANG_WA <span class="keyword">auto</span> arr = get_enum_array&lt;Enum, Min, Max&gt;();</div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span> </div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>  <span class="comment">// Calculate the index in the array</span></div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>  <span class="keyword">const</span> <span class="keyword">auto</span> index = (Min &lt; 0 ? -Min : Min) + <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(enumValue) + 1;</div>
-<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>  <span class="keyword">const</span> <span class="keyword">auto</span> name =</div>
-<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>      arr[(index &lt; Min || index &gt;= <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(arr.size())) ? 0 : index];</div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span> </div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>  <span class="comment">// Return the name if it&#39;s valid</span></div>
-<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>  <span class="keywordflow">if</span> (!name.empty() &amp;&amp; !is_digit(name[0])) {</div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>    <span class="keywordflow">return</span> <a class="code hl_struct" href="structmgutility_1_1pair.html">mgutility::fixed_string&lt;enum_name_buffer&lt;Enum&gt;::size</a>&gt;{}.append(name);</div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>  }</div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span> </div>
-<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>  <span class="comment">// Construct bitmasked name</span></div>
-<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>  <a class="code hl_struct" href="structmgutility_1_1pair.html">mgutility::fixed_string&lt;enum_name_buffer&lt;Enum&gt;::size</a>&gt; bitmasked_name;</div>
-<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>  <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = Min; i &lt; Max; ++i) {</div>
-<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>    <span class="keyword">const</span> <span class="keyword">auto</span> idx = (Min &lt; 0 ? -Min : Min) + i + 1;</div>
-<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>    <span class="keywordflow">if</span> (idx &gt;= 0 &amp;&amp; idx &lt; <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(arr.size()) &amp;&amp; !arr[idx].empty() &amp;&amp;</div>
-<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>        !detail::is_digit(arr[idx][0]) &amp;&amp;</div>
-<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>        (enumValue &amp; <span class="keyword">static_cast&lt;</span>Enum<span class="keyword">&gt;</span>(i)) == <span class="keyword">static_cast&lt;</span>Enum<span class="keyword">&gt;</span>(i)) {</div>
-<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>      bitmasked_name.append(arr[idx]).append(<span class="stringliteral">&quot;|&quot;</span>);</div>
-<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>    }</div>
-<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>  }</div>
-<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span> </div>
-<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>  <span class="comment">// Remove the trailing &#39;|&#39; if present</span></div>
-<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>  <span class="keywordflow">if</span> (!bitmasked_name.empty()) {</div>
-<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>    bitmasked_name.pop_back();</div>
-<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>  }</div>
-<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span> </div>
-<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>  <span class="keywordflow">return</span> bitmasked_name;</div>
-<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>}</div>
-<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>} <span class="comment">// namespace detail</span></div>
-<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>} <span class="comment">// namespace mgutility</span></div>
-<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span> </div>
-<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span><span class="preprocessor">#endif </span><span class="comment">// MGUTILITY_REFLECTION_DETAIL_ENUM_NAME_IMPL_HPP</span></div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>  <span class="keywordflow">return</span> arr[<span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(</div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>      (index &lt; Min || index &gt; <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(arr.size()) - 1) ? 0 : index)];</div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>}</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span> </div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span><span class="comment">// NOLINTNEXTLINE [modernize-use-constraints]</span></div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, <span class="keywordtype">int</span> Min, <span class="keywordtype">int</span> Max,</div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>          detail::enable_if_t&lt;detail::has_bit_or&lt;Enum&gt;::value, <span class="keywordtype">bool</span>&gt; = <span class="keyword">true</span>&gt;</div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>MGUTILITY_CNSTXPR_CLANG_WA <span class="keyword">auto</span> enum_name_impl(Enum enumValue) <span class="keyword">noexcept</span></div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>    -&gt; <a class="code hl_struct" href="structmgutility_1_1pair.html">mgutility::fixed_string&lt;enum_name_buffer&lt;Enum&gt;::size</a>&gt; {</div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span> </div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>  <span class="comment">// Get the array of enum names</span></div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>  MGUTILITY_CNSTXPR_CLANG_WA <span class="keyword">auto</span> arr = get_enum_array&lt;Enum, Min, Max&gt;();</div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span> </div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>  <span class="comment">// Calculate the index in the array</span></div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>  <span class="keyword">const</span> <span class="keyword">auto</span> index = (Min &lt; 0 ? -Min : Min) + <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(enumValue) + 1;</div>
+<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>  <span class="keyword">const</span> <span class="keyword">auto</span> name =</div>
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>      arr[(index &lt; Min || index &gt;= <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(arr.size())) ? 0 : index];</div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span> </div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>  <span class="comment">// Return the name if it&#39;s valid</span></div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>  <span class="keywordflow">if</span> (!name.empty() &amp;&amp; !is_digit(name[0])) {</div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>    <span class="keywordflow">return</span> <a class="code hl_struct" href="structmgutility_1_1pair.html">mgutility::fixed_string&lt;enum_name_buffer&lt;Enum&gt;::size</a>&gt;{}.append(name);</div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>  }</div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span> </div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>  <span class="comment">// Construct bitmasked name</span></div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>  <a class="code hl_struct" href="structmgutility_1_1pair.html">mgutility::fixed_string&lt;enum_name_buffer&lt;Enum&gt;::size</a>&gt; bitmasked_name;</div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>  <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = Min; i &lt; Max; ++i) {</div>
+<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>    <span class="keyword">const</span> <span class="keyword">auto</span> idx = (Min &lt; 0 ? -Min : Min) + i + 1;</div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>    <span class="keywordflow">if</span> (idx &gt;= 0 &amp;&amp; idx &lt; <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(arr.size()) &amp;&amp; !arr[idx].empty() &amp;&amp;</div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>        !detail::is_digit(arr[idx][0]) &amp;&amp;</div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>        (enumValue &amp; <span class="keyword">static_cast&lt;</span>Enum<span class="keyword">&gt;</span>(i)) == <span class="keyword">static_cast&lt;</span>Enum<span class="keyword">&gt;</span>(i)) {</div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>      bitmasked_name.append(arr[idx]).append(<span class="stringliteral">&quot;|&quot;</span>);</div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>    }</div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>  }</div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span> </div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>  <span class="comment">// Remove the trailing &#39;|&#39; if present</span></div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>  <span class="keywordflow">if</span> (!bitmasked_name.empty()) {</div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>    bitmasked_name.pop_back();</div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>  }</div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span> </div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>  <span class="keywordflow">return</span> bitmasked_name;</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>}</div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>} <span class="comment">// namespace detail</span></div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>} <span class="comment">// namespace mgutility</span></div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span> </div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span><span class="preprocessor">#endif </span><span class="comment">// MGUTILITY_REFLECTION_DETAIL_ENUM_NAME_IMPL_HPP</span></div>
 <div class="ttc" id="anamespacemgutility_html"><div class="ttname"><a href="namespacemgutility.html">mgutility</a></div><div class="ttdoc">Checks for MSVC compiler version.</div><div class="ttdef"><b>Definition</b> enum_for_each.hpp:35</div></div>
 <div class="ttc" id="astructmgutility_1_1custom__enum_html"><div class="ttname"><a href="structmgutility_1_1custom__enum.html">mgutility::custom_enum</a></div><div class="ttdoc">Provides the custom names map for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:259</div></div>
 <div class="ttc" id="astructmgutility_1_1detail_1_1enum__array__cache_html"><div class="ttname"><a href="structmgutility_1_1detail_1_1enum__array__cache.html">mgutility::detail::enum_array_cache</a></div><div class="ttdoc">Caches an array of enum names for a given enum sequence.</div><div class="ttdef"><b>Definition</b> enum_name_impl.hpp:198</div></div>

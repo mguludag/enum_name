@@ -447,149 +447,167 @@ using string_view = std::string_view;
 
 // fixed_string implementation
 namespace mgutility {
-namespace detail {
 
-/**
- * @brief A fixed-size string class.
- *
- * @tparam N The size.
- */
-template <std::size_t N> class fixed_string {
+template <size_t N = 0> class fixed_string {
 public:
-  /**
-   * @brief The size type.
-   */
-  using size_type = std::size_t;
-
-  /**
-   * @brief The value type.
-   */
-  using value_type = char;
-
-  /**
-   * @brief Default constructor.
-   */
-  MGUTILITY_CNSTXPR fixed_string() noexcept : size_(0) { data_[0] = '\0'; }
-
-  /**
-   * @brief Constructor from C-string.
-   *
-   * @param str The C-string.
-   */
-  MGUTILITY_CNSTXPR fixed_string(const char *str) noexcept : size_(0) {
-    append(str);
+  template <size_t M>
+  // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
+  MGUTILITY_CNSTXPR static auto make(const char (&str)[M]) -> fixed_string<M> {
+    return fixed_string<M>{str};
   }
 
-  /**
-   * @brief Constructor from string_view.
-   *
-   * @param sv The string_view.
-   */
-  MGUTILITY_CNSTXPR fixed_string(string_view sv) noexcept : size_(0) {
-    append(sv);
-  }
+  MGUTILITY_CNSTXPR fixed_string() = default;
 
-  /**
-   * @brief Returns the data.
-   *
-   * @return The data.
-   */
-  MGUTILITY_CNSTXPR const char *data() const noexcept { return data_; }
-
-  /**
-   * @brief Returns the size.
-   *
-   * @return The size.
-   */
-  MGUTILITY_CNSTXPR size_type size() const noexcept { return size_; }
-
-  /**
-   * @brief Returns the capacity.
-   *
-   * @return The capacity.
-   */
-  MGUTILITY_CNSTXPR size_type capacity() const noexcept { return N - 1; }
-
-  /**
-   * @brief Checks if empty.
-   *
-   * @return True if empty.
-   */
-  MGUTILITY_CNSTXPR bool empty() const noexcept { return size_ == 0; }
-
-  /**
-   * @brief Appends a character.
-   *
-   * @param ch The character.
-   * @return This.
-   */
-  MGUTILITY_CNSTXPR fixed_string &append(char ch) noexcept {
-    if (size_ < capacity()) {
-      data_[size_] = ch;
-      ++size_;
-      data_[size_] = '\0';
+  // Constructor to initialize from a string literal
+  // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
+  MGUTILITY_CNSTXPR explicit fixed_string(const char (&str)[N]) {
+    for (size_t i = 0; i < N - 1; ++i) {
+      data[i] = str[i];
     }
+    cursor = N - 1;
+    data[cursor] = '\0';
+  }
+
+  // Concatenation operator
+  template <size_t M>
+  MGUTILITY_CNSTXPR auto operator+(const fixed_string<M> &other) const
+      -> fixed_string<N + M - 1> {
+    fixed_string<N + M - 1> result{};
+    size_t idx = 0;
+    for (; idx < N - 1; ++idx) {
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
+      result.data[idx] = data[idx];
+    }
+    for (size_t j = 0; j < M; ++j) {
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
+      result.data[idx + j] = other.data[j];
+    }
+    result.cursor = N + M - 2;
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
+    result.data[result.cursor] = '\0';
+    return result;
+  }
+
+  // Concatenation operator
+  template <size_t M>
+  // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
+  MGUTILITY_CNSTXPR auto operator+(const char (&str)[M]) const
+      -> fixed_string<N + M - 1> {
+    return *this + fixed_string<M>{str};
+  }
+
+  template <size_t M>
+  // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
+  MGUTILITY_CNSTXPR auto append(const char (&str)[M]) -> fixed_string<N> & {
+    static_assert(N > M,
+                  "Capacity needs to be greater than string to be appended!");
+    for (size_t i = 0; i < M - 1; ++i) {
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
+      data[cursor++] = str[i];
+    }
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
+    data[cursor] = '\0';
     return *this;
   }
 
-  /**
-   * @brief Appends a C-string.
-   *
-   * @param str The C-string.
-   * @return This.
-   */
-  MGUTILITY_CNSTXPR fixed_string &append(const char *str) noexcept {
-    while (*str && size_ < capacity()) {
-      data_[size_] = *str;
-      ++size_;
-      ++str;
+  MGUTILITY_CNSTXPR auto append(string_view str) -> fixed_string<N> & {
+    for (const char chr : str) {
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
+      data[cursor++] = chr;
     }
-    data_[size_] = '\0';
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
+    data[cursor] = '\0';
     return *this;
   }
 
-  /**
-   * @brief Appends a string_view.
-   *
-   * @param sv The string_view.
-   * @return This.
-   */
-  MGUTILITY_CNSTXPR fixed_string &append(string_view sv) noexcept {
-    for (size_type i = 0; i < sv.size() && size_ < capacity(); ++i) {
-      data_[size_] = sv[i];
-      ++size_;
-    }
-    data_[size_] = '\0';
-    return *this;
-  }
-
-  /**
-   * @brief Pops the last character.
-   */
-  MGUTILITY_CNSTXPR void pop_back() noexcept {
-    if (size_ > 0) {
-      --size_;
-      data_[size_] = '\0';
+  MGUTILITY_CNSTXPR auto pop_back() -> void {
+    if (cursor > 0) {
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
+      data[--cursor] = '\0';
     }
   }
 
-  /**
-   * @brief Converts to string_view.
-   *
-   * @return The string_view.
-   */
-  MGUTILITY_CNSTXPR operator string_view() const noexcept {
-    return {data_, size_};
+  MGUTILITY_CNSTXPR auto size() const -> size_t { return cursor; }
+
+  // NOLINTNEXTLINE [readability-identifier-length]
+  constexpr size_t find(char c, size_t pos = 0) const noexcept {
+    // NOLINTNEXTLINE [readability-avoid-nested-conditional-operator]
+    return c == data[pos] ? pos : (pos < cursor ? find(c, ++pos) : npos);
   }
+
+  // Conversion to std::string_view for easy printing
+  // NOLINTNEXTLINE[google-explicit-constructor]
+  MGUTILITY_CNSTXPR operator string_view() const {
+    return string_view(data, cursor);
+  }
+
+  MGUTILITY_CNSTXPR auto view() const -> string_view {
+    return string_view(data, cursor);
+  }
+
+  constexpr bool empty() const noexcept { return cursor == 0; }
+
+  constexpr const char &operator[](size_t index) const noexcept {
+    // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
+    return data[index];
+  }
+
+  MGUTILITY_CNSTXPR inline bool operator==(const char *rhs) const {
+    return view() == rhs;
+  }
+
+  // NOLINTNEXTLINE [readability-identifier-length]
+  friend std::ostream &operator<<(std::ostream &os,
+                                  const fixed_string<N> &str) {
+    for (size_t i = 0; i < str.cursor; ++i) {
+      // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
+      os << str.data[i];
+    }
+    return os;
+  }
+
+  static constexpr auto npos = -1;
 
 private:
-  char data_[N];
-  size_type size_;
+  // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
+  char data[N]{'\0'};
+  size_t cursor{};
 };
 
-} // namespace detail
-
 } // namespace mgutility
+
+#if defined(__cpp_lib_format)
+
+#include <format>
+
+/**
+ * @brief Formatter for enum types for use with std::format.
+ *
+ * @tparam Enum The enum type.
+ */
+template <size_t N>
+struct std::formatter<mgutility::fixed_string<N>>
+    : formatter<std::string_view> {
+  auto constexpr format(const mgutility::fixed_string<N> &str,
+                        format_context &ctx) const {
+    return formatter<std::string_view>::format(str.view().data(), ctx);
+  }
+};
+
+#endif
+
+#if defined(ENUM_NAME_USE_FMT) ||                                              \
+    (defined(MGUTILITY_HAS_HAS_INCLUDE) && __has_include(<fmt/format.h>))
+#include <fmt/format.h>
+
+template <size_t N>
+struct fmt::formatter<mgutility::fixed_string<N>> : formatter<string_view> {
+  auto format(const mgutility::fixed_string<N> &str, format_context &ctx) const
+      -> appender {
+    return formatter<string_view>::format(str.view().data(), ctx);
+  }
+};
+#endif // MGUTILITY_USE_FMT || __has_include(<fmt/format.h>)
 
 // Now, the meta.hpp content without guard
 namespace mgutility {
@@ -789,6 +807,8 @@ using make_enum_sequence = typename enum_sequence_from_index<
     Enum, Min,
     make_index_sequence<static_cast<std::size_t>(Max - Min + 1)>>::type;
 
+} // namespace detail
+
 /**
  * @brief Provides the range for an enumeration type.
  *
@@ -842,7 +862,7 @@ template <typename T> struct enum_name_buffer {
 template <typename T>
 // NOLINTNEXTLINE [modernize-type-traits]
 using string_or_view_t =
-    typename std::conditional<has_bit_or<T>::value,
+    typename std::conditional<detail::has_bit_or<T>::value,
                               fixed_string<enum_name_buffer<T>::size>,
                               mgutility::string_view>::type;
 
@@ -853,9 +873,7 @@ using string_or_view_t =
  * @tparam Enum The enum type.
  */
 template <typename Enum>
-using enum_pair = std::pair<Enum, detail::string_or_view_t<Enum>>;
-
-} // namespace detail
+using enum_pair = std::pair<Enum, string_or_view_t<Enum>>;
 
 } // namespace mgutility
 
@@ -868,7 +886,7 @@ namespace mgutility {
  * @tparam Enum The enum type.
  */
 template <typename Enum> class enum_for_each {
-  using value_type = const detail::enum_pair<Enum>;
+  using value_type = const enum_pair<Enum>;
   using size_type = std::size_t;
 
   /**
@@ -878,7 +896,7 @@ template <typename Enum> class enum_for_each {
     using const_iter_type = int;
     using iter_type = detail::remove_const_t<const_iter_type>;
     using iterator_category = std::forward_iterator_tag;
-    using value_type = const detail::enum_pair<Enum>;
+    using value_type = const enum_pair<Enum>;
     using difference_type = std::ptrdiff_t;
     using pointer = value_type *;
     using reference = value_type &;
@@ -974,234 +992,321 @@ public:
    * @return The size of the enum range.
    */
   auto size() -> std::size_t {
-    return static_cast<int>(detail::enum_range<Enum>::max) -
-           static_cast<int>(detail::enum_range<Enum>::min) + 1;
+    return static_cast<int>(enum_range<Enum>::max) -
+           static_cast<int>(enum_range<Enum>::min) + 1;
   }
 
 private:
-  enum_iter m_begin{static_cast<int>(
-      detail::enum_range<Enum>::min)}; /**< The beginning iterator. */
-  enum_iter m_end{static_cast<int>(detail::enum_range<Enum>::max) +
+  enum_iter m_begin{
+      static_cast<int>(enum_range<Enum>::min)}; /**< The beginning iterator. */
+  enum_iter m_end{static_cast<int>(enum_range<Enum>::max) +
                   1}; /**< The end iterator. */
 };
 
 } // namespace mgutility
 
+#if MGUTILITY_CPLUSPLUS >= 201703L
+#include <optional>
+#endif
+
 // optional implementation
 namespace mgutility {
 
+#if MGUTILITY_CPLUSPLUS < 201703L
+
 /**
- * @brief A simple optional implementation for C++11.
+ * @brief Exception thrown when accessing an empty optional.
+ */
+struct bad_optional_access : public std::exception {
+  /**
+   * @brief Returns the exception message.
+   *
+   * @return A C-string with the exception message.
+   */
+  const char *what() const noexcept override { return "optional has no value"; }
+};
+
+struct nullopt_t;
+
+/**
+ * @brief A class template that provides optional (nullable) objects.
  *
- * @tparam T The type.
+ * @tparam T The type of the value.
  */
 template <typename T> class optional {
 public:
   /**
-   * @brief Default constructor.
+   * @brief Constructs an empty optional.
    */
-  MGUTILITY_CNSTXPR optional() noexcept : has_value_(false) {}
+  MGUTILITY_CNSTXPR inline explicit optional(nullopt_t & /*unused*/)
+      : dummy_{0}, has_value_{false} {}
 
   /**
-   * @brief Constructor from value.
-   *
-   * @param value The value.
+   * @brief Constructs an empty optional.
    */
-  MGUTILITY_CNSTXPR optional(const T &value) noexcept : has_value_(true) {
-    new (&storage_) T(value);
-  }
+  MGUTILITY_CNSTXPR inline optional() : dummy_{0}, has_value_{false} {}
 
   /**
-   * @brief Constructor from rvalue.
+   * @brief Constructs an optional with a value.
    *
-   * @param value The value.
+   * @tparam Args The types of the arguments.
+   * @param args The arguments to construct the value.
    */
-  MGUTILITY_CNSTXPR optional(T &&value) noexcept : has_value_(true) {
-    new (&storage_) T(std::move(value));
-  }
+  template <typename... Args>
+  MGUTILITY_CNSTXPR inline explicit optional(Args &&...args)
+      : value_{T{std::forward<Args>(args)...}}, has_value_{true} {}
+
+  /**
+   * @brief Constructs an optional with a value.
+   *
+   * @param value The value to initialize with.
+   */
+  MGUTILITY_CNSTXPR inline explicit optional(T &&value)
+      : value_{std::move(value)}, has_value_{true} {}
 
   /**
    * @brief Copy constructor.
    *
-   * @param other The other optional.
+   * @param other The other optional to copy.
    */
-  MGUTILITY_CNSTXPR optional(const optional &other) noexcept
-      : has_value_(other.has_value_) {
-    if (has_value_) {
-      new (&storage_) T(other.value());
-    }
-  }
+  MGUTILITY_CNSTXPR inline optional(const optional &other)
+      : value_{other.value_}, has_value_{other.has_value_} {}
 
   /**
    * @brief Move constructor.
    *
-   * @param other The other optional.
+   * @param other The other optional to move.
    */
-  MGUTILITY_CNSTXPR optional(optional &&other) noexcept
-      : has_value_(other.has_value_) {
-    if (has_value_) {
-      new (&storage_) T(std::move(other.value()));
-      other.reset();
-    }
+  MGUTILITY_CNSTXPR inline optional(optional &&other) noexcept
+      : value_{other.value_}, has_value_{other.has_value_} {
+    other.reset();
   }
 
   /**
    * @brief Destructor.
    */
-  ~optional() { reset(); }
+  ~optional() = default;
 
   /**
-   * @brief Copy assignment.
+   * @brief Copy assignment operator.
    *
-   * @param other The other optional.
-   * @return This.
+   * @param other The other optional to copy.
+   * @return A reference to this optional.
    */
-  MGUTILITY_CNSTXPR optional &operator=(const optional &other) noexcept {
-    if (this != &other) {
-      reset();
-      has_value_ = other.has_value_;
-      if (has_value_) {
-        new (&storage_) T(other.value());
-      }
-    }
+  MGUTILITY_CNSTXPR inline optional &operator=(const optional &other) {
+    value_ = other.value_;
+    has_value_ = other.has_value_;
     return *this;
   }
 
   /**
-   * @brief Move assignment.
+   * @brief Move assignment operator.
    *
-   * @param other The other optional.
-   * @return This.
+   * @param other The other optional to move.
+   * @return A reference to this optional.
    */
-  MGUTILITY_CNSTXPR optional &operator=(optional &&other) noexcept {
-    if (this != &other) {
-      reset();
-      has_value_ = other.has_value_;
-      if (has_value_) {
-        new (&storage_) T(std::move(other.value()));
-        other.reset();
-      }
-    }
+  MGUTILITY_CNSTXPR inline optional &operator=(optional &&other) noexcept {
+    value_ = other.value_;
+    has_value_ = other.has_value_;
+    other.reset();
     return *this;
   }
 
   /**
-   * @brief Assignment from value.
+   * @brief Swaps the contents of this optional with another.
    *
-   * @param value The value.
-   * @return This.
+   * @param other The other optional to swap with.
    */
-  MGUTILITY_CNSTXPR optional &operator=(const T &value) noexcept {
-    reset();
+  MGUTILITY_CNSTXPR inline void swap(optional &other) noexcept {
+    auto val = std::move(other.value_);
+    other.value_ = std::move(value_);
+    value_ = std::move(val);
+
+    auto hval = other.has_value_;
+    other.has_value_ = has_value_;
+    has_value_ = hval;
+  }
+
+  /**
+   * @brief Dereferences the stored value.
+   *
+   * @return A reference to the stored value.
+   */
+  MGUTILITY_CNSTXPR inline T &operator*() { return value_; }
+
+  /**
+   * @brief Dereferences the stored value (const version).
+   *
+   * @return A reference to the stored value.
+   */
+  MGUTILITY_CNSTXPR inline T &operator*() const { return value_; }
+
+  /**
+   * @brief Accesses the stored value.
+   *
+   * @return A reference to the stored value.
+   * @throws bad_optional_access if the optional has no value.
+   */
+  MGUTILITY_CNSTXPR inline T &value() {
+    if (!has_value_) {
+      throw bad_optional_access();
+    }
+    return value_;
+  }
+
+  /**
+   * @brief Accesses the stored value (const version).
+   *
+   * @return A reference to the stored value.
+   * @throws bad_optional_access if the optional has no value.
+   */
+  MGUTILITY_CNSTXPR inline T &value() const {
+    if (!has_value_) {
+      throw bad_optional_access();
+    }
+    return value_;
+  }
+
+  /**
+   * @brief Returns the stored value or a default value if empty.
+   *
+   * @param value The default value to return if empty.
+   * @return The stored value or the default value.
+   */
+  MGUTILITY_CNSTXPR inline T value_or(T &&value) {
+    return has_value_ ? value_ : std::move(value);
+  }
+
+  /**
+   * @brief Returns the stored value or a default value if empty (const
+   * version).
+   *
+   * @param value The default value to return if empty.
+   * @return The stored value or the default value.
+   */
+  MGUTILITY_CNSTXPR inline T value_or(T &&value) const {
+    return has_value_ ? value_ : std::move(value);
+  }
+
+  /**
+   * @brief Returns the stored value or a default value if empty.
+   *
+   * @param value The default value to return if empty.
+   * @return The stored value or the default value.
+   */
+  MGUTILITY_CNSTXPR inline T value_or(const T &value) {
+    return has_value_ ? value_ : value;
+  }
+
+  /**
+   * @brief Returns the stored value or a default value if empty (const
+   * version).
+   *
+   * @param value The default value to return if empty.
+   * @return The stored value or the default value.
+   */
+  MGUTILITY_CNSTXPR inline T value_or(const T &value) const {
+    return has_value_ ? value_ : value;
+  }
+
+  /**
+   * @brief Constructs the value in-place.
+   *
+   * @param value The value to emplace.
+   */
+  MGUTILITY_CNSTXPR inline void emplace(T value) {
+    value_ = std::move(value);
     has_value_ = true;
-    new (&storage_) T(value);
-    return *this;
   }
 
   /**
-   * @brief Assignment from rvalue.
+   * @brief Constructs the value in-place with arguments.
    *
-   * @param value The value.
-   * @return This.
-   */
-  MGUTILITY_CNSTXPR optional &operator=(T &&value) noexcept {
-    reset();
-    has_value_ = true;
-    new (&storage_) T(std::move(value));
-    return *this;
-  }
-
-  /**
-   * @brief Checks if has value.
-   *
-   * @return True if has value.
-   */
-  MGUTILITY_CNSTXPR bool has_value() const noexcept { return has_value_; }
-
-  /**
-   * @brief Checks if has value.
-   *
-   * @return True if has value.
-   */
-  MGUTILITY_CNSTXPR explicit operator bool() const noexcept {
-    return has_value_;
-  }
-
-  /**
-   * @brief Returns the value.
-   *
-   * @return The value.
-   */
-  MGUTILITY_CNSTXPR T &value() noexcept {
-    return *reinterpret_cast<T *>(&storage_);
-  }
-
-  /**
-   * @brief Returns the const value.
-   *
-   * @return The const value.
-   */
-  MGUTILITY_CNSTXPR const T &value() const noexcept {
-    return *reinterpret_cast<const T *>(&storage_);
-  }
-
-  /**
-   * @brief Returns the value or default.
-   *
-   * @param default_value The default value.
-   * @return The value or default.
-   */
-  MGUTILITY_CNSTXPR T value_or(const T &default_value) const noexcept {
-    return has_value_ ? value() : default_value;
-  }
-
-  /**
-   * @brief Resets the optional.
-   */
-  MGUTILITY_CNSTXPR void reset() noexcept {
-    if (has_value_) {
-      value().~T();
-      has_value_ = false;
-    }
-  }
-
-  /**
-   * @brief Emplaces a value.
-   *
-   * @param args The arguments.
-   * @return The value.
+   * @tparam Args The types of the arguments.
+   * @param args The arguments to construct the value.
    */
   template <typename... Args>
-  MGUTILITY_CNSTXPR T &emplace(Args &&...args) noexcept {
-    reset();
+  MGUTILITY_CNSTXPR inline void emplace(Args &&...args) {
+    value_ = std::move(T{std::forward<Args>(args)...});
     has_value_ = true;
-    new (&storage_) T(std::forward<Args>(args)...);
-    return value();
   }
 
+  /**
+   * @brief Checks if the optional has a value.
+   *
+   * @return True if the optional has a value, otherwise false.
+   */
+  MGUTILITY_CNSTXPR inline bool has_value() const { return has_value_; }
+
+  /**
+   * @brief Resets the optional, making it empty.
+   */
+  template <typename U = T,
+            detail::enable_if_t<!std::is_destructible<U>::value, bool> = true>
+  MGUTILITY_CNSTXPR inline void reset() {
+    value_ = T{};
+    has_value_ = false;
+  }
+
+  /**
+   * @brief Resets the optional, making it empty.
+   */
+  template <typename U = T,
+            detail::enable_if_t<std::is_destructible<T>::value, bool> = true>
+  MGUTILITY_CNSTXPR inline void reset() {
+    value_.~T();
+    has_value_ = false;
+  }
+
+  /**
+   * @brief Checks if the optional has a value.
+   *
+   * @return True if the optional has a value, otherwise false.
+   */
+  MGUTILITY_CNSTXPR operator bool() { return has_value_; }
+
 private:
+  union {
+    T value_;
+    char dummy_[sizeof(T)];
+  };
   bool has_value_;
-  std::aligned_storage_t<sizeof(T), alignof(T)> storage_;
 };
 
 /**
- * @brief Null optional.
+ * @brief Represents a null optional.
  */
-inline constexpr struct nullopt_t {
-} nullopt;
+struct nullopt_t {
+  /**
+   * @brief Converts nullopt_t to an empty optional.
+   *
+   * @tparam T The type of the optional.
+   * @return An empty optional.
+   */
+  template <typename T> MGUTILITY_CNSTXPR operator optional<T>() {
+    return optional<T>{};
+  }
+};
 
 /**
- * @brief Makes an optional.
- *
- * @tparam T The type.
- * @param value The value.
- * @return The optional.
+ * @brief A global instance of nullopt_t to represent null optional.
  */
-template <typename T>
-MGUTILITY_CNSTXPR optional<std::decay_t<T>> make_optional(T &&value) noexcept {
-  return optional<std::decay_t<T>>(std::forward<T>(value));
-}
+auto nullopt = nullopt_t{};
 
+#else
+/**
+ * @brief Alias template for std::optional.
+ *
+ * @tparam T The type of the value.
+ */
+template <typename T> using optional = std::optional<T>;
+
+/**
+ * @brief A global constant representing a null optional.
+ */
+inline constexpr auto nullopt{std::nullopt};
+
+#endif
 } // namespace mgutility
 
 // Now, the enum_for_each.hpp content
@@ -1592,7 +1697,7 @@ constexpr auto to_underlying(Enum enumValue) noexcept
  */
 template <int Min, int Max, typename Enum>
 MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
-    -> detail::string_or_view_t<Enum> {
+    -> string_or_view_t<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
   // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
@@ -1608,11 +1713,10 @@ MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
  * @param e The enum value.
  * @return A string view or string representing the name of the enum value.
  */
-template <typename Enum,
-          int Min = static_cast<int>(detail::enum_range<Enum>::min),
-          int Max = static_cast<int>(detail::enum_range<Enum>::max)>
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max)>
 MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
-    -> detail::string_or_view_t<Enum> {
+    -> string_or_view_t<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
   // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
@@ -1628,7 +1732,7 @@ MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
 template <typename Enum>
 auto enum_for_each<Enum>::enum_iter::operator*() const -> value_type {
   auto value = static_cast<Enum>(m_pos);
-  return detail::enum_pair<Enum>{value, enum_name(value)};
+  return enum_pair<Enum>{value, enum_name(value)};
 }
 
 /**
@@ -1640,9 +1744,8 @@ auto enum_for_each<Enum>::enum_iter::operator*() const -> value_type {
  * @param str The string view representing the enum name.
  * @return An optional enum value.
  */
-template <typename Enum,
-          int Min = static_cast<int>(detail::enum_range<Enum>::min),
-          int Max = static_cast<int>(detail::enum_range<Enum>::max),
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max),
           detail::enable_if_t<!detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
     -> mgutility::optional<Enum> {
@@ -1661,9 +1764,8 @@ MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
  * @param str The string view representing the enum name.
  * @return An optional enum bitmask value.
  */
-template <typename Enum,
-          int Min = static_cast<int>(detail::enum_range<Enum>::min),
-          int Max = static_cast<int>(detail::enum_range<Enum>::max),
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max),
           detail::enable_if_t<detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
     -> mgutility::optional<Enum> {
@@ -1682,9 +1784,8 @@ MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
  * @param value The integer value to cast.
  * @return An optional enum value.
  */
-template <typename Enum,
-          int Min = static_cast<int>(detail::enum_range<Enum>::min),
-          int Max = static_cast<int>(detail::enum_range<Enum>::max)>
+template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
+          int Max = static_cast<int>(enum_range<Enum>::max)>
 MGUTILITY_CNSTXPR auto enum_cast(int value) noexcept
     -> mgutility::optional<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");

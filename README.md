@@ -52,7 +52,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE mgutility::enum_name)
 | ENUM_NAME_FETCH_FMT | Fetch fmt library | OFF |
 | ENUM_NAME_INSTALL | Install the enum_name library | OFF |
 
-## Example usage ([try it!](https://godbolt.org/z/3Msn3WoYd))
+## Example usage ([try it!](https://godbolt.org/z/PPEh78dbP))
 
 ```C++
 #include <iostream>
@@ -73,14 +73,14 @@ enum class Position {
 
 // Define bitwise OR operator for Position
 auto constexpr operator|(Position lhs, Position rhs) -> Position {
-  return static_cast<Position>(mgutility::enum_to_underlying(lhs) |
-                               mgutility::enum_to_underlying(rhs));
+  return static_cast<Position>(mgutility::to_underlying(lhs) |
+                               mgutility::to_underlying(rhs));
 }
 
 // Define bitwise AND operator for Position
 auto constexpr operator&(Position lhs, Position rhs) -> Position {
-  return static_cast<Position>(mgutility::enum_to_underlying(lhs) &
-                               mgutility::enum_to_underlying(rhs));
+  return static_cast<Position>(mgutility::to_underlying(lhs) &
+                               mgutility::to_underlying(rhs));
 }
 
 // Define the range for Position enum values (Option 1)
@@ -129,7 +129,7 @@ int main() {
       });
 
   std::ranges::for_each(positions, [](auto &&pos) {
-    std::println("{} \t: {}", mgutility::enum_to_underlying(pos.first),
+    std::println("{} \t: {}", mgutility::to_underlying(pos.first),
                  pos.second);
   });
 
@@ -139,7 +139,7 @@ int main() {
   for (auto &&e : mgutility::enum_for_each<Position>()) {
     if (!e.second.empty() &&
         e.second.find('|') == mgutility::string_view::npos) {
-      std::cout << mgutility::enum_to_underlying(e.first) << " \t: " << e.second
+      std::cout << mgutility::to_underlying(e.first) << " \t: " << e.second
                 << '\n';
     }
   }

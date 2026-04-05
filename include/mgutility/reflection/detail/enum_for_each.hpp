@@ -34,6 +34,13 @@ SOFTWARE.
 
 namespace mgutility {
 namespace detail {
+
+#ifdef MGUTILITY_ENUM_NAME_OPTIMIZE_FOR_SIZE
+constexpr bool optimize_for_size = true;
+#else
+constexpr bool optimize_for_size = false;
+#endif
+
 /**
  * @brief Alias template for a string or string view type based on the presence
  * of a bitwise OR operator.
@@ -46,7 +53,8 @@ namespace detail {
 template <typename T>
 // NOLINTNEXTLINE [modernize-type-traits]
 using string_or_view_t = typename std::conditional<
-    has_bit_or<T>::value, mgutility::fixed_string<enum_name_buffer<T>::size>,
+    has_bit_or<T>::value || optimize_for_size,
+    mgutility::fixed_string<enum_name_buffer<T>::size>,
     mgutility::string_view>::type;
 
 /**

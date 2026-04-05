@@ -231,8 +231,7 @@ struct enum_array_cache<Enum, Min, detail::enum_sequence<Enum, Is...>> {
 
     for (const auto &pair : map) {
       const int raw = static_cast<int>(pair.first);
-      const auto idx =
-          static_cast<size_t>(raw - mgutility::enum_range<Enum>::min + 1);
+      const auto idx = static_cast<size_t>(raw - Min + 1);
 
       if (idx >= 1 && idx < arr.size()) {
         arr[idx] = enum_type::string_type<Enum>(pair.second);
@@ -252,8 +251,7 @@ struct enum_array_cache<Enum, Min, detail::enum_sequence<Enum, Is...>> {
 
           for (const auto &pair : mgutility::custom_enum<Enum>::map) {
             auto idx =
-                static_cast<size_t>(static_cast<int>(pair.first) -
-                                    mgutility::enum_range<Enum>::min + 1);
+                static_cast<size_t>(static_cast<int>(pair.first) - Min + 1);
 
             if (idx >= 1 && idx < tmp.size()) {
               tmp[idx] = enum_type::string_type<Enum>(pair.second);

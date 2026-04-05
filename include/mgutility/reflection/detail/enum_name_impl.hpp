@@ -388,7 +388,7 @@ MGUTILITY_CNSTXPR auto to_enum_bitmask_impl(mgutility::string_view str) noexcept
 template <typename Enum, int Min, int Max,
           detail::enable_if_t<!detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR auto enum_name_impl(Enum enumValue) noexcept
-    -> mgutility::string_view {
+    -> detail::string_or_view_t<Enum> {
   MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
   const auto index{(Min < 0 ? -Min : Min) + static_cast<int>(enumValue) + 1};
   return arr[static_cast<size_t>(

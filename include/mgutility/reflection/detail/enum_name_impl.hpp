@@ -247,10 +247,8 @@ struct enum_array_cache<Enum, Min, detail::enum_sequence<Enum, Is...>> {
   value() {
     static const std::array<enum_type::string_type<Enum>, sizeof...(Is) + 1>
         arr = [] {
-          std::array<enum_type::string_type<Enum>, sizeof...(Is) + 1> sizeof...(
-              Is) +
-                  1 >
-              tmp{"", enum_type::template name<Enum, Is>()...};
+          std::array<enum_type::string_type<Enum>, sizeof...(Is) + 1> tmp{
+              "", enum_type::template name<Enum, Is>()...};
 
           for (const auto &pair : mgutility::custom_enum<Enum>::map) {
             auto idx =

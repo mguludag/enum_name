@@ -246,7 +246,7 @@ template <typename T> struct enum_name_buffer {
 };
 
 template <typename T> struct enum_name_blob {
-  static constexpr auto size = MGUTILITY_ENUM_NAME_BUFFER_SIZE;
+  static constexpr auto size = MGUTILITY_ENUM_NAME_BLOB_SIZE;
 };
 
 } // namespace mgutility

@@ -323,7 +323,7 @@ MGUTILITY_CNSTXPR auto get_enum_array() noexcept
 template <typename Enum, int Min, int Max>
 MGUTILITY_CNSTXPR inline auto to_enum_impl(mgutility::string_view str) noexcept
     -> mgutility::optional<Enum> {
-  MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
+  MGUTILITY_CNSTXPR auto arr = get_enum_array<Enum, Min, Max>();
 
   const auto index{detail::find(arr, str)};
   return index == 0

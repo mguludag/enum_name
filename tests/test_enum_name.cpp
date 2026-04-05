@@ -1,4 +1,6 @@
+#include "mgutility/reflection/detail/enum_for_each.hpp"
 #include "mgutility/reflection/detail/meta.hpp"
+#include <iostream>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
 #include "mgutility/reflection/enum_name.hpp"
@@ -158,6 +160,11 @@ template <> struct mgutility::custom_enum<color> {
 };
 
 TEST_CASE("testing the enum name serialization") {
+
+  for (auto enum_pair : mgutility::enum_for_each<color>()) {
+    std::cerr << "enum value: " << mgutility::to_underlying(enum_pair.first)
+              << ", enum name: " << enum_pair.second << '\n';
+  }
   auto blue = mgutility::enum_name(color::blue);
   CHECK(blue == "blue");
   auto white_smoke = mgutility::enum_name(color::white_smoke);

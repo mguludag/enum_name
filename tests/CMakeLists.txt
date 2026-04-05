@@ -6,6 +6,8 @@ project(
 
 set(CMAKE_CXX_STANDARD 17)
 
+add_compile_definitions(MGUTILITY_ENUM_NAME_OPTIMIZE_FOR_SIZE)
+
 add_executable(${PROJECT_NAME} test_enum_name.cpp)
 
 target_link_libraries(${PROJECT_NAME} mgutility::enum_name doctest::doctest)

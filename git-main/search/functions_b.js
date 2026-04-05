@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['what_0',['what',['../structmgutility_1_1bad__optional__access.html#af173560b0b4fa03df95450c19b6445d1',1,'mgutility::bad_optional_access']]]
+  ['_7eoptional_0',['~optional',['../classmgutility_1_1optional.html#a2e1c20d05d40a957ee86318dc1558ff8',1,'mgutility::optional']]]
 ];

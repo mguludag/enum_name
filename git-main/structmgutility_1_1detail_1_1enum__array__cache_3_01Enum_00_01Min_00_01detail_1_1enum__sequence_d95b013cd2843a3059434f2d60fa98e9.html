@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=11" />
     <meta name="generator" content="Doxygen 1.10.0" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>enum_name: mgutility::bad_optional_access Struct Reference</title>
+    <title>enum_name: mgutility::detail::enum_array_cache&lt; Enum, Min, detail::enum_sequence&lt; Enum, Is... &gt; &gt; Struct Template Reference</title>
     <link href="tabs.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="dynsections.js"></script>
@@ -83,67 +83,40 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="namespacemgutility.html">mgutility</a></li><li class="navelem"><a class="el" href="structmgutility_1_1bad__optional__access.html">bad_optional_access</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacemgutility.html">mgutility</a></li><li class="navelem"><b>detail</b></li><li class="navelem"><a class="el" href="structmgutility_1_1detail_1_1enum__array__cache_3_01Enum_00_01Min_00_01detail_1_1enum__sequence_d95b013cd2843a3059434f2d60fa98e9.html">enum_array_cache&lt; Enum, Min, detail::enum_sequence&lt; Enum, Is... &gt; &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="structmgutility_1_1bad__optional__access-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">mgutility::bad_optional_access Struct Reference</div></div>
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="structmgutility_1_1detail_1_1enum__array__cache_3_01Enum_00_01Min_00_01detail_1_1enum__sequence_4cda2b047ba99b167bfcb172a26f5d71.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">mgutility::detail::enum_array_cache&lt; Enum, Min, detail::enum_sequence&lt; Enum, Is... &gt; &gt; Struct Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Exception thrown when accessing an empty optional.  
+<p>Specialization of <a class="el" href="structmgutility_1_1detail_1_1enum__array__cache.html" title="Caches an array of enum names for a given enum sequence.">enum_array_cache</a> for <a class="el" href="structmgutility_1_1detail_1_1enum__sequence.html" title="Represents a sequence of enumeration values.">enum_sequence</a>.  
  <a href="#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="mgutility__enum__name_8hpp_source.html">mgutility_enum_name.hpp</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for mgutility::bad_optional_access:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="structmgutility_1_1bad__optional__access.png" alt=""/>
- </div></div>
+<p><code>#include &lt;<a class="el" href="enum__name__impl_8hpp_source.html">enum_name_impl.hpp</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:af173560b0b4fa03df95450c19b6445d1" id="r_af173560b0b4fa03df95450c19b6445d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmgutility_1_1pair.html">const</a> <a class="el" href="structmgutility_1_1pair.html">char</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af173560b0b4fa03df95450c19b6445d1">what</a> () <a class="el" href="structmgutility_1_1pair.html">const</a> <a class="el" href="structmgutility_1_1pair.html">noexcept</a> <a class="el" href="structmgutility_1_1pair.html">override</a></td></tr>
-<tr class="memdesc:af173560b0b4fa03df95450c19b6445d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the exception message.  <br /></td></tr>
-<tr class="separator:af173560b0b4fa03df95450c19b6445d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a4c6148d2df1e93ed623c635a89ebeda3" id="r_a4c6148d2df1e93ed623c635a89ebeda3"><td class="memItemLeft" align="right" valign="top"><a id="a4c6148d2df1e93ed623c635a89ebeda3" name="a4c6148d2df1e93ed623c635a89ebeda3"></a>
+<a class="el" href="structmgutility_1_1pair.html">static</a> <a class="el" href="structmgutility_1_1pair.html">const</a> std::array&lt; <a class="el" href="classmgutility_1_1basic__string__view.html">enum_type::string_type</a>&lt; <a class="el" href="structmgutility_1_1pair.html">Enum</a> &gt;, sizeof...(<a class="el" href="structmgutility_1_1pair.html">Is</a>)+1 &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>value</b> ()</td></tr>
+<tr class="separator:a4c6148d2df1e93ed623c635a89ebeda3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Exception thrown when accessing an empty optional. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="af173560b0b4fa03df95450c19b6445d1" name="af173560b0b4fa03df95450c19b6445d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af173560b0b4fa03df95450c19b6445d1">&#9670;&#160;</a></span>what()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structmgutility_1_1pair.html">const</a> <a class="el" href="structmgutility_1_1pair.html">char</a> * mgutility::bad_optional_access::what </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"></span></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns the exception message. </p>
-<dl class="section return"><dt>Returns</dt><dd>A C-string with the exception message. </dd></dl>
-
-</div>
-</div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>/home/runner/work/enum_name/enum_name/single_include/<a class="el" href="mgutility__enum__name_8hpp_source.html">mgutility_enum_name.hpp</a></li>
+<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="structmgutility_1_1pair.html">typename</a> <a class="el" href="structmgutility_1_1pair.html">Enum</a>, <a class="el" href="structmgutility_1_1pair.html">int</a> Min, Enum... Is&gt;<br />
+struct mgutility::detail::enum_array_cache&lt; Enum, Min, detail::enum_sequence&lt; Enum, Is... &gt; &gt;</div><p>Specialization of <a class="el" href="structmgutility_1_1detail_1_1enum__array__cache.html" title="Caches an array of enum names for a given enum sequence.">enum_array_cache</a> for <a class="el" href="structmgutility_1_1detail_1_1enum__sequence.html" title="Represents a sequence of enumeration values.">enum_sequence</a>. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Enum</td><td>The enum type. </td></tr>
+    <tr><td class="paramname">Is</td><td>The enum values. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<li>/home/runner/work/enum_name/enum_name/include/mgutility/reflection/detail/<a class="el" href="enum__name__impl_8hpp_source.html">enum_name_impl.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

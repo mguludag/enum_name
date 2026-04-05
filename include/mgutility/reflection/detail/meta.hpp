@@ -26,6 +26,7 @@ SOFTWARE.
 #define DETAIL_META_HPP
 
 #include "mgutility/_common/definitions.hpp"
+#include "mgutility/std/utility.hpp"
 #include <initializer_list>
 #include <type_traits>
 #include <utility>
@@ -137,67 +138,6 @@ using underlying_type_t = typename std::underlying_type<T>::type;
 template <typename T>
 // NOLINTNEXTLINE [modernize-type-traits]
 using remove_const_t = typename std::remove_const<T>::type;
-
-/**
- * @brief Represents a compile-time sequence of indices.
- *
- * @tparam Ints The sequence of indices.
- */
-template <std::size_t... Ints> struct index_sequence {};
-
-/**
- * @brief Concatenates two index sequences.
- *
- * @tparam Seq1 The first index sequence.
- * @tparam Seq2 The second index sequence.
- */
-template <typename Seq1, typename Seq2> struct index_sequence_concat;
-
-template <std::size_t... I1, std::size_t... I2>
-struct index_sequence_concat<index_sequence<I1...>, index_sequence<I2...>> {
-  using type = index_sequence<I1..., (sizeof...(I1) + I2)...>;
-};
-
-/**
- * @brief Implementation helper for creating index sequences.
- *
- * @tparam N The size of the index sequence to create.
- */
-template <std::size_t N> struct make_index_sequence_impl;
-
-template <std::size_t N> struct make_index_sequence_impl {
-private:
-  static constexpr std::size_t half = N / 2;
-
-  using first = typename make_index_sequence_impl<half>::type;
-  using second = typename make_index_sequence_impl<N - half>::type;
-
-public:
-  using type = typename index_sequence_concat<first, second>::type;
-};
-
-// base cases
-/**
- * @brief Base case for index sequence of size 0.
- */
-template <> struct make_index_sequence_impl<0> {
-  using type = index_sequence<>;
-};
-
-/**
- * @brief Base case for index sequence of size 1.
- */
-template <> struct make_index_sequence_impl<1> {
-  using type = index_sequence<0>;
-};
-
-/**
- * @brief Alias for creating an index sequence of size N.
- *
- * @tparam N The size of the index sequence.
- */
-template <std::size_t N>
-using make_index_sequence = typename make_index_sequence_impl<N>::type;
 
 /**
  * @brief Represents a sequence of enumeration values.

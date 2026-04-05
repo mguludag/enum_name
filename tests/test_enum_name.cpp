@@ -1,6 +1,4 @@
-#include "mgutility/reflection/detail/enum_for_each.hpp"
 #include "mgutility/reflection/detail/meta.hpp"
-#include <iostream>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest/doctest.h"
 #include "mgutility/reflection/enum_name.hpp"
@@ -160,52 +158,28 @@ template <> struct mgutility::custom_enum<color> {
 };
 
 TEST_CASE("testing the enum name serialization") {
-
-  for (auto enum_pair : mgutility::enum_for_each<color>()) {
-    std::cerr << "enum value: " << mgutility::to_underlying(enum_pair.first)
-              << ", enum name: " << enum_pair.second << '\n';
-  }
-  auto blue = mgutility::enum_name(color::blue);
-  CHECK(blue == "blue");
-  auto white_smoke = mgutility::enum_name(color::white_smoke);
-  CHECK(white_smoke == "white_smoke");
-  auto yellow_green = mgutility::enum_name(color::yellow_green);
-  CHECK(yellow_green == "yellow_green");
-  auto steel_blue = mgutility::enum_name(color::steel_blue);
-  CHECK(steel_blue == "steel_blue");
-  auto pale_turquoise = mgutility::enum_name(color::pale_turquoise);
-  CHECK(pale_turquoise == "pale_turquoise");
-  auto light_golden_rod_yellow =
-      mgutility::enum_name(color::light_golden_rod_yellow);
-  CHECK(light_golden_rod_yellow == "light_golden_rod_yellow");
-  auto dark_olive_green = mgutility::enum_name(color::dark_olive_green);
-  CHECK(dark_olive_green == "dark_olive_green");
-  auto azure = mgutility::enum_name(color::azure);
-  CHECK(azure == "azure");
-  auto ghost_white = mgutility::enum_name(color::ghost_white);
-  CHECK(ghost_white == "ghost_white");
-  auto maroon = mgutility::enum_name(color::maroon);
-  CHECK(maroon == "maroon");
-  auto navy = mgutility::enum_name(color::navy);
-  CHECK(navy == "navy");
-  auto spring_green = mgutility::enum_name(color::spring_green);
-  CHECK(spring_green == "spring_green");
-  auto rebecca_purple = mgutility::enum_name(color::rebecca_purple);
-  CHECK(rebecca_purple == "rebecca_purple");
-  auto red = mgutility::enum_name(color::red);
-  CHECK(red == "RED");
-  auto tan = mgutility::enum_name(color::tan);
-  CHECK(tan == "tan");
-  auto mint_cream = mgutility::enum_name(color::mint_cream);
-  CHECK(mint_cream == "mint_cream");
-  auto light_green = mgutility::enum_name(color::light_green);
-  CHECK(light_green == "light_green");
-  auto dodger_blue = mgutility::enum_name(color::dodger_blue);
-  CHECK(dodger_blue == "dodger_blue");
-  auto cornflower_blue = mgutility::enum_name(color::cornflower_blue);
-  CHECK(cornflower_blue == "cornflower_blue");
-  auto thistle = mgutility::enum_name<-5, 0>(color::thistle);
-  CHECK(thistle == "");
+  CHECK(mgutility::enum_name(color::blue) == "blue");
+  CHECK(mgutility::enum_name(color::white_smoke) == "white_smoke");
+  CHECK(mgutility::enum_name(color::yellow_green) == "yellow_green");
+  CHECK(mgutility::enum_name(color::steel_blue) == "steel_blue");
+  CHECK(mgutility::enum_name(color::pale_turquoise) == "pale_turquoise");
+  CHECK(mgutility::enum_name(color::white_smoke) == "white_smoke");
+  CHECK(mgutility::enum_name(color::light_golden_rod_yellow) ==
+        "light_golden_rod_yellow");
+  CHECK(mgutility::enum_name(color::dark_olive_green) == "dark_olive_green");
+  CHECK(mgutility::enum_name(color::azure) == "azure");
+  CHECK(mgutility::enum_name(color::ghost_white) == "ghost_white");
+  CHECK(mgutility::enum_name(color::maroon) == "maroon");
+  CHECK(mgutility::enum_name(color::navy) == "navy");
+  CHECK(mgutility::enum_name(color::spring_green) == "spring_green");
+  CHECK(mgutility::enum_name(color::rebecca_purple) == "rebecca_purple");
+  CHECK(mgutility::enum_name(color::red) == "RED");
+  CHECK(mgutility::enum_name(color::tan) == "tan");
+  CHECK(mgutility::enum_name(color::mint_cream) == "mint_cream");
+  CHECK(mgutility::enum_name(color::light_green) == "light_green");
+  CHECK(mgutility::enum_name(color::dodger_blue) == "dodger_blue");
+  CHECK(mgutility::enum_name(color::cornflower_blue) == "cornflower_blue");
+  CHECK(mgutility::enum_name<-5, 0>(color::thistle) == "");
 }
 
 TEST_CASE("testing the enum name deserialization") {

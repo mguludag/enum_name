@@ -283,9 +283,8 @@ get_enum_array(detail::enum_sequence<Enum, Is...> /*unused*/) noexcept
                           detail::enum_sequence<Enum, Is...>>::value();
 #else
     -> const std::array<enum_type::string_type<Enum>, sizeof...(Is) + 1> & {
-  sizeof...(Is) + 1 > & {
-    return enum_array_cache<Enum, Min,
-                            detail::enum_sequence<Enum, Is...>>::value();
+  return enum_array_cache<Enum, Min,
+                          detail::enum_sequence<Enum, Is...>>::value();
 #endif
 }
 
@@ -306,9 +305,9 @@ MGUTILITY_CNSTXPR auto get_enum_array() noexcept
   return get_enum_array<Enum, Min>(
       detail::make_enum_sequence<Enum, Min, Max>());
 #else
-      -> const std::array<enum_type::string_type<Enum>, Max - Min + 2> & {
-    return get_enum_array<Enum, Min>(
-        detail::make_enum_sequence<Enum, Min, Max>());
+    -> const std::array<enum_type::string_type<Enum>, Max - Min + 2> & {
+  return get_enum_array<Enum, Min>(
+      detail::make_enum_sequence<Enum, Min, Max>());
 #endif
 }
 

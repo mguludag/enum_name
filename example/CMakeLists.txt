@@ -10,7 +10,6 @@ add_executable(${PROJECT_NAME} main.cpp)
 
 target_link_libraries(${PROJECT_NAME} mgutility::enum_name)
 
-target_compile_options(${PROJECT_NAME} PRIVATE -O2)
 
 if(ENUM_NAME_FETCH_FMT)
   add_compile_definitions(ENUM_NAME_USE_FMT)

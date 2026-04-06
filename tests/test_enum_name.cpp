@@ -158,6 +158,7 @@ template <> struct mgutility::custom_enum<color> {
 };
 
 TEST_CASE("testing the enum name serialization") {
+  std::cout << mgutility::enum_name(color::white_smoke) << std::endl;
   CHECK(mgutility::enum_name(color::blue) == "blue");
   CHECK(mgutility::enum_name(color::white_smoke) == "white_smoke");
   CHECK(mgutility::enum_name(color::yellow_green) == "yellow_green");

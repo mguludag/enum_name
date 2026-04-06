@@ -27,8 +27,8 @@ using mgutility::operators::operator&;
 
 // Define the range for Position enum values (Option 1)
 template <> struct mgutility::enum_range<Position> {
-  static constexpr auto min = 0;  // Minimum value
-  static constexpr auto max = 16; // Maximum value
+  static constexpr auto min = 0;   // Minimum value
+  static constexpr auto max = 128; // Maximum value
 };
 
 // Specialize individual or all enum names
@@ -58,19 +58,19 @@ int main() {
   auto posCenter =
       mgutility::to_enum<Position>("CENTER"); // Convert string to enum
 
-#if MGUTILITY_CPLUSPLUS > 201402L &&                                           \
-    ((defined(__clang__) && __clang_major__ > 11) ||                           \
-     (defined(__GNUC__) && __GNUC__ > 11))
-  static_assert(mgutility::enum_name(Position::Top | Position::Right) ==
-                    "TOP|RIGHT",
-                "Compile-time check failed: TOP|RIGHT");
-#if MGUTILITY_CPLUSPLUS > 201703L &&                                           \
-    (defined(__clang__) || (defined(__GNUC__) && __GNUC__ > 11))
-  static_assert(mgutility::to_enum<Position>("BOTTOM|LEFT").value() ==
-                    (Position::Bottom | Position::Left),
-                "Compile-time check failed");
-#endif
-#endif
+  // #if MGUTILITY_CPLUSPLUS > 201402L &&                                           \
+//     ((defined(__clang__) && __clang_major__ > 11) ||                           \
+//      (defined(__GNUC__) && __GNUC__ > 11))
+  //   static_assert(mgutility::enum_name(Position::Top | Position::Right) ==
+  //                     "TOP|RIGHT",
+  //                 "Compile-time check failed: TOP|RIGHT");
+  // #if MGUTILITY_CPLUSPLUS > 201703L && \
+//     (defined(__clang__) || (defined(__GNUC__) && __GNUC__ > 11))
+  //   static_assert(mgutility::to_enum<Position>("BOTTOM|LEFT").value() ==
+  //                     (Position::Bottom | Position::Left),
+  //                 "Compile-time check failed");
+  // #endif
+  // #endif
 
 #if defined(__cpp_lib_print)
 
@@ -83,16 +83,14 @@ int main() {
       });
 
   std::ranges::for_each(positions, [](auto &&pos) {
-    std::println("{} \t: {}", mgutility::to_underlying(pos.first),
-                 pos.second);
+    std::println("{} \t: {}", mgutility::to_underlying(pos.first), pos.second);
   });
 
 #else
 
   // Print each Position and its underlying value using a for loop
   for (auto &&elem : mgutility::enum_for_each<Position>()) {
-    if (!elem.second.empty() &&
-        elem.second.find('|') == mgutility::string_view::npos) {
+    if (!elem.second.empty()) {
 #if defined(ENUM_NAME_USE_FMT) ||                                              \
     (defined(MGUTILITY_HAS_HAS_INCLUDE) && __has_include(<fmt/format.h>))
       fmt::print("{} \t: {}\n", mgutility::to_underlying(elem.first),

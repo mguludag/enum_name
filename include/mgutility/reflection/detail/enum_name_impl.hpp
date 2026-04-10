@@ -171,7 +171,7 @@ private:
     // ++pos;
 
     auto end = str.rfind('>');
-    auto enum_names = str.substr(pos, end - pos);
+    auto enum_names = str.substr(0, end);
 
 #else
     return {};

@@ -278,7 +278,7 @@ template <typename Enum, int Min, int Max> struct enum_array_cache {
       -> enum_name_array<Enum, Min, Max> {
     enum_name_array<Enum, Min, Max> arr{};
 
-    for (auto idx = 0; idx < result.ranges.size(); ++idx) {
+    for (std::size_t idx = 0; idx < result.ranges.size(); ++idx) {
       arr[idx] = result.blob.view().substr(result.ranges[idx].first,
                                            result.ranges[idx].second);
     }

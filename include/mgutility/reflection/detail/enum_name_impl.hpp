@@ -219,7 +219,9 @@ private:
         result.ranges[idx++] = {size, result.blob.size() - size};
 
         enum_names = enum_names.substr(pos + 1);
+        continue;
       }
+      enum_names = {};
     }
 
     return result;

@@ -165,7 +165,7 @@ private:
 
 #elif defined(_MSC_VER)
     // MSVC: different format
-    auto pos = str.rfind(',');
+    auto pos = str.find(',');
     if (pos == mgutility::string_view::npos)
       return {};
 

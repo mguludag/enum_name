@@ -65,16 +65,6 @@ namespace detail {
 #endif
 
 /**
- * @brief Defines the MGUTILITY_ENUM_NAME_BUFFER_SIZE macro.
- *
- * This macro defines the size of the buffer used for enum names.
- */
-#ifndef MGUTILITY_ENUM_NAME_BLOB_SIZE
-// NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
-#define MGUTILITY_ENUM_NAME_BLOB_SIZE 1024U * 8U
-#endif
-
-/**
  * @brief Trait to check if a type is a scoped enumeration.
  *
  * @tparam E The type to check.
@@ -243,15 +233,6 @@ template <typename T> struct custom_enum {
  */
 template <typename T> struct enum_name_buffer {
   static constexpr auto size = MGUTILITY_ENUM_NAME_BUFFER_SIZE;
-};
-
-/**
- * @brief Provides the name buffer size for an enumeration type.
- *
- * @tparam T The enumeration type.
- */
-template <typename T> struct enum_name_blob {
-  static constexpr auto size = MGUTILITY_ENUM_NAME_BLOB_SIZE;
 };
 
 } // namespace mgutility

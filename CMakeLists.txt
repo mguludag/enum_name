@@ -6,7 +6,7 @@ project(
   LANGUAGES CXX)
 
 option(ENUM_NAME_BUILD_DOCS "Build documentation" OFF)
-option(ENUM_NAME_BUILD_TESTS "Build tests" OFF)
+option(ENUM_NAME_BUILD_TESTS "Build tests" ON)
 option(ENUM_NAME_BUILD_EXAMPLE "Build example" ON)
 option(ENUM_NAME_FETCH_FMT "Fetch fmt library" OFF)
 option(ENUM_NAME_INSTALL "Install the enum_name library" OFF)

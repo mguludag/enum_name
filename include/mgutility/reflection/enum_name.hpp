@@ -57,7 +57,7 @@ constexpr auto to_underlying(Enum enumValue) noexcept
  */
 template <int Min, int Max, typename Enum>
 MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
-    -> fixed_string<enum_name_buffer<Enum>::size> {
+    -> detail::string_or_view_t<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
   // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
@@ -76,7 +76,7 @@ MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
 template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
           int Max = static_cast<int>(enum_range<Enum>::max)>
 MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
-    -> fixed_string<enum_name_buffer<Enum>::size> {
+    -> detail::string_or_view_t<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
   // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");

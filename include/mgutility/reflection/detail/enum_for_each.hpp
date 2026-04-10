@@ -36,13 +36,28 @@ namespace mgutility {
 namespace detail {
 
 /**
+ * @brief Alias template for a string or string view type based on the presence
+ * of a bitwise OR operator.
+ *
+ * If the type T supports the bitwise OR operator, the alias is a std::string.
+ * Otherwise, it is a mgutility::string_view.
+ *
+ * @tparam T The type to check.
+ */
+template <typename T>
+// NOLINTNEXTLINE [modernize-type-traits]
+using string_or_view_t = typename std::conditional<
+    has_bit_or<T>::value, mgutility::fixed_string<enum_name_buffer<T>::size>,
+    mgutility::string_view>::type;
+
+/**
  * @brief A pair consisting of an enum value and its corresponding string or
  * string view.
  *
  * @tparam Enum The enum type.
  */
 template <typename Enum>
-using enum_pair = std::pair<Enum, fixed_string<enum_name_buffer<Enum>::size>>;
+using enum_pair = std::pair<Enum, detail::string_or_view_t<Enum>>;
 } // namespace detail
 
 /**

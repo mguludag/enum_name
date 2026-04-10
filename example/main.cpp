@@ -27,7 +27,7 @@ using mgutility::operators::operator&;
 
 // Define the range for Position enum values (Option 1)
 template <> struct mgutility::enum_range<Position> {
-  static constexpr auto min = 0;   // Minimum value
+  static constexpr auto min = 0;  // Minimum value
   static constexpr auto max = 16; // Maximum value
 };
 
@@ -58,19 +58,19 @@ int main() {
   auto posCenter =
       mgutility::to_enum<Position>("CENTER"); // Convert string to enum
 
-  // #if MGUTILITY_CPLUSPLUS > 201402L &&                                           \
-//     ((defined(__clang__) && __clang_major__ > 11) ||                           \
-//      (defined(__GNUC__) && __GNUC__ > 11))
-  //   static_assert(mgutility::enum_name(Position::Top | Position::Right) ==
-  //                     "TOP|RIGHT",
-  //                 "Compile-time check failed: TOP|RIGHT");
-  // #if MGUTILITY_CPLUSPLUS > 201703L && \
-//     (defined(__clang__) || (defined(__GNUC__) && __GNUC__ > 11))
-  //   static_assert(mgutility::to_enum<Position>("BOTTOM|LEFT").value() ==
-  //                     (Position::Bottom | Position::Left),
-  //                 "Compile-time check failed");
-  // #endif
-  // #endif
+#if MGUTILITY_CPLUSPLUS > 201402L &&                                           \
+    ((defined(__clang__) && __clang_major__ > 11) ||                           \
+     (defined(__GNUC__) && __GNUC__ > 11))
+  static_assert(mgutility::enum_name(Position::Top | Position::Right) ==
+                    "TOP|RIGHT",
+                "Compile-time check failed: TOP|RIGHT");
+#if MGUTILITY_CPLUSPLUS > 201703L &&                                           \
+    (defined(__clang__) || (defined(__GNUC__) && __GNUC__ > 11))
+  static_assert(mgutility::to_enum<Position>("BOTTOM|LEFT").value() ==
+                    (Position::Bottom | Position::Left),
+                "Compile-time check failed");
+#endif
+#endif
 
 #if defined(__cpp_lib_print)
 

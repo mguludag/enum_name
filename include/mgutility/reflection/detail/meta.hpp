@@ -226,7 +226,7 @@ using flat_map = pair<T, const char *>[];
  */
 template <typename T> struct custom_enum {
   // #if MGUTILITY_CPLUSPLUS > 201402L
-  static constexpr flat_map<T> map = {};
+  static MGUTILITY_INLINE constexpr flat_map<T> map = {};
   // #else
   //     static constexpr flat_map<T> map() noexcept {
   //         return {}; // default: empty map

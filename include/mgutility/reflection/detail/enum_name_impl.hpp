@@ -283,11 +283,10 @@ template <typename Enum, int Min, int Max> struct enum_array_cache {
 
 #if MGUTILITY_CPLUSPLUS > 201402L
     constexpr auto map = mgutility::custom_enum<Enum>::map;
-#else
-    const auto map = mgutility::custom_enum<Enum>::map;
-#endif
-
     for (const auto &pair : map) {
+#else
+    for (const auto &pair : mgutility::custom_enum<Enum>::map) {
+#endif
       if (pair.first >= static_cast<Enum>(Min) &&
           pair.first < static_cast<Enum>(Max)) {
         arr[static_cast<std::size_t>(pair.first) - Min] = pair.second;

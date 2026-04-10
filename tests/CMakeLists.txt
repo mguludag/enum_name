@@ -4,7 +4,6 @@ project(
   VERSION 0.1
   LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 11)
 
 add_compile_definitions(MGUTILITY_ENUM_NAME_OPTIMIZE_FOR_SIZE)
 

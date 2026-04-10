@@ -35,12 +35,6 @@ SOFTWARE.
 namespace mgutility {
 namespace detail {
 
-#ifdef MGUTILITY_ENUM_NAME_OPTIMIZE_FOR_SIZE
-constexpr bool optimize_for_size = true;
-#else
-constexpr bool optimize_for_size = false;
-#endif
-
 /**
  * @brief A pair consisting of an enum value and its corresponding string or
  * string view.

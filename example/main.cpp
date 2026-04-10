@@ -33,7 +33,7 @@ template <> struct mgutility::enum_range<Position> {
 
 // Specialize individual or all enum names
 template <> struct mgutility::custom_enum<Position> {
-  static constexpr mgutility::flat_map<Position> map{
+  static MGUTILITY_INLINE constexpr mgutility::flat_map<Position> map{
       // NOLINTNEXTLINE [modernize-use-designated-initializers]
       {Position::Top, "TOP"},
       // NOLINTNEXTLINE [modernize-use-designated-initializers]

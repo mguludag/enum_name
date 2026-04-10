@@ -64,6 +64,14 @@ namespace detail {
 #define MGUTILITY_ENUM_NAME_BUFFER_SIZE 32U
 #endif
 
+#ifndef MGUTILITY_INLINE
+#if MGUTILITY_CPLUSPLUS > 201402L
+#define MGUTILITY_INLINE inline
+#else
+#define MGUTILITY_INLINE
+#endif
+#endif
+
 /**
  * @brief Trait to check if a type is a scoped enumeration.
  *

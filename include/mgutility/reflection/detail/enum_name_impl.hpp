@@ -400,8 +400,11 @@ MGUTILITY_CNSTXPR auto enum_name_impl(Enum enumValue) noexcept
     -> mgutility::string_view {
   MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
   const auto index{(Min < 0 ? -Min : Min) + static_cast<int>(enumValue)};
-  return arr[static_cast<size_t>(
-      (index < Min || index > static_cast<int>(arr.size()) - 1) ? 0 : index)];
+  if (index < Min || index > static_cast<int>(arr.size()) - 1) {
+    return mgutility::string_view{};
+  }
+
+  return arr[static_cast<size_t>(index)];
 }
 
 /**
@@ -425,12 +428,9 @@ MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
 
   // Calculate the index in the array
   const auto index = (Min < 0 ? -Min : Min) + static_cast<int>(enumValue);
-  const auto name =
-      arr[(index < Min || index >= static_cast<int>(arr.size())) ? 0 : index];
 
-  // Return the name if it's valid
-  if (name.size() > 0) {
-    return mgutility::fixed_string<enum_name_buffer<Enum>::size>{}.append(name);
+  if (index >= Min && index < static_cast<int>(arr.size())) {
+    return arr[static_cast<size_t>(index)];
   }
 
   // Construct bitmasked name

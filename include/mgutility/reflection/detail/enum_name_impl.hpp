@@ -429,12 +429,16 @@ MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
   // Calculate the index in the array
   const auto index = (Min < 0 ? -Min : Min) + static_cast<int>(enumValue);
 
-  if (index >= Min && index < static_cast<int>(arr.size())) {
-    return arr[static_cast<size_t>(index)];
+  mgutility::fixed_string<enum_name_buffer<Enum>::size> bitmasked_name;
+
+  if (index >= 0 && index < static_cast<int>(arr.size())) {
+    bitmasked_name.append(arr[static_cast<size_t>(index)]);
   }
 
-  // Construct bitmasked name
-  mgutility::fixed_string<enum_name_buffer<Enum>::size> bitmasked_name;
+  if (!bitmasked_name.empty()) {
+    return bitmasked_name;
+  }
+
   for (auto i = 0; i < Max - Min; ++i) {
     if (i >= 0 && i < static_cast<int>(arr.size()) && arr[i].size() > 0 &&
         (enumValue & static_cast<Enum>(i)) == static_cast<Enum>(i)) {

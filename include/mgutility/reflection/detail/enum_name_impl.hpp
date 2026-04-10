@@ -164,11 +164,11 @@ private:
 
 #elif defined(_MSC_VER)
     // MSVC: different format
-    auto pos = str.rfind(',');
-    if (pos == mgutility::string_view::npos)
-      return {};
+    // auto pos = str.rfind(',');
+    // if (pos == mgutility::string_view::npos)
+    //   return {};
 
-    ++pos;
+    // ++pos;
 
     auto end = str.rfind('>');
     auto enum_names = str.substr(pos, end - pos);

@@ -181,7 +181,6 @@ private:
       return {};
     }
 
-
     enum_name_parse_result<Enum, Min, Max> result{};
 
     std::size_t idx = 0;
@@ -200,10 +199,10 @@ private:
           token = token.substr(0, token.size() - 1);
         }
 
-
         std::size_t begin = token.find('(');
         std::size_t end = token.rfind(')');
-        if (begin != mgutility::string_view::npos || end != mgutility::string_view::npos) {
+        if (begin != mgutility::string_view::npos ||
+            end != mgutility::string_view::npos) {
           result.ranges[idx++] = {0, 0};
           enum_names = enum_names.substr(pos + 1);
           continue;
@@ -282,7 +281,13 @@ template <typename Enum, int Min, int Max> struct enum_array_cache {
                                            result.ranges[idx].second);
     }
 
-    for (const auto &pair : mgutility::custom_enum<Enum>::map) {
+#if MGUTILITY_CPLUSPLUS > 201402L
+    constexpr auto map = mgutility::custom_enum<Enum>::map;
+#else
+    const auto map = mgutility::custom_enum<Enum>::map;
+#endif
+
+    for (const auto &pair : map) {
       if (pair.first >= static_cast<Enum>(Min) &&
           pair.first < static_cast<Enum>(Max)) {
         arr[static_cast<std::size_t>(pair.first) - Min] = pair.second;

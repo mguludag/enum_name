@@ -283,7 +283,7 @@ template <typename Enum, int Min, int Max> struct enum_array_cache {
                                            result.ranges[idx].second);
     }
 
-#if MGUTILITY_CPLUSPLUS > 201402L
+#if MGUTILITY_CPLUSPLUS >= 201402L
     constexpr auto map = mgutility::custom_enum<Enum>::map;
     for (const auto &pair : map) {
 #else

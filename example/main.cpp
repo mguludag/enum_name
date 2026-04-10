@@ -28,7 +28,7 @@ using mgutility::operators::operator&;
 // Define the range for Position enum values (Option 1)
 template <> struct mgutility::enum_range<Position> {
   static constexpr auto min = 0;   // Minimum value
-  static constexpr auto max = 128; // Maximum value
+  static constexpr auto max = 16; // Maximum value
 };
 
 // Specialize individual or all enum names

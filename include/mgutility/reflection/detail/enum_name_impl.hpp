@@ -151,7 +151,8 @@ private:
   template <typename Enum, int Min, int Max>
   MGUTILITY_CNSTXPR static enum_name_parse_result<Enum, Min, Max>
   parse() noexcept {
-    auto str = raw_name<Enum>(detail::make_enum_sequence<Enum, Min, Max>{});
+    MGUTILITY_CNSTXPR auto str =
+        raw_name<Enum>(detail::make_enum_sequence<Enum, Min, Max>{});
 
 #if defined(__clang__) || defined(__GNUC__)
 #if defined(__clang__)
@@ -164,14 +165,14 @@ private:
 
 #elif defined(_MSC_VER)
     // MSVC: different format
-    auto pos = str.find(',');
+    auto pos = str.rfind(',');
     if (pos == mgutility::string_view::npos)
       return {};
 
     ++pos;
 
     auto end = str.rfind('>');
-    auto enum_names = str.substr(0, end);
+    auto result = str.substr(pos, end - pos);
 
 #else
     return {};

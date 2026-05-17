@@ -29,7 +29,7 @@ var searchData=
   ['subcase_26',['Subcase',['../structdoctest_1_1detail_1_1Subcase.html',1,'doctest::detail::Subcase'],['../structSubcase.html',1,'Subcase']]],
   ['subcases_27',['Test cases and subcases',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2tutorial.html#autotoc_md180',1,'']]],
   ['subcasesignature_28',['SubcaseSignature',['../structdoctest_1_1SubcaseSignature.html',1,'doctest']]],
-  ['substr_29',['substr',['../classmgutility_1_1basic__string__view.html#afaa73ee06ad76de37e100e06f98822ee',1,'mgutility::basic_string_view']]],
+  ['substr_29',['substr',['../classmgutility_1_1basic__string__view.html#a4a1d3a6be3618135df401c46e701aea6',1,'mgutility::basic_string_view']]],
   ['suites_30',['Test suites',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2testcases.html#autotoc_md173',1,'']]],
   ['supported_31',['Is mocking supported?',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2faq.html#autotoc_md131',1,'']]],
   ['supported_20compilers_32',['Supported Compilers',['../md__2home_2runner_2work_2enum__name_2enum__name_2README.html#autotoc_md190',1,'']]],

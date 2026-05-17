@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mgutility_0',['mgutility',['../namespacemgutility.html',1,'']]]
+  ['amalgamate_0',['amalgamate',['../namespaceamalgamate.html',1,'']]]
 ];

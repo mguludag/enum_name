@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['name_0',['name',['../structmgutility_1_1detail_1_1enum__type.html#a621332f0c493787058f53c7ea5db3053',1,'mgutility::detail::enum_type::name() noexcept -&gt; enum_name_parse_result&lt; detail::underlying_type_t&lt; Enum &gt;, Min, Max &gt;'],['../structmgutility_1_1detail_1_1enum__type.html#a1a6e5482d8a60df2e38930facca18994',1,'mgutility::detail::enum_type::name() noexcept']]],
+  ['name_0',['name',['../structmgutility_1_1detail_1_1enum__type.html#a621332f0c493787058f53c7ea5db3053',1,'mgutility::detail::enum_type::name() noexcept -&gt; enum_name_parse_result&lt; detail::underlying_type_t&lt; Enum &gt;, Min, Max &gt;'],['../structmgutility_1_1detail_1_1enum__type.html#a621332f0c493787058f53c7ea5db3053',1,'mgutility::detail::enum_type::name() noexcept -&gt; enum_name_parse_result&lt; detail::underlying_type_t&lt; Enum &gt;, Min, Max &gt;']]],
   ['nan_20checking_1',['NaN checking',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2assertions.html#autotoc_md55',1,'']]],
   ['next_20steps_2',['Next steps',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2tutorial.html#autotoc_md182',1,'']]],
   ['not_20getting_20registered_3',['Why are my tests in a static library not getting registered?',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2faq.html#autotoc_md132',1,'']]],

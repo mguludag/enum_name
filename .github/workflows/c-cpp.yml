@@ -102,9 +102,8 @@ jobs:
           make -j2
           ctest -j2 --output-on-failure
 
-  regenerate-single-include:
+  check-single-include:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -112,22 +111,22 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-      - name: Regenerate single-include header
+      - name: Regenerate and verify single-include header is up-to-date
         run: |
           python3 scripts/amalgamate.py \
             --main include/mgutility/reflection/enum_name.hpp \
             --source-dir include \
             --source-dir mgutility/include \
-            --output single_include/mgutility_enum_name.hpp
-      - name: Create Pull Request if changed
-        uses: peter-evans/create-pull-request@v7
-        with:
-          add-paths: single_include/mgutility_enum_name.hpp
-          commit-message: "Auto-regenerate single-include header"
-          branch: auto-update/single-include
-          title: "chore: auto-regenerate single-include header"
-          body: |
-            Automated regeneration of `single_include/mgutility_enum_name.hpp` 
-            from source headers after recent changes to `${{ github.ref }}`.
-          delete-branch: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+            --output /tmp/expected_enum_name.hpp
+          if ! diff -q single_include/mgutility_enum_name.hpp /tmp/expected_enum_name.hpp > /dev/null 2>&1; then
+            echo "ERROR: single_include/mgutility_enum_name.hpp is out of date!"
+            echo "Run the following command locally to regenerate:"
+            echo "  python3 scripts/amalgamate.py \\"
+            echo "    --main include/mgutility/reflection/enum_name.hpp \\"
+            echo "    --source-dir include \\"
+            echo "    --source-dir mgutility/include \\"
+            echo "    --output single_include/mgutility_enum_name.hpp"
+            diff single_include/mgutility_enum_name.hpp /tmp/expected_enum_name.hpp || true
+            exit 1
+          fi
+          echo "single_include/mgutility_enum_name.hpp is up-to-date."

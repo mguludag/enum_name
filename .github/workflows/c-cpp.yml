@@ -110,7 +110,7 @@ jobs:
           submodules: true
       - name: Build project devcontainer image
         run: |
-          docker build -f .devcontainer/Dockerfile -t enum_name_devcontainer:ci .
+          docker build -f .devcontainer/Dockerfile -t enum_name_devcontainer:ci .devcontainer
       - name: Run single-include check inside project devcontainer
         run: |
           docker run --rm -v "${{ github.workspace }}":/workspace -w /workspace enum_name_devcontainer:ci bash -lc "

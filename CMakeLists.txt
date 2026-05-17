@@ -114,3 +114,17 @@ endif()
 if(${ENUM_NAME_BUILD_DOCS})
   add_subdirectory(doc)
 endif()
+
+# Single-include header generation
+find_package(Python3 QUIET)
+if(Python3_FOUND)
+  add_custom_target(single_include
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/amalgamate.py
+      --main ${CMAKE_SOURCE_DIR}/include/mgutility/reflection/enum_name.hpp
+      --source-dir ${CMAKE_SOURCE_DIR}/include
+      --source-dir ${CMAKE_SOURCE_DIR}/mgutility/include
+      --output ${CMAKE_SOURCE_DIR}/single_include/mgutility_enum_name.hpp
+    COMMENT "Regenerating single-include header from source files"
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  )
+endif()

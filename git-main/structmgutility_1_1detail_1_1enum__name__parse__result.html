@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=11" />
     <meta name="generator" content="Doxygen 1.10.0" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>enum_name: mgutility::detail::enum_name_parse_result&lt; T, Min, Max &gt; Struct Template Reference</title>
+    <title>enum_name: mgutility::detail::enum_name_parse_result&lt; U, Min, Max &gt; Struct Template Reference</title>
     <link href="tabs.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="dynsections.js"></script>
@@ -91,26 +91,43 @@ $(function() {
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="structmgutility_1_1detail_1_1enum__name__parse__result-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">mgutility::detail::enum_name_parse_result&lt; T, Min, Max &gt; Struct Template Reference</div></div>
+  <div class="headertitle"><div class="title">mgutility::detail::enum_name_parse_result&lt; U, Min, Max &gt; Struct Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Parse result for enum names.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="enum__name__impl_8hpp_source.html">enum_name_impl.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a2799dd69ca90dd93abdc8f47ff809f00" id="r_a2799dd69ca90dd93abdc8f47ff809f00"><td class="memItemLeft" align="right" valign="top"><a id="a2799dd69ca90dd93abdc8f47ff809f00" name="a2799dd69ca90dd93abdc8f47ff809f00"></a>
-<a class="el" href="classmgutility_1_1fixed__string.html">fixed_string</a>&lt; <a class="el" href="structmgutility_1_1enum__name__buffer.html">enum_name_buffer</a>&lt; T &gt;::size *size &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>blob</b></td></tr>
-<tr class="separator:a2799dd69ca90dd93abdc8f47ff809f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7579bc5fca2206f830c145889f018ba0" id="r_a7579bc5fca2206f830c145889f018ba0"><td class="memItemLeft" align="right" valign="top"><a id="a7579bc5fca2206f830c145889f018ba0" name="a7579bc5fca2206f830c145889f018ba0"></a>
+<tr class="memitem:ab91a9a9facfdfe1db7fbc6003a7d824c" id="r_ab91a9a9facfdfe1db7fbc6003a7d824c"><td class="memItemLeft" align="right" valign="top"><a id="ab91a9a9facfdfe1db7fbc6003a7d824c" name="ab91a9a9facfdfe1db7fbc6003a7d824c"></a>
+<a class="el" href="classmgutility_1_1fixed__string.html">fixed_string</a>&lt; MGUTILITY_GLOBAL_ENUM_BLOB_SIZE &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>strings</b></td></tr>
+<tr class="separator:ab91a9a9facfdfe1db7fbc6003a7d824c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56a0b68223bcc57e8ccaf3782780ca68" id="r_a56a0b68223bcc57e8ccaf3782780ca68"><td class="memItemLeft" align="right" valign="top"><a id="a56a0b68223bcc57e8ccaf3782780ca68" name="a56a0b68223bcc57e8ccaf3782780ca68"></a>
 std::array&lt; <a class="el" href="structmgutility_1_1pair.html">pair</a>&lt; std::size_t, std::size_t &gt;, size &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ranges</b></td></tr>
-<tr class="separator:a7579bc5fca2206f830c145889f018ba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a56a0b68223bcc57e8ccaf3782780ca68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a7fb33f9b29403cae9344c222d0f0c6e1" id="r_a7fb33f9b29403cae9344c222d0f0c6e1"><td class="memItemLeft" align="right" valign="top"><a id="a7fb33f9b29403cae9344c222d0f0c6e1" name="a7fb33f9b29403cae9344c222d0f0c6e1"></a>
+<tr class="memitem:a8f155ee866524622ddc8573ed3dd8e87" id="r_a8f155ee866524622ddc8573ed3dd8e87"><td class="memItemLeft" align="right" valign="top"><a id="a8f155ee866524622ddc8573ed3dd8e87" name="a8f155ee866524622ddc8573ed3dd8e87"></a>
 static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> = std::size_t{Max - Min}</td></tr>
-<tr class="separator:a7fb33f9b29403cae9344c222d0f0c6e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a8f155ee866524622ddc8573ed3dd8e87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this struct was generated from the following file:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename U, int Min, int Max&gt;<br />
+struct mgutility::detail::enum_name_parse_result&lt; U, Min, Max &gt;</div><p>Parse result for enum names. </p>
+<p>Templated on the underlying type U instead of the enum type itself, so all enums with the same underlying type (e.g., all 'int'-based enums) share the same struct type. The strings buffer is a fixed size (MGUTILITY_GLOBAL_ENUM_BLOB_SIZE) rather than a per-enum-type <a class="el" href="classmgutility_1_1fixed__string.html">fixed_string</a>, reducing template bloat.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>The underlying type of the enum (e.g., int, unsigned int). </td></tr>
+    <tr><td class="paramname">Min</td><td>The minimum enum value. </td></tr>
+    <tr><td class="paramname">Max</td><td>The maximum enum value. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/runner/work/enum_name/enum_name/include/mgutility/reflection/detail/<a class="el" href="enum__name__impl_8hpp_source.html">enum_name_impl.hpp</a></li>
 </ul>
 </div><!-- contents -->

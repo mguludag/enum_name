@@ -101,10 +101,10 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a8f5ae354836979916f1143903f405329" id="r_a8f5ae354836979916f1143903f405329"><td class="memTemplParams" colspan="2">template&lt;typename Enum , int Min, int Max&gt; </td></tr>
-<tr class="memitem:a8f5ae354836979916f1143903f405329"><td class="memTemplItemLeft" align="right" valign="top">static MGUTILITY_CNSTXPR <a class="el" href="structmgutility_1_1detail_1_1enum__name__parse__result.html">enum_name_parse_result</a>&lt; Enum, Min, Max &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a8f5ae354836979916f1143903f405329">name</a> () noexcept</td></tr>
-<tr class="memdesc:a8f5ae354836979916f1143903f405329"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the name of the enum value, checking custom names first.  <br /></td></tr>
-<tr class="separator:a8f5ae354836979916f1143903f405329"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a621332f0c493787058f53c7ea5db3053" id="r_a621332f0c493787058f53c7ea5db3053"><td class="memTemplParams" colspan="2">template&lt;typename Enum , int Min, int Max&gt; </td></tr>
+<tr class="memitem:a621332f0c493787058f53c7ea5db3053"><td class="memTemplItemLeft" align="right" valign="top">static MGUTILITY_CNSTXPR auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a621332f0c493787058f53c7ea5db3053">name</a> () noexcept -&gt; <a class="el" href="structmgutility_1_1detail_1_1enum__name__parse__result.html">enum_name_parse_result</a>&lt; detail::underlying_type_t&lt; Enum &gt;, Min, Max &gt;</td></tr>
+<tr class="memdesc:a621332f0c493787058f53c7ea5db3053"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the name of the enum value, checking custom names first.  <br /></td></tr>
+<tr class="separator:a621332f0c493787058f53c7ea5db3053"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a6e5482d8a60df2e38930facca18994" id="r_a1a6e5482d8a60df2e38930facca18994"><td class="memTemplParams" colspan="2">template&lt;typename Enum , Enum e&gt; </td></tr>
 <tr class="memitem:a1a6e5482d8a60df2e38930facca18994"><td class="memTemplItemLeft" align="right" valign="top">static MGUTILITY_CNSTXPR <a class="el" href="classmgutility_1_1basic__string__view.html">mgutility::string_view</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a1a6e5482d8a60df2e38930facca18994">name</a> () noexcept</td></tr>
 <tr class="memdesc:a1a6e5482d8a60df2e38930facca18994"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the name of the enum value, checking custom names first.  <br /></td></tr>
@@ -113,19 +113,19 @@ Static Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Provides functionality to extract and parse enum names at compile-time. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a8f5ae354836979916f1143903f405329" name="a8f5ae354836979916f1143903f405329"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8f5ae354836979916f1143903f405329">&#9670;&#160;</a></span>name() <span class="overload">[1/2]</span></h2>
+<a id="a1a6e5482d8a60df2e38930facca18994" name="a1a6e5482d8a60df2e38930facca18994"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a6e5482d8a60df2e38930facca18994">&#9670;&#160;</a></span>name() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Enum , int Min, int Max&gt; </div>
+template&lt;typename Enum , Enum e&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static MGUTILITY_CNSTXPR <a class="el" href="structmgutility_1_1detail_1_1enum__name__parse__result.html">enum_name_parse_result</a>&lt; Enum, Min, Max &gt; mgutility::detail::enum_type::name </td>
+          <td class="memname">static MGUTILITY_CNSTXPR <a class="el" href="classmgutility_1_1basic__string__view.html">mgutility::string_view</a> mgutility::detail::enum_type::name </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"></span></td><td>)</td>
           <td></td>
@@ -150,22 +150,22 @@ template&lt;typename Enum , int Min, int Max&gt; </div>
 
 </div>
 </div>
-<a id="a1a6e5482d8a60df2e38930facca18994" name="a1a6e5482d8a60df2e38930facca18994"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a6e5482d8a60df2e38930facca18994">&#9670;&#160;</a></span>name() <span class="overload">[2/2]</span></h2>
+<a id="a621332f0c493787058f53c7ea5db3053" name="a621332f0c493787058f53c7ea5db3053"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a621332f0c493787058f53c7ea5db3053">&#9670;&#160;</a></span>name() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Enum , Enum e&gt; </div>
+template&lt;typename Enum , int Min, int Max&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static MGUTILITY_CNSTXPR <a class="el" href="classmgutility_1_1basic__string__view.html">mgutility::string_view</a> mgutility::detail::enum_type::name </td>
+          <td class="memname">static MGUTILITY_CNSTXPR auto mgutility::detail::enum_type::name </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"></span></td><td>)</td>
-          <td></td>
+          <td> -&gt; <a class="el" href="structmgutility_1_1detail_1_1enum__name__parse__result.html">enum_name_parse_result</a>&lt;detail::underlying_type_t&lt;Enum&gt;, Min, Max&gt; </td>
         </tr>
       </table>
   </td>

@@ -88,6 +88,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="structmgutility_1_1detail_1_1enum__array__cache-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">mgutility::detail::enum_array_cache&lt; Enum, Min, Max &gt; Struct Template Reference</div></div>
@@ -99,14 +100,23 @@ $(function() {
 
 <p><code>#include &lt;<a class="el" href="enum__name__impl_8hpp_source.html">enum_name_impl.hpp</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a3665ef1022e7582ab40ad35d78926109" id="r_a3665ef1022e7582ab40ad35d78926109"><td class="memItemLeft" align="right" valign="top"><a id="a3665ef1022e7582ab40ad35d78926109" name="a3665ef1022e7582ab40ad35d78926109"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>underlying</b> = detail::underlying_type_t&lt;Enum&gt;</td></tr>
+<tr class="separator:a3665ef1022e7582ab40ad35d78926109"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f15c48b86db7994d1f267cc238f15c2" id="r_a0f15c48b86db7994d1f267cc238f15c2"><td class="memItemLeft" align="right" valign="top"><a id="a0f15c48b86db7994d1f267cc238f15c2" name="a0f15c48b86db7994d1f267cc238f15c2"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>parse_result_t</b> = <a class="el" href="structmgutility_1_1detail_1_1enum__name__parse__result.html">enum_name_parse_result</a>&lt;underlying, Min, Max&gt;</td></tr>
+<tr class="separator:a0f15c48b86db7994d1f267cc238f15c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a3ee85f60d0654a3b57301d9bb7209610" id="r_a3ee85f60d0654a3b57301d9bb7209610"><td class="memItemLeft" align="right" valign="top"><a id="a3ee85f60d0654a3b57301d9bb7209610" name="a3ee85f60d0654a3b57301d9bb7209610"></a>
-static <a class="el" href="structmgutility_1_1detail_1_1enum__name__parse__result.html">enum_name_parse_result</a>&lt; Enum, Min, Max &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>value</b> ()</td></tr>
-<tr class="separator:a3ee85f60d0654a3b57301d9bb7209610"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a637779d029e98c922aaebe21efa78cc3" id="r_a637779d029e98c922aaebe21efa78cc3"><td class="memItemLeft" align="right" valign="top"><a id="a637779d029e98c922aaebe21efa78cc3" name="a637779d029e98c922aaebe21efa78cc3"></a>
-static MGUTILITY_CNSTXPR auto&#160;</td><td class="memItemRight" valign="bottom"><b>apply_custom</b> (const <a class="el" href="structmgutility_1_1detail_1_1enum__name__parse__result.html">enum_name_parse_result</a>&lt; Enum, Min, Max &gt; &amp;result) noexcept -&gt; enum_name_array&lt; Enum, Min, Max &gt;</td></tr>
-<tr class="separator:a637779d029e98c922aaebe21efa78cc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f6125a36c44bd66a7867c91161c8508" id="r_a5f6125a36c44bd66a7867c91161c8508"><td class="memItemLeft" align="right" valign="top"><a id="a5f6125a36c44bd66a7867c91161c8508" name="a5f6125a36c44bd66a7867c91161c8508"></a>
+static <a class="el" href="structmgutility_1_1detail_1_1enum__name__parse__result.html">parse_result_t</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>value</b> ()</td></tr>
+<tr class="separator:a5f6125a36c44bd66a7867c91161c8508"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac82ca316c23ff99dd55ce94be82d1a42" id="r_ac82ca316c23ff99dd55ce94be82d1a42"><td class="memItemLeft" align="right" valign="top"><a id="ac82ca316c23ff99dd55ce94be82d1a42" name="ac82ca316c23ff99dd55ce94be82d1a42"></a>
+static MGUTILITY_CNSTXPR auto&#160;</td><td class="memItemRight" valign="bottom"><b>apply_custom</b> (const <a class="el" href="structmgutility_1_1detail_1_1enum__name__parse__result.html">parse_result_t</a> &amp;result) noexcept -&gt; enum_name_array&lt; Enum, Min, Max &gt;</td></tr>
+<tr class="separator:ac82ca316c23ff99dd55ce94be82d1a42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename Enum, int Min, int Max&gt;<br />

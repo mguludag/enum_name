@@ -15,7 +15,7 @@ var searchData=
   ['filldata_3c_20t_5bn_5d_3e_12',['filldata&lt; T[N]&gt;',['../structdoctest_1_1detail_1_1filldata_3_01T_0fN_0e_4.html',1,'doctest::detail']]],
   ['find_13',['find',['../classmgutility_1_1basic__string__view.html#a511d28b000ada097a6f4449266c2a018',1,'mgutility::basic_string_view']]],
   ['fixed_5fstring_14',['fixed_string',['../classmgutility_1_1fixed__string.html',1,'mgutility']]],
-  ['fixed_5fstring_3c_20mgutility_3a_3aenum_5fname_5fbuffer_3c_20t_20_3e_3a_3asize_20_2asize_20_3e_15',['fixed_string&lt; mgutility::enum_name_buffer&lt; T &gt;::size *size &gt;',['../classmgutility_1_1fixed__string.html',1,'mgutility']]],
+  ['fixed_5fstring_3c_20mgutility_5fglobal_5fenum_5fblob_5fsize_20_3e_15',['fixed_string&lt; MGUTILITY_GLOBAL_ENUM_BLOB_SIZE &gt;',['../classmgutility_1_1fixed__string.html',1,'mgutility']]],
   ['fixtures_16',['Test fixtures',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2testcases.html#autotoc_md172',1,'']]],
   ['floating_20point_20comparisons_17',['Floating point comparisons',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2assertions.html#autotoc_md54',1,'']]],
   ['foo_18',['Foo',['../structApp_1_1Foo.html',1,'App::Foo'],['../structBar_1_1Foo.html',1,'Bar::Foo']]],

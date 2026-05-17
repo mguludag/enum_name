@@ -25,7 +25,6 @@ SOFTWARE.
 #ifndef MGUTILITY_ENUM_NAME_HPP
 #define MGUTILITY_ENUM_NAME_HPP
 
-
 /*
 MIT License
 
@@ -82,7 +81,6 @@ SOFTWARE.
 #ifndef DETAIL_ENUM_FOR_EACH_HPP
 #define DETAIL_ENUM_FOR_EACH_HPP
 
-
 /*
 MIT License
 
@@ -109,7 +107,6 @@ SOFTWARE.
 
 #ifndef DETAIL_META_HPP
 #define DETAIL_META_HPP
-
 
 /*
 MIT License
@@ -210,7 +207,6 @@ SOFTWARE.
 #if defined(__has_include) && !defined(MGUTILITY_HAS_HAS_INCLUDE)
 #define MGUTILITY_HAS_HAS_INCLUDE
 #endif
-
 
 #endif // MGUTILITY_COMMON_DEFINITIONS_HPP
 /*
@@ -571,7 +567,6 @@ SOFTWARE.
 #ifndef MGUTILITY_FIXED_STRING_HPP
 #define MGUTILITY_FIXED_STRING_HPP
 
-
 /*
 MIT License
 
@@ -604,7 +599,6 @@ SOFTWARE.
 #include <iosfwd>
 #include <string>
 #include <utility>
-
 
 #if MGUTILITY_CPLUSPLUS > 201402L
 #include <string_view>

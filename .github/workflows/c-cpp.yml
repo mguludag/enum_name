@@ -113,7 +113,7 @@ jobs:
           docker build -f .devcontainer/Dockerfile -t enum_name_devcontainer:ci .devcontainer
       - name: Run single-include check inside project devcontainer
         run: |
-          docker run --rm -v "${{ github.workspace }}":/workspace -w /workspace enum_name_devcontainer:ci bash -lc "
+          docker run --rm -v "${{ github.workspace }}":/workspace -w /workspace enum_name_devcontainer:ci bash -lc '
             set -euo pipefail
             if command -v clang-format >/dev/null 2>&1; then
               clang-format --version
@@ -129,13 +129,13 @@ jobs:
             if ! diff -q single_include/mgutility_enum_name.hpp /tmp/expected_enum_name.hpp > /dev/null 2>&1; then
               echo "ERROR: single_include/mgutility_enum_name.hpp is out of date!"
               echo "Run the following command locally to regenerate:"
-              echo "  python3 scripts/amalgamate.py \"
-              echo "    --main include/mgutility/reflection/enum_name.hpp \"
-              echo "    --source-dir include \"
-              echo "    --source-dir mgutility/include \"
+              echo "  python3 scripts/amalgamate.py \\\"
+              echo "    --main include/mgutility/reflection/enum_name.hpp \\\"
+              echo "    --source-dir include \\\"
+              echo "    --source-dir mgutility/include \\\"
               echo "    --output single_include/mgutility_enum_name.hpp"
               diff -u single_include/mgutility_enum_name.hpp /tmp/expected_enum_name.hpp || true
               exit 1
             fi
             echo "single_include/mgutility_enum_name.hpp is up-to-date."
-          "
+          '

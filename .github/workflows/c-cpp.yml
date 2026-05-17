@@ -104,12 +104,11 @@ jobs:
 
   regenerate-single-include:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
-          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
@@ -120,12 +119,15 @@ jobs:
             --source-dir include \
             --source-dir mgutility/include \
             --output single_include/mgutility_enum_name.hpp
-      - name: Commit and push if changed
-        run: |
-          git diff --quiet single_include/mgutility_enum_name.hpp || {
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add single_include/mgutility_enum_name.hpp
-            git commit -m "Auto-regenerate single-include header"
-            git push
-          }
+      - name: Create Pull Request if changed
+        uses: peter-evans/create-pull-request@v7
+        with:
+          add-paths: single_include/mgutility_enum_name.hpp
+          commit-message: "Auto-regenerate single-include header"
+          branch: auto-update/single-include
+          title: "chore: auto-regenerate single-include header"
+          body: |
+            Automated regeneration of `single_include/mgutility_enum_name.hpp` 
+            from source headers after recent changes to `${{ github.ref }}`.
+          delete-branch: true
+          token: ${{ secrets.GITHUB_TOKEN }}

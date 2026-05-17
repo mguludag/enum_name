@@ -13,6 +13,7 @@ Usage:
 import argparse
 import os
 import re
+import subprocess
 import sys
 from typing import List, Optional, Set, Tuple
 
@@ -239,6 +240,20 @@ def main():
     os.makedirs(os.path.dirname(args.output), exist_ok=True)
     with open(args.output, 'w', encoding='utf-8') as f:
         f.writelines(output_lines)
+
+    # Run clang-format on the output file (if available)
+    try:
+        subprocess.run(
+            ['clang-format', '-i', '-style=file', args.output],
+            check=True, capture_output=True, timeout=30
+        )
+        print(f"Formatted: {args.output}")
+    except FileNotFoundError:
+        print("Warning: clang-format not found, skipping formatting",
+              file=sys.stderr)
+    except subprocess.CalledProcessError as e:
+        print(f"Warning: clang-format failed: {e.stderr.decode().strip()}",
+              file=sys.stderr)
 
     print(f"Amalgamated header written to: {args.output}")
 

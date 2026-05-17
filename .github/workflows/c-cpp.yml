@@ -108,25 +108,34 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-      - name: Regenerate and verify single-include header is up-to-date
+      - name: Build project devcontainer image
         run: |
-          python3 scripts/amalgamate.py \
-            --main include/mgutility/reflection/enum_name.hpp \
-            --source-dir include \
-            --source-dir mgutility/include \
-            --output /tmp/expected_enum_name.hpp
-          if ! diff -q single_include/mgutility_enum_name.hpp /tmp/expected_enum_name.hpp > /dev/null 2>&1; then
-            echo "ERROR: single_include/mgutility_enum_name.hpp is out of date!"
-            echo "Run the following command locally to regenerate:"
-            echo "  python3 scripts/amalgamate.py \\"
-            echo "    --main include/mgutility/reflection/enum_name.hpp \\"
-            echo "    --source-dir include \\"
-            echo "    --source-dir mgutility/include \\"
-            echo "    --output single_include/mgutility_enum_name.hpp"
-            diff single_include/mgutility_enum_name.hpp /tmp/expected_enum_name.hpp || true
-            exit 1
-          fi
-          echo "single_include/mgutility_enum_name.hpp is up-to-date."
+          docker build -f .devcontainer/Dockerfile -t enum_name_devcontainer:ci .
+      - name: Run single-include check inside project devcontainer
+        run: |
+          docker run --rm -v "${{ github.workspace }}":/workspace -w /workspace enum_name_devcontainer:ci bash -lc "
+            set -euo pipefail
+            if command -v clang-format >/dev/null 2>&1; then
+              clang-format --version
+            else
+              apt-get update && apt-get install -y clang-format
+              clang-format --version
+            fi
+            python3 scripts/amalgamate.py \
+              --main include/mgutility/reflection/enum_name.hpp \
+              --source-dir include \
+              --source-dir mgutility/include \
+              --output /tmp/expected_enum_name.hpp
+            if ! diff -q single_include/mgutility_enum_name.hpp /tmp/expected_enum_name.hpp > /dev/null 2>&1; then
+              echo "ERROR: single_include/mgutility_enum_name.hpp is out of date!"
+              echo "Run the following command locally to regenerate:"
+              echo "  python3 scripts/amalgamate.py \"
+              echo "    --main include/mgutility/reflection/enum_name.hpp \"
+              echo "    --source-dir include \"
+              echo "    --source-dir mgutility/include \"
+              echo "    --output single_include/mgutility_enum_name.hpp"
+              diff -u single_include/mgutility_enum_name.hpp /tmp/expected_enum_name.hpp || true
+              exit 1
+            fi
+            echo "single_include/mgutility_enum_name.hpp is up-to-date."
+          "

@@ -1,6 +1,116 @@
 /*
 MIT License
 
+Copyright (c) 2023 mguludag
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#ifndef MGUTILITY_ENUM_NAME_HPP
+#define MGUTILITY_ENUM_NAME_HPP
+
+/*
+MIT License
+
+Copyright (c) 2024 mguludag
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#ifndef MGUTILITY_REFLECTION_DETAIL_ENUM_NAME_IMPL_HPP
+#define MGUTILITY_REFLECTION_DETAIL_ENUM_NAME_IMPL_HPP
+
+// NOLINTNEXTLINE [unused-includes]
+
+/*
+MIT License
+
+Copyright (c) 2024 mguludag
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#ifndef DETAIL_ENUM_FOR_EACH_HPP
+#define DETAIL_ENUM_FOR_EACH_HPP
+
+/*
+MIT License
+
+Copyright (c) 2024 mguludag
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#ifndef DETAIL_META_HPP
+#define DETAIL_META_HPP
+
+/*
+MIT License
+
 Copyright (c) 2024 mguludag
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -99,10 +209,105 @@ SOFTWARE.
 #endif
 
 #endif // MGUTILITY_COMMON_DEFINITIONS_HPP
+/*
+MIT License
 
-#ifndef DETAIL_META_HPP
-#define DETAIL_META_HPP
+Copyright (c) 2024 mguludag
 
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#ifndef MGUTILITY_DETAIL_UTILITY_HPP
+#define MGUTILITY_DETAIL_UTILITY_HPP
+
+#include <initializer_list>
+#include <type_traits>
+#include <utility>
+
+namespace mgutility {
+namespace detail {
+
+/**
+ * @brief Represents a compile-time sequence of indices.
+ *
+ * @tparam Ints The sequence of indices.
+ */
+template <std::size_t... Ints> struct index_sequence {};
+
+/**
+ * @brief Concatenates two index sequences.
+ *
+ * @tparam Seq1 The first index sequence.
+ * @tparam Seq2 The second index sequence.
+ */
+template <typename Seq1, typename Seq2> struct index_sequence_concat;
+
+template <std::size_t... I1, std::size_t... I2>
+struct index_sequence_concat<index_sequence<I1...>, index_sequence<I2...>> {
+  using type = index_sequence<I1..., (sizeof...(I1) + I2)...>;
+};
+
+/**
+ * @brief Implementation helper for creating index sequences.
+ *
+ * @tparam N The size of the index sequence to create.
+ */
+template <std::size_t N> struct make_index_sequence_impl;
+
+template <std::size_t N> struct make_index_sequence_impl {
+private:
+  static constexpr std::size_t half = N / 2;
+
+  using first = typename make_index_sequence_impl<half>::type;
+  using second = typename make_index_sequence_impl<N - half>::type;
+
+public:
+  using type = typename index_sequence_concat<first, second>::type;
+};
+
+// base cases
+/**
+ * @brief Base case for index sequence of size 0.
+ */
+template <> struct make_index_sequence_impl<0> {
+  using type = index_sequence<>;
+};
+
+/**
+ * @brief Base case for index sequence of size 1.
+ */
+template <> struct make_index_sequence_impl<1> {
+  using type = index_sequence<0>;
+};
+
+/**
+ * @brief Alias for creating an index sequence of size N.
+ *
+ * @tparam N The size of the index sequence.
+ */
+template <std::size_t N>
+using make_index_sequence = typename make_index_sequence_impl<N>::type;
+} // namespace detail
+
+} // namespace mgutility
+
+#endif // DETAIL_META_HPP
 #include <initializer_list>
 #include <type_traits>
 #include <utility>
@@ -137,7 +342,28 @@ namespace detail {
  */
 #ifndef MGUTILITY_ENUM_NAME_BUFFER_SIZE
 // NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
-#define MGUTILITY_ENUM_NAME_BUFFER_SIZE 128U
+#define MGUTILITY_ENUM_NAME_BUFFER_SIZE 32U
+#endif
+
+/**
+ * @brief Defines the MGUTILITY_GLOBAL_ENUM_BLOB_SIZE macro.
+ *
+ * This macro defines the size of the global fixed-size buffer shared by
+ * all enum types in enum_name_parse_result. All enum names for all enums
+ * with the same underlying type are stored in this shared buffer, reducing
+ * template bloat compared to per-type fixed_string instantiations.
+ */
+#ifndef MGUTILITY_GLOBAL_ENUM_BLOB_SIZE
+// NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
+#define MGUTILITY_GLOBAL_ENUM_BLOB_SIZE 8192
+#endif
+
+#ifndef MGUTILITY_INLINE
+#if MGUTILITY_CPLUSPLUS > 201402L
+#define MGUTILITY_INLINE inline
+#else
+#define MGUTILITY_INLINE
+#endif
 #endif
 
 /**
@@ -214,67 +440,6 @@ using underlying_type_t = typename std::underlying_type<T>::type;
 template <typename T>
 // NOLINTNEXTLINE [modernize-type-traits]
 using remove_const_t = typename std::remove_const<T>::type;
-
-/**
- * @brief Represents a compile-time sequence of indices.
- *
- * @tparam Ints The sequence of indices.
- */
-template <std::size_t... Ints> struct index_sequence {};
-
-/**
- * @brief Concatenates two index sequences.
- *
- * @tparam Seq1 The first index sequence.
- * @tparam Seq2 The second index sequence.
- */
-template <typename Seq1, typename Seq2> struct index_sequence_concat;
-
-template <std::size_t... I1, std::size_t... I2>
-struct index_sequence_concat<index_sequence<I1...>, index_sequence<I2...>> {
-  using type = index_sequence<I1..., (sizeof...(I1) + I2)...>;
-};
-
-/**
- * @brief Implementation helper for creating index sequences.
- *
- * @tparam N The size of the index sequence to create.
- */
-template <std::size_t N> struct make_index_sequence_impl;
-
-template <std::size_t N> struct make_index_sequence_impl {
-private:
-  static constexpr std::size_t half = N / 2;
-
-  using first = typename make_index_sequence_impl<half>::type;
-  using second = typename make_index_sequence_impl<N - half>::type;
-
-public:
-  using type = typename index_sequence_concat<first, second>::type;
-};
-
-// base cases
-/**
- * @brief Base case for index sequence of size 0.
- */
-template <> struct make_index_sequence_impl<0> {
-  using type = index_sequence<>;
-};
-
-/**
- * @brief Base case for index sequence of size 1.
- */
-template <> struct make_index_sequence_impl<1> {
-  using type = index_sequence<0>;
-};
-
-/**
- * @brief Alias for creating an index sequence of size N.
- *
- * @tparam N The size of the index sequence.
- */
-template <std::size_t N>
-using make_index_sequence = typename make_index_sequence_impl<N>::type;
 
 /**
  * @brief Represents a sequence of enumeration values.
@@ -355,11 +520,11 @@ using flat_map = pair<T, const char *>[];
  */
 template <typename T> struct custom_enum {
   // #if MGUTILITY_CPLUSPLUS > 201402L
-  static constexpr flat_map<T> map = {};
+  static MGUTILITY_INLINE constexpr flat_map<T> map = {};
   // #else
-  //   static constexpr flat_map<T> map() noexcept {
-  //     return {}; // default: empty map
-  //   }
+  //     static constexpr flat_map<T> map() noexcept {
+  //         return {}; // default: empty map
+  //     }
   // #endif
 };
 
@@ -375,6 +540,56 @@ template <typename T> struct enum_name_buffer {
 } // namespace mgutility
 
 #endif // DETAIL_META_HPP
+/*
+MIT License
+
+Copyright (c) 2025 mguludag
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#ifndef MGUTILITY_FIXED_STRING_HPP
+#define MGUTILITY_FIXED_STRING_HPP
+
+/*
+MIT License
+
+Copyright (c) 2024 mguludag
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 
 #ifndef MGUTILITY_STRING_VIEW_HPP
 #define MGUTILITY_STRING_VIEW_HPP
@@ -559,6 +774,20 @@ public:
   constexpr const Char *end() const noexcept { return (data_ + size_); }
 
   /**
+   * @brief Returns a reference to the first character.
+   *
+   * @return A reference to the first character.
+   */
+  constexpr const Char &front() const noexcept { return data_[0]; }
+
+  /**
+   * @brief Returns a reference to the last character.
+   *
+   * @return A reference to the last character.
+   */
+  constexpr const Char &back() const noexcept { return data_[size_ - 1]; }
+
+  /**
    * @brief Checks if the string is empty.
    *
    * @return True if the string is empty, otherwise false.
@@ -587,9 +816,9 @@ public:
    * @return A basic_string_view representing the substring.
    */
   constexpr basic_string_view<Char> substr(size_t begin,
-                                           size_t len = 0U) const noexcept {
+                                           size_t len = npos) const noexcept {
     return basic_string_view<Char>(data_ + begin,
-                                   len == 0U ? size_ - begin : len);
+                                   len == npos ? size_ - begin : len);
   }
 
   /**
@@ -601,12 +830,21 @@ public:
    */
   // NOLINTNEXTLINE [readability-identifier-length]
   constexpr size_t rfind(Char c, size_t pos = npos) const noexcept {
+#if MGUTILITY_CPLUSPLUS < 201402L
     // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
     return (pos == npos ? pos = size_ : pos = pos),
            c == data_[pos] ? pos
            // NOLINTNEXTLINE [readability-avoid-nested-conditional-operator]
            : pos == 0U ? npos
                        : rfind(c, --pos);
+#else
+    for (size_t i = (pos == npos ? size_ : pos) - 1; i < size_; --i) {
+      if (data_[i] == c) {
+        return i;
+      }
+    }
+    return npos;
+#endif
   }
 
   /**
@@ -618,8 +856,17 @@ public:
    */
   // NOLINTNEXTLINE [readability-identifier-length]
   constexpr size_t find(Char c, size_t pos = 0) const noexcept {
+#if MGUTILITY_CPLUSPLUS < 201402L
     // NOLINTNEXTLINE [readability-avoid-nested-conditional-operator]
     return c == data_[pos] ? pos : pos < size_ ? find(c, ++pos) : npos;
+#else
+    for (size_t i = pos; i < size_; ++i) {
+      if (data_[i] == c) {
+        return i;
+      }
+    }
+    return npos;
+#endif
   }
 
   /**
@@ -728,12 +975,11 @@ using string_view = std::string_view;
 
 #endif // STRING_STRING_VIEW_HPP
 
-#ifndef MGUTILITY_FIXED_STRING_HPP
-#define MGUTILITY_FIXED_STRING_HPP
-
 namespace mgutility {
 
 template <size_t N = 0> class fixed_string {
+  template <size_t> friend class fixed_string;
+
 public:
   template <size_t M>
   // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
@@ -743,14 +989,36 @@ public:
 
   MGUTILITY_CNSTXPR fixed_string() = default;
 
+  // --- safe pack expansion (no OOB) ---
+  template <std::size_t M, std::size_t... Is>
+  constexpr fixed_string(const char (&str)[M], detail::index_sequence<Is...>)
+      : data_{(Is < M ? str[Is] : '\0')...}, cursor_(M ? M - 1 : 0) {}
+
+  // single literal constructor (handles all M)
+  template <std::size_t M>
+  constexpr fixed_string(const char (&str)[M])
+      : fixed_string(str, typename detail::make_index_sequence<N>{}) {}
+
+  MGUTILITY_CNSTXPR fixed_string(const char *str, std::size_t len)
+      : data_{}, cursor_(len < N ? len
+                         : N     ? N - 1
+                                 : 0) {
+    for (std::size_t i = 0; i < N; ++i) {
+      data_[i] = (i < len) ? str[i] : '\0';
+    }
+  }
+
+  MGUTILITY_CNSTXPR fixed_string(mgutility::string_view str)
+      : fixed_string(str.data(), str.size()) {}
+
   // Constructor to initialize from a string literal
   // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
   MGUTILITY_CNSTXPR explicit fixed_string(const char (&str)[N]) {
     for (size_t i = 0; i < N - 1; ++i) {
-      data[i] = str[i];
+      data_[i] = str[i];
     }
-    cursor = N - 1;
-    data[cursor] = '\0';
+    cursor_ = N - 1;
+    data_[cursor_] = '\0';
   }
 
   // Concatenation operator
@@ -759,17 +1027,17 @@ public:
       -> fixed_string<N + M - 1> {
     fixed_string<N + M - 1> result{};
     size_t idx = 0;
-    for (; idx < N - 1; ++idx) {
+    for (; idx < cursor_; ++idx) {
       // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
-      result.data[idx] = data[idx];
+      result.data_[idx] = data_[idx];
     }
-    for (size_t j = 0; j < M; ++j) {
+    for (size_t j = 0; j < other.size(); ++j) {
       // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
-      result.data[idx + j] = other.data[j];
+      result.data_[idx + j] = other.data_[j];
     }
-    result.cursor = N + M - 2;
+    result.cursor_ = cursor_ + other.size();
     // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
-    result.data[result.cursor] = '\0';
+    result.data_[result.cursor_] = '\0';
     return result;
   }
 
@@ -788,53 +1056,56 @@ public:
                   "Capacity needs to be greater than string to be appended!");
     for (size_t i = 0; i < M - 1; ++i) {
       // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
-      data[cursor++] = str[i];
+      data_[cursor_++] = str[i];
     }
     // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
-    data[cursor] = '\0';
+    data_[cursor_] = '\0';
     return *this;
   }
 
   MGUTILITY_CNSTXPR auto append(string_view str) -> fixed_string<N> & {
-    for (const char chr : str) {
+    auto len = str.size() > N - cursor_ ? N - cursor_ : str.size();
+    for (std::size_t i = 0; i < len; ++i) {
       // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
-      data[cursor++] = chr;
+      data_[cursor_++] = str[i];
     }
     // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
-    data[cursor] = '\0';
+    data_[cursor_] = '\0';
     return *this;
   }
 
   MGUTILITY_CNSTXPR auto pop_back() -> void {
-    if (cursor > 0) {
+    if (cursor_ > 0) {
       // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
-      data[--cursor] = '\0';
+      data_[--cursor_] = '\0';
     }
   }
 
-  MGUTILITY_CNSTXPR auto size() const -> size_t { return cursor; }
+  MGUTILITY_CNSTXPR auto size() const -> size_t { return cursor_; }
 
   // NOLINTNEXTLINE [readability-identifier-length]
   constexpr size_t find(char c, size_t pos = 0) const noexcept {
     // NOLINTNEXTLINE [readability-avoid-nested-conditional-operator]
-    return c == data[pos] ? pos : (pos < cursor ? find(c, ++pos) : npos);
+    return c == data_[pos] ? pos : (pos < cursor_ ? find(c, ++pos) : npos);
   }
 
   // Conversion to std::string_view for easy printing
   // NOLINTNEXTLINE[google-explicit-constructor]
   MGUTILITY_CNSTXPR operator string_view() const {
-    return string_view(data, cursor);
+    return string_view(data_, cursor_);
   }
 
   MGUTILITY_CNSTXPR auto view() const -> string_view {
-    return string_view(data, cursor);
+    return string_view(data_, cursor_);
   }
 
-  constexpr bool empty() const noexcept { return cursor == 0; }
+  constexpr const char *data() const noexcept { return data_; }
+
+  constexpr bool empty() const noexcept { return cursor_ == 0; }
 
   constexpr const char &operator[](size_t index) const noexcept {
     // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
-    return data[index];
+    return data_[index];
   }
 
   MGUTILITY_CNSTXPR inline bool operator==(const char *rhs) const {
@@ -844,9 +1115,9 @@ public:
   // NOLINTNEXTLINE [readability-identifier-length]
   friend std::ostream &operator<<(std::ostream &os,
                                   const fixed_string<N> &str) {
-    for (size_t i = 0; i < str.cursor; ++i) {
+    for (size_t i = 0; i < str.cursor_; ++i) {
       // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
-      os << str.data[i];
+      os << str.data_[i];
     }
     return os;
   }
@@ -855,8 +1126,8 @@ public:
 
 private:
   // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
-  char data[N]{'\0'};
-  size_t cursor{};
+  char data_[N]{'\0'};
+  size_t cursor_{};
 };
 
 } // namespace mgutility
@@ -896,8 +1167,190 @@ struct fmt::formatter<mgutility::fixed_string<N>> : formatter<string_view> {
 
 #endif // MGUTILITY_FIXED_STRING_HPP
 
+// NOLINTNEXTLINE [unused-includes]
+#include <cstdint>
+#include <utility>
+
+namespace mgutility {
+namespace detail {
+
+/**
+ * @brief Alias template for a string or string view type based on the presence
+ * of a bitwise OR operator.
+ *
+ * If the type T supports the bitwise OR operator, the alias is a std::string.
+ * Otherwise, it is a mgutility::string_view.
+ *
+ * @tparam T The type to check.
+ */
+template <typename T>
+// NOLINTNEXTLINE [modernize-type-traits]
+using string_or_view_t = typename std::conditional<
+    has_bit_or<T>::value, mgutility::fixed_string<enum_name_buffer<T>::size>,
+    mgutility::string_view>::type;
+
+/**
+ * @brief A pair consisting of an enum value and its corresponding string or
+ * string view.
+ *
+ * @tparam Enum The enum type.
+ */
+template <typename Enum>
+using enum_pair = std::pair<Enum, detail::string_or_view_t<Enum>>;
+} // namespace detail
+
+/**
+ * @brief A class template for iterating over enum values.
+ *
+ * @tparam Enum The enum type.
+ */
+template <typename Enum> class enum_for_each {
+  using value_type = const detail::enum_pair<Enum>;
+  using size_type = std::size_t;
+
+  /**
+   * @brief An iterator for enum values.
+   */
+  struct enum_iter {
+    using const_iter_type = int;
+    using iter_type = detail::remove_const_t<const_iter_type>;
+    using iterator_category = std::forward_iterator_tag;
+    using value_type = const detail::enum_pair<Enum>;
+    using difference_type = std::ptrdiff_t;
+    using pointer = value_type *;
+    using reference = value_type &;
+
+    /**
+     * @brief Default constructor initializing the iterator to the default
+     * position.
+     */
+    enum_iter() : m_pos{} {}
+
+    /**
+     * @brief Constructor initializing the iterator to a specific position.
+     *
+     * @param value The initial position of the iterator.
+     */
+    explicit enum_iter(iter_type value) : m_pos{value} {}
+
+    /**
+     * @brief Pre-increment operator.
+     *
+     * @return A reference to the incremented iterator.
+     */
+    auto operator++() -> enum_iter & {
+      ++m_pos;
+      return *this;
+    }
+
+    /**
+     * @brief Post-increment operator.
+     *
+     * @return A copy of the iterator before incrementing.
+     */
+    auto operator++(int) -> enum_iter {
+      m_pos++;
+      return *this;
+    }
+
+    /**
+     * @brief Inequality comparison operator.
+     *
+     * @param other The other iterator to compare with.
+     * @return True if the iterators are not equal, otherwise false.
+     */
+    auto operator!=(const enum_iter &other) const -> bool {
+      return m_pos != other.m_pos;
+    }
+
+    /**
+     * @brief Equality comparison operator.
+     *
+     * @param other The other iterator to compare with.
+     * @return True if the iterators are equal, otherwise false.
+     */
+    auto operator==(const enum_iter &other) const -> bool {
+      return m_pos == other.m_pos;
+    }
+
+    /**
+     * @brief Dereference operator.
+     *
+     * @return The current enum pair.
+     */
+    auto operator*() const -> value_type;
+
+  private:
+    iter_type m_pos; /**< The current position of the iterator. */
+  };
+
+public:
+  /**
+   * @brief Default constructor.
+   */
+  enum_for_each() = default;
+
+  /**
+   * @brief Returns an iterator to the beginning of the enum range.
+   *
+   * @return A reference to the beginning iterator.
+   */
+  auto begin() -> enum_iter & { return m_begin; }
+
+  /**
+   * @brief Returns an iterator to the end of the enum range.
+   *
+   * @return A reference to the end iterator.
+   */
+  auto end() -> enum_iter & { return m_end; }
+
+  /**
+   * @brief Returns the size of the enum range.
+   *
+   * @return The size of the enum range.
+   */
+  auto size() -> std::size_t {
+    return static_cast<int>(enum_range<Enum>::max) -
+           static_cast<int>(enum_range<Enum>::min) + 1;
+  }
+
+private:
+  enum_iter m_begin{
+      static_cast<int>(enum_range<Enum>::min)}; /**< The beginning iterator. */
+  enum_iter m_end{static_cast<int>(enum_range<Enum>::max) +
+                  1}; /**< The end iterator. */
+};
+} // namespace mgutility
+
+#endif // DETAIL_ENUM_FOR_EACH_HPP
+/*
+MIT License
+
+Copyright (c) 2024 mguludag
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 #ifndef DETAIL_OPTIONAL_HPP
 #define DETAIL_OPTIONAL_HPP
+
+// NOLINTNEXTLINE [unused-includes]
 
 // NOLINTNEXTLINE [unused-includes]
 #include <exception>
@@ -1206,172 +1659,10 @@ inline constexpr auto nullopt{std::nullopt};
 } // namespace mgutility
 
 #endif // DETAIL_OPTIONAL_HPP
-
-#ifndef DETAIL_ENUM_FOR_EACH_HPP
-#define DETAIL_ENUM_FOR_EACH_HPP
-
-// NOLINTNEXTLINE [unused-includes]
-#include <cstdint>
-#include <utility>
-
-namespace mgutility {
-namespace detail {
-/**
- * @brief Alias template for a string or string view type based on the presence
- * of a bitwise OR operator.
- *
- * If the type T supports the bitwise OR operator, the alias is a std::string.
- * Otherwise, it is a mgutility::string_view.
- *
- * @tparam T The type to check.
- */
-template <typename T>
-// NOLINTNEXTLINE [modernize-type-traits]
-using string_or_view_t = typename std::conditional<
-    has_bit_or<T>::value, mgutility::fixed_string<enum_name_buffer<T>::size>,
-    mgutility::string_view>::type;
-
-/**
- * @brief A pair consisting of an enum value and its corresponding string or
- * string view.
- *
- * @tparam Enum The enum type.
- */
-template <typename Enum>
-using enum_pair = std::pair<Enum, detail::string_or_view_t<Enum>>;
-} // namespace detail
-
-/**
- * @brief A class template for iterating over enum values.
- *
- * @tparam Enum The enum type.
- */
-template <typename Enum> class enum_for_each {
-  using value_type = const detail::enum_pair<Enum>;
-  using size_type = std::size_t;
-
-  /**
-   * @brief An iterator for enum values.
-   */
-  struct enum_iter {
-    using const_iter_type = int;
-    using iter_type = detail::remove_const_t<const_iter_type>;
-    using iterator_category = std::forward_iterator_tag;
-    using value_type = const detail::enum_pair<Enum>;
-    using difference_type = std::ptrdiff_t;
-    using pointer = value_type *;
-    using reference = value_type &;
-
-    /**
-     * @brief Default constructor initializing the iterator to the default
-     * position.
-     */
-    enum_iter() : m_pos{} {}
-
-    /**
-     * @brief Constructor initializing the iterator to a specific position.
-     *
-     * @param value The initial position of the iterator.
-     */
-    explicit enum_iter(iter_type value) : m_pos{value} {}
-
-    /**
-     * @brief Pre-increment operator.
-     *
-     * @return A reference to the incremented iterator.
-     */
-    auto operator++() -> enum_iter & {
-      ++m_pos;
-      return *this;
-    }
-
-    /**
-     * @brief Post-increment operator.
-     *
-     * @return A copy of the iterator before incrementing.
-     */
-    auto operator++(int) -> enum_iter {
-      m_pos++;
-      return *this;
-    }
-
-    /**
-     * @brief Inequality comparison operator.
-     *
-     * @param other The other iterator to compare with.
-     * @return True if the iterators are not equal, otherwise false.
-     */
-    auto operator!=(const enum_iter &other) const -> bool {
-      return m_pos != other.m_pos;
-    }
-
-    /**
-     * @brief Equality comparison operator.
-     *
-     * @param other The other iterator to compare with.
-     * @return True if the iterators are equal, otherwise false.
-     */
-    auto operator==(const enum_iter &other) const -> bool {
-      return m_pos == other.m_pos;
-    }
-
-    /**
-     * @brief Dereference operator.
-     *
-     * @return The current enum pair.
-     */
-    auto operator*() const -> value_type;
-
-  private:
-    iter_type m_pos; /**< The current position of the iterator. */
-  };
-
-public:
-  /**
-   * @brief Default constructor.
-   */
-  enum_for_each() = default;
-
-  /**
-   * @brief Returns an iterator to the beginning of the enum range.
-   *
-   * @return A reference to the beginning iterator.
-   */
-  auto begin() -> enum_iter & { return m_begin; }
-
-  /**
-   * @brief Returns an iterator to the end of the enum range.
-   *
-   * @return A reference to the end iterator.
-   */
-  auto end() -> enum_iter & { return m_end; }
-
-  /**
-   * @brief Returns the size of the enum range.
-   *
-   * @return The size of the enum range.
-   */
-  auto size() -> std::size_t {
-    return static_cast<int>(enum_range<Enum>::max) -
-           static_cast<int>(enum_range<Enum>::min) + 1;
-  }
-
-private:
-  enum_iter m_begin{
-      static_cast<int>(enum_range<Enum>::min)}; /**< The beginning iterator. */
-  enum_iter m_end{static_cast<int>(enum_range<Enum>::max) +
-                  1}; /**< The end iterator. */
-};
-} // namespace mgutility
-
-#endif // DETAIL_ENUM_FOR_EACH_HPP
-
-#ifndef MGUTILITY_REFLECTION_DETAIL_ENUM_NAME_IMPL_HPP
-#define MGUTILITY_REFLECTION_DETAIL_ENUM_NAME_IMPL_HPP
-
-// NOLINTNEXTLINE [unused-includes]
 #include <algorithm>
 #include <array>
+#include <cstddef>
+#include <cstring>
 
 /**
  * @brief Checks for MSVC compiler version.
@@ -1422,6 +1713,29 @@ namespace detail {
 #endif
 
 /**
+ * @brief Parse result for enum names.
+ *
+ * Templated on the underlying type U instead of the enum type itself,
+ * so all enums with the same underlying type (e.g., all 'int'-based enums)
+ * share the same struct type. The strings buffer is a fixed size
+ * (MGUTILITY_GLOBAL_ENUM_BLOB_SIZE) rather than a per-enum-type
+ * fixed_string, reducing template bloat.
+ *
+ * @tparam U The underlying type of the enum (e.g., int, unsigned int).
+ * @tparam Min The minimum enum value.
+ * @tparam Max The maximum enum value.
+ */
+template <typename U, int Min, int Max> struct enum_name_parse_result {
+  static constexpr auto size = std::size_t{Max - Min};
+  fixed_string<MGUTILITY_GLOBAL_ENUM_BLOB_SIZE> strings;
+  std::array<pair<std::size_t, std::size_t>, size> ranges;
+};
+
+template <typename T, int Min, int Max>
+using enum_name_array =
+    std::array<mgutility::string_view, static_cast<std::size_t>(Max - Min)>;
+
+/**
  * @brief Provides functionality to extract and parse enum names at
  * compile-time.
  */
@@ -1434,16 +1748,20 @@ private:
    * @tparam e The enum value.
    * @return The raw string_view from __PRETTY_FUNCTION__.
    */
-  template <typename Enum, Enum e>
-  MGUTILITY_CNSTXPR static mgutility::string_view raw_name() noexcept {
+  template <typename Enum, Enum... e>
+  MGUTILITY_CNSTXPR static auto
+  raw_name(detail::enum_sequence<Enum, e...> /*unused*/) noexcept
+      -> mgutility::string_view {
 #if defined(__GNUC__) && !defined(__clang__) && MGUTILITY_CPLUSPLUS >= 201402L
 #define PREFIX                                                                 \
   MGUTILITY_STRLEN("static constexpr mgutility::string_view "                  \
-                   "mgutility::detail::enum_type::raw_name()")
+                   "mgutility::detail::enum_type::raw_name(mgutility::detail:" \
+                   ":enum_sequence<Enum, e ...>) [with Enum = ")
 #elif defined(__clang__) || defined(__GNUC__)
 #define PREFIX                                                                 \
   MGUTILITY_STRLEN("static mgutility::string_view "                            \
-                   "mgutility::detail::enum_type::raw_name()")
+                   "mgutility::detail::enum_type::raw_name(mgutility::detail:" \
+                   ":enum_sequence<Enum, e ...>) [with Enum = ")
 #elif defined(_MSC_VER)
 #if MGUTILITY_CPLUSPLUS > 201402L
 #define PREFIX                                                                 \
@@ -1470,50 +1788,88 @@ private:
    * @param str The raw string from __PRETTY_FUNCTION__.
    * @return The parsed enum name.
    */
-  MGUTILITY_CNSTXPR static mgutility::string_view
-  parse(mgutility::string_view str) noexcept {
+  template <typename Enum, int Min, int Max>
+  MGUTILITY_CNSTXPR static auto parse() noexcept
+      -> enum_name_parse_result<detail::underlying_type_t<Enum>, Min, Max> {
+    using U = detail::underlying_type_t<Enum>;
+    using result_type = enum_name_parse_result<U, Min, Max>;
+
+    MGUTILITY_CNSTXPR auto str =
+        raw_name<Enum>(detail::make_enum_sequence<Enum, Min, Max>{});
+
 #if defined(__clang__) || defined(__GNUC__)
 #if defined(__clang__)
     auto end = str.rfind(']');
 #elif defined(__GNUC__) && !defined(__clang__)
     auto end = str.rfind(';');
 #endif
-    // Typical form:
-    // "Enum = MyEnum::Value]"
 
-    auto pos = str.rfind('=', end);
-    if (pos == mgutility::string_view::npos) {
-      return {};
-    }
-    pos += 2; // skip "::"
-
-    auto result = str.substr(pos, end - pos);
+    auto enum_names = str.substr(0, end);
 
 #elif defined(_MSC_VER)
     // MSVC: different format
-    auto pos = str.rfind(',');
+    auto pos = str.find(',');
     if (pos == mgutility::string_view::npos)
       return {};
 
     ++pos;
 
     auto end = str.rfind('>');
-    auto result = str.substr(pos, end - pos);
+    auto enum_names = str.substr(pos, end - pos);
 
 #else
     return {};
 #endif
 
-    if (result.empty()) {
+    if (enum_names.empty()) {
       return {};
     }
 
-    // invalid cases look like "(Enum)123"
-    if (result[0] == '(') {
-      return {};
+    result_type result{};
+
+    std::size_t idx = 0;
+
+    while (!enum_names.empty() && idx < result.ranges.size()) {
+      auto pos = enum_names.find(',');
+      if (pos != mgutility::string_view::npos) {
+        auto token = enum_names.substr(0, pos);
+
+        // remove whitespace
+        while (!token.empty() && token.front() == ' ') {
+          token = token.substr(1);
+        }
+
+        while (!token.empty() && token.back() == ' ') {
+          token = token.substr(0, token.size() - 1);
+        }
+
+        std::size_t begin = token.find('(');
+        std::size_t end = token.rfind(')');
+        if (begin != mgutility::string_view::npos ||
+            end != mgutility::string_view::npos) {
+          result.ranges[idx++] = {0, 0};
+          enum_names = enum_names.substr(pos + 1);
+          continue;
+        }
+
+        std::size_t start = 0;
+        if (token.find(':') != mgutility::string_view::npos) {
+          start = token.find(':') + 2;
+          token = token.substr(start);
+        }
+
+        // Write into the fixed-size global buffer
+        auto offset = result.strings.size();
+        result.strings.append(token);
+        result.ranges[idx++] = {offset, token.size()};
+
+        enum_names = enum_names.substr(pos + 1);
+        continue;
+      }
+      enum_names = {};
     }
 
-    return result.substr(result.rfind(':') + 1);
+    return result;
   }
 
 public:
@@ -1524,9 +1880,10 @@ public:
    * @tparam e The enum value.
    * @return The name of the enum value.
    */
-  template <typename Enum, Enum e>
-  MGUTILITY_CNSTXPR static mgutility::string_view name() noexcept {
-    return parse(raw_name<Enum, e>());
+  template <typename Enum, int Min, int Max>
+  MGUTILITY_CNSTXPR static auto name() noexcept
+      -> enum_name_parse_result<detail::underlying_type_t<Enum>, Min, Max> {
+    return parse<Enum, Min, Max>();
   }
 };
 
@@ -1536,7 +1893,7 @@ public:
  * @tparam Enum The enum type.
  * @tparam Seq The enum sequence.
  */
-template <typename Enum, typename Seq> struct enum_array_cache;
+template <typename Enum, int Min, int Max> struct enum_array_cache;
 
 /**
  * @brief Specialization of enum_array_cache for enum_sequence.
@@ -1544,75 +1901,49 @@ template <typename Enum, typename Seq> struct enum_array_cache;
  * @tparam Enum The enum type.
  * @tparam Is The enum values.
  */
-template <typename Enum, Enum... Is>
-struct enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>> {
+template <typename Enum, int Min, int Max> struct enum_array_cache {
+  using underlying = detail::underlying_type_t<Enum>;
+  using parse_result_t = enum_name_parse_result<underlying, Min, Max>;
+
+#if MGUTILITY_CPLUSPLUS > 201402L
+
+  static constexpr auto parse_result =
+      enum_type::template name<Enum, Min, Max>();
+
+#else
+  // C++11: lazy runtime array
+  static parse_result_t &value() {
+    static parse_result_t arr = enum_type::template name<Enum, Min, Max>();
+
+    return arr;
+  }
+#endif
+
+  static MGUTILITY_CNSTXPR auto
+  apply_custom(const parse_result_t &result) noexcept
+      -> enum_name_array<Enum, Min, Max> {
+    enum_name_array<Enum, Min, Max> arr{};
+
+    for (std::size_t idx = 0; idx < result.ranges.size(); ++idx) {
+      arr[idx] = result.strings.view().substr(result.ranges[idx].first,
+                                              result.ranges[idx].second);
+    }
+
 #if MGUTILITY_CPLUSPLUS >= 201402L
-  // C++17+: fully constexpr
-  // NOLINTNEXTLINE [readability-redundant-inline-specifier]
-  static inline constexpr std::array<mgutility::string_view, sizeof...(Is) + 1>
-  value() {
-    std::array<mgutility::string_view, sizeof...(Is) + 1> arr{
-        "", enum_type::template name<Enum, Is>()...};
-
     constexpr auto map = mgutility::custom_enum<Enum>::map;
-
     for (const auto &pair : map) {
-      const int raw = static_cast<int>(pair.first);
-      const auto idx =
-          static_cast<size_t>(raw - mgutility::enum_range<Enum>::min + 1);
-
-      if (idx >= 1 && idx < arr.size()) {
-        arr[idx] = pair.second;
+#else
+    for (const auto &pair : mgutility::custom_enum<Enum>::map) {
+#endif
+      if (pair.first >= static_cast<Enum>(Min) &&
+          pair.first < static_cast<Enum>(Max)) {
+        arr[static_cast<std::size_t>(pair.first) - Min] = pair.second;
       }
     }
 
     return arr;
   }
-#else
-  // C++11: lazy runtime array
-  static const std::array<mgutility::string_view, sizeof...(Is) + 1> &value() {
-    static const std::array<mgutility::string_view, sizeof...(Is) + 1> arr =
-        [] {
-          std::array<mgutility::string_view, sizeof...(Is) + 1> tmp{
-              "", enum_type::template name<Enum, Is>()...};
-
-          for (const auto &pair : mgutility::custom_enum<Enum>::map) {
-            auto idx =
-                static_cast<size_t>(static_cast<int>(pair.first) -
-                                    mgutility::enum_range<Enum>::min + 1);
-
-            if (idx >= 1 && idx < tmp.size()) {
-              tmp[idx] = pair.second;
-            }
-          }
-
-          return tmp;
-        }();
-
-    return arr;
-  }
-#endif
 };
-
-/**
- * @brief Gets an array of enum names for the given sequence.
- *
- * @tparam Enum The enum type.
- * @tparam Is The enum values.
- * @param unused The enum sequence (unused parameter).
- * @return An array of string_views containing the enum names.
- */
-template <typename Enum, Enum... Is>
-MGUTILITY_CNSTXPR auto
-get_enum_array(detail::enum_sequence<Enum, Is...> /*unused*/) noexcept
-#if MGUTILITY_CPLUSPLUS >= 201402L
-    -> std::array<mgutility::string_view, sizeof...(Is) + 1> {
-  return enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>>::value();
-#else
-    -> const std::array<mgutility::string_view, sizeof...(Is) + 1> & {
-  return enum_array_cache<Enum, detail::enum_sequence<Enum, Is...>>::value();
-#endif
-}
 
 /**
  * @brief Gets an array of enum names for the enum type within the specified
@@ -1626,12 +1957,13 @@ get_enum_array(detail::enum_sequence<Enum, Is...> /*unused*/) noexcept
 template <typename Enum, int Min = mgutility::enum_range<Enum>::min,
           int Max = mgutility::enum_range<Enum>::max>
 MGUTILITY_CNSTXPR auto get_enum_array() noexcept
-#if MGUTILITY_CPLUSPLUS >= 201402L
-    -> std::array<mgutility::string_view, Max - Min + 2> {
-  return get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
+    -> enum_name_array<Enum, Min, Max> {
+#if MGUTILITY_CPLUSPLUS > 201402L
+  constexpr auto &cache = enum_array_cache<Enum, Min, Max>::parse_result;
+  return enum_array_cache<Enum, Min, Max>::apply_custom(cache);
 #else
-    -> const std::array<mgutility::string_view, Max - Min + 2> & {
-  return get_enum_array<Enum>(detail::make_enum_sequence<Enum, Min, Max>());
+  return enum_array_cache<Enum, Min, Max>::apply_custom(
+      enum_array_cache<Enum, Min, Max>::value());
 #endif
 }
 
@@ -1650,9 +1982,8 @@ MGUTILITY_CNSTXPR inline auto to_enum_impl(mgutility::string_view str) noexcept
   MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
 
   const auto index{detail::find(arr, str)};
-  return index == 0
-             ? mgutility::nullopt
-             : mgutility::optional<Enum>{static_cast<Enum>(index + Min - 1)};
+  return index == 0 ? mgutility::nullopt
+                    : mgutility::optional<Enum>{static_cast<Enum>(index + Min)};
 }
 
 /**
@@ -1714,9 +2045,12 @@ template <typename Enum, int Min, int Max,
 MGUTILITY_CNSTXPR auto enum_name_impl(Enum enumValue) noexcept
     -> mgutility::string_view {
   MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
-  const auto index{(Min < 0 ? -Min : Min) + static_cast<int>(enumValue) + 1};
-  return arr[static_cast<size_t>(
-      (index < Min || index > static_cast<int>(arr.size()) - 1) ? 0 : index)];
+  const auto index{(Min < 0 ? -Min : Min) + static_cast<int>(enumValue)};
+  if (index < Min || index > static_cast<int>(arr.size()) - 1) {
+    return mgutility::string_view{};
+  }
+
+  return arr[static_cast<size_t>(index)];
 }
 
 /**
@@ -1739,23 +2073,22 @@ MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
   MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
 
   // Calculate the index in the array
-  const auto index = (Min < 0 ? -Min : Min) + static_cast<int>(enumValue) + 1;
-  const auto name =
-      arr[(index < Min || index >= static_cast<int>(arr.size())) ? 0 : index];
+  const auto index = (Min < 0 ? -Min : Min) + static_cast<int>(enumValue);
 
-  // Return the name if it's valid
-  if (!name.empty() && !is_digit(name[0])) {
-    return mgutility::fixed_string<enum_name_buffer<Enum>::size>{}.append(name);
+  mgutility::fixed_string<enum_name_buffer<Enum>::size> bitmasked_name;
+
+  if (index >= 0 && index < static_cast<int>(arr.size())) {
+    bitmasked_name.append(arr[static_cast<size_t>(index)]);
   }
 
-  // Construct bitmasked name
-  mgutility::fixed_string<enum_name_buffer<Enum>::size> bitmasked_name;
-  for (auto i = Min; i < Max; ++i) {
-    const auto idx = (Min < 0 ? -Min : Min) + i + 1;
-    if (idx >= 0 && idx < static_cast<int>(arr.size()) && !arr[idx].empty() &&
-        !detail::is_digit(arr[idx][0]) &&
+  if (!bitmasked_name.empty()) {
+    return bitmasked_name;
+  }
+
+  for (auto i = 0; i < Max - Min; ++i) {
+    if (i >= 0 && i < static_cast<int>(arr.size()) && arr[i].size() > 0 &&
         (enumValue & static_cast<Enum>(i)) == static_cast<Enum>(i)) {
-      bitmasked_name.append(arr[idx]).append("|");
+      bitmasked_name.append(arr[i]).append("|");
     }
   }
 
@@ -1770,10 +2103,6 @@ MGUTILITY_CNSTXPR_CLANG_WA auto enum_name_impl(Enum enumValue) noexcept
 } // namespace mgutility
 
 #endif // MGUTILITY_REFLECTION_DETAIL_ENUM_NAME_IMPL_HPP
-
-#ifndef MGUTILITY_ENUM_NAME_HPP
-#define MGUTILITY_ENUM_NAME_HPP
-
 namespace mgutility {
 
 /**
@@ -1901,7 +2230,7 @@ MGUTILITY_CNSTXPR auto enum_cast(int value) noexcept
   if (enum_name(static_cast<Enum>(value)).empty()) {
     return mgutility::nullopt;
   }
-  return static_cast<Enum>(value);
+  return mgutility::optional<Enum>{static_cast<Enum>(value)};
 }
 
 namespace operators {

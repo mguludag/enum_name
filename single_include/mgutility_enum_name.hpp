@@ -615,8 +615,8 @@ namespace detail {
  * @return The length of the C-string.
  */
 // NOLINTNEXTLINE [readability-identifier-length]
-constexpr auto strlen_constexpr(const char *str, size_t sz = 0) noexcept
-    -> size_t {
+constexpr auto strlen_constexpr(const char *str,
+                                size_t sz = 0) noexcept -> size_t {
   // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-pointer-arithmetic]
   return str[sz] == '\0' ? sz : strlen_constexpr(str, ++sz);
 }
@@ -1023,8 +1023,8 @@ public:
 
   // Concatenation operator
   template <size_t M>
-  MGUTILITY_CNSTXPR auto operator+(const fixed_string<M> &other) const
-      -> fixed_string<N + M - 1> {
+  MGUTILITY_CNSTXPR auto
+  operator+(const fixed_string<M> &other) const -> fixed_string<N + M - 1> {
     fixed_string<N + M - 1> result{};
     size_t idx = 0;
     for (; idx < cursor_; ++idx) {
@@ -1044,8 +1044,8 @@ public:
   // Concatenation operator
   template <size_t M>
   // NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]
-  MGUTILITY_CNSTXPR auto operator+(const char (&str)[M]) const
-      -> fixed_string<N + M - 1> {
+  MGUTILITY_CNSTXPR auto
+  operator+(const char (&str)[M]) const -> fixed_string<N + M - 1> {
     return *this + fixed_string<M>{str};
   }
 
@@ -1158,8 +1158,8 @@ struct std::formatter<mgutility::fixed_string<N>>
 
 template <size_t N>
 struct fmt::formatter<mgutility::fixed_string<N>> : formatter<string_view> {
-  auto format(const mgutility::fixed_string<N> &str, format_context &ctx) const
-      -> appender {
+  auto format(const mgutility::fixed_string<N> &str,
+              format_context &ctx) const -> appender {
     return formatter<string_view>::format(str.view().data(), ctx);
   }
 };
@@ -1956,8 +1956,8 @@ template <typename Enum, int Min, int Max> struct enum_array_cache {
  */
 template <typename Enum, int Min = mgutility::enum_range<Enum>::min,
           int Max = mgutility::enum_range<Enum>::max>
-MGUTILITY_CNSTXPR auto get_enum_array() noexcept
-    -> enum_name_array<Enum, Min, Max> {
+MGUTILITY_CNSTXPR auto
+get_enum_array() noexcept -> enum_name_array<Enum, Min, Max> {
 #if MGUTILITY_CPLUSPLUS > 201402L
   constexpr auto &cache = enum_array_cache<Enum, Min, Max>::parse_result;
   return enum_array_cache<Enum, Min, Max>::apply_custom(cache);
@@ -1977,8 +1977,8 @@ MGUTILITY_CNSTXPR auto get_enum_array() noexcept
  * @return An optional enum value.
  */
 template <typename Enum, int Min, int Max>
-MGUTILITY_CNSTXPR inline auto to_enum_impl(mgutility::string_view str) noexcept
-    -> mgutility::optional<Enum> {
+MGUTILITY_CNSTXPR inline auto
+to_enum_impl(mgutility::string_view str) noexcept -> mgutility::optional<Enum> {
   MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
 
   const auto index{detail::find(arr, str)};
@@ -2042,8 +2042,8 @@ MGUTILITY_CNSTXPR auto to_enum_bitmask_impl(mgutility::string_view str) noexcept
  */
 template <typename Enum, int Min, int Max,
           detail::enable_if_t<!detail::has_bit_or<Enum>::value, bool> = true>
-MGUTILITY_CNSTXPR auto enum_name_impl(Enum enumValue) noexcept
-    -> mgutility::string_view {
+MGUTILITY_CNSTXPR auto
+enum_name_impl(Enum enumValue) noexcept -> mgutility::string_view {
   MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
   const auto index{(Min < 0 ? -Min : Min) + static_cast<int>(enumValue)};
   if (index < Min || index > static_cast<int>(arr.size()) - 1) {
@@ -2115,8 +2115,8 @@ namespace mgutility {
 template <typename Enum,
           // NOLINTNEXTLINE [modernize-type-traits]
           detail::enable_if_t<std::is_enum<Enum>::value, bool> = true>
-constexpr auto to_underlying(Enum enumValue) noexcept
-    -> detail::underlying_type_t<Enum> {
+constexpr auto
+to_underlying(Enum enumValue) noexcept -> detail::underlying_type_t<Enum> {
   // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
   return static_cast<detail::underlying_type_t<Enum>>(enumValue);
@@ -2132,8 +2132,8 @@ constexpr auto to_underlying(Enum enumValue) noexcept
  * @return A string view or string representing the name of the enum value.
  */
 template <int Min, int Max, typename Enum>
-MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
-    -> detail::string_or_view_t<Enum> {
+MGUTILITY_CNSTXPR auto
+enum_name(Enum enumValue) noexcept -> detail::string_or_view_t<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
   // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
@@ -2151,8 +2151,8 @@ MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
  */
 template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
           int Max = static_cast<int>(enum_range<Enum>::max)>
-MGUTILITY_CNSTXPR auto enum_name(Enum enumValue) noexcept
-    -> detail::string_or_view_t<Enum> {
+MGUTILITY_CNSTXPR auto
+enum_name(Enum enumValue) noexcept -> detail::string_or_view_t<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
   // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Value is not an Enum type!");
@@ -2183,8 +2183,8 @@ auto enum_for_each<Enum>::enum_iter::operator*() const -> value_type {
 template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
           int Max = static_cast<int>(enum_range<Enum>::max),
           detail::enable_if_t<!detail::has_bit_or<Enum>::value, bool> = true>
-MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
-    -> mgutility::optional<Enum> {
+MGUTILITY_CNSTXPR auto
+to_enum(mgutility::string_view str) noexcept -> mgutility::optional<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
   // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
@@ -2203,8 +2203,8 @@ MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
 template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
           int Max = static_cast<int>(enum_range<Enum>::max),
           detail::enable_if_t<detail::has_bit_or<Enum>::value, bool> = true>
-MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
-    -> mgutility::optional<Enum> {
+MGUTILITY_CNSTXPR auto
+to_enum(mgutility::string_view str) noexcept -> mgutility::optional<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
   // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");
@@ -2222,8 +2222,8 @@ MGUTILITY_CNSTXPR auto to_enum(mgutility::string_view str) noexcept
  */
 template <typename Enum, int Min = static_cast<int>(enum_range<Enum>::min),
           int Max = static_cast<int>(enum_range<Enum>::max)>
-MGUTILITY_CNSTXPR auto enum_cast(int value) noexcept
-    -> mgutility::optional<Enum> {
+MGUTILITY_CNSTXPR auto
+enum_cast(int value) noexcept -> mgutility::optional<Enum> {
   static_assert(Min < Max, "Max must be greater than Min!");
   // NOLINTNEXTLINE [modernize-type-traits]
   static_assert(std::is_enum<Enum>::value, "Type is not an Enum type!");

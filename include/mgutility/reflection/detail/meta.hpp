@@ -64,6 +64,19 @@ namespace detail {
 #define MGUTILITY_ENUM_NAME_BUFFER_SIZE 32U
 #endif
 
+/**
+ * @brief Defines the MGUTILITY_GLOBAL_ENUM_BLOB_SIZE macro.
+ *
+ * This macro defines the size of the global fixed-size buffer shared by
+ * all enum types in enum_name_parse_result. All enum names for all enums
+ * with the same underlying type are stored in this shared buffer, reducing
+ * template bloat compared to per-type fixed_string instantiations.
+ */
+#ifndef MGUTILITY_GLOBAL_ENUM_BLOB_SIZE
+// NOLINTNEXTLINE [cppcoreguidelines-macro-usage]
+#define MGUTILITY_GLOBAL_ENUM_BLOB_SIZE 8192
+#endif
+
 #ifndef MGUTILITY_INLINE
 #if MGUTILITY_CPLUSPLUS > 201402L
 #define MGUTILITY_INLINE inline

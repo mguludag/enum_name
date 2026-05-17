@@ -154,7 +154,7 @@ MGUTILITY_CNSTXPR auto enum_cast(int value) noexcept
   if (enum_name(static_cast<Enum>(value)).empty()) {
     return mgutility::nullopt;
   }
-  return static_cast<Enum>(value);
+  return mgutility::optional<Enum>{static_cast<Enum>(value)};
 }
 
 namespace operators {

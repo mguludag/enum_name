@@ -37,6 +37,7 @@ SOFTWARE.
 #include <algorithm>
 #include <array>
 #include <cstddef>
+#include <cstring>
 
 /**
  * @brief Checks for MSVC compiler version.
@@ -86,9 +87,22 @@ namespace detail {
 #define MGUTILITY_STRLEN(x) sizeof(x) - 1
 #endif
 
-template <typename T, int Min, int Max> struct enum_name_parse_result {
+/**
+ * @brief Parse result for enum names.
+ *
+ * Templated on the underlying type U instead of the enum type itself,
+ * so all enums with the same underlying type (e.g., all 'int'-based enums)
+ * share the same struct type. The strings buffer is a fixed size
+ * (MGUTILITY_GLOBAL_ENUM_BLOB_SIZE) rather than a per-enum-type
+ * fixed_string, reducing template bloat.
+ *
+ * @tparam U The underlying type of the enum (e.g., int, unsigned int).
+ * @tparam Min The minimum enum value.
+ * @tparam Max The maximum enum value.
+ */
+template <typename U, int Min, int Max> struct enum_name_parse_result {
   static constexpr auto size = std::size_t{Max - Min};
-  fixed_string<enum_name_buffer<T>::size * size> blob;
+  fixed_string<MGUTILITY_GLOBAL_ENUM_BLOB_SIZE> strings;
   std::array<pair<std::size_t, std::size_t>, size> ranges;
 };
 
@@ -110,8 +124,9 @@ private:
    * @return The raw string_view from __PRETTY_FUNCTION__.
    */
   template <typename Enum, Enum... e>
-  MGUTILITY_CNSTXPR static mgutility::string_view
-  raw_name(detail::enum_sequence<Enum, e...> /*unused*/) noexcept {
+  MGUTILITY_CNSTXPR static auto
+  raw_name(detail::enum_sequence<Enum, e...> /*unused*/) noexcept
+      -> mgutility::string_view {
 #if defined(__GNUC__) && !defined(__clang__) && MGUTILITY_CPLUSPLUS >= 201402L
 #define PREFIX                                                                 \
   MGUTILITY_STRLEN("static constexpr mgutility::string_view "                  \
@@ -149,8 +164,11 @@ private:
    * @return The parsed enum name.
    */
   template <typename Enum, int Min, int Max>
-  MGUTILITY_CNSTXPR static enum_name_parse_result<Enum, Min, Max>
-  parse() noexcept {
+  MGUTILITY_CNSTXPR static auto parse() noexcept
+      -> enum_name_parse_result<detail::underlying_type_t<Enum>, Min, Max> {
+    using U = detail::underlying_type_t<Enum>;
+    using result_type = enum_name_parse_result<U, Min, Max>;
+
     MGUTILITY_CNSTXPR auto str =
         raw_name<Enum>(detail::make_enum_sequence<Enum, Min, Max>{});
 
@@ -182,7 +200,7 @@ private:
       return {};
     }
 
-    enum_name_parse_result<Enum, Min, Max> result{};
+    result_type result{};
 
     std::size_t idx = 0;
 
@@ -215,9 +233,10 @@ private:
           token = token.substr(start);
         }
 
-        auto size = result.blob.size();
-        result.blob.append(token);
-        result.ranges[idx++] = {size, result.blob.size() - size};
+        // Write into the fixed-size global buffer
+        auto offset = result.strings.size();
+        result.strings.append(token);
+        result.ranges[idx++] = {offset, token.size()};
 
         enum_names = enum_names.substr(pos + 1);
         continue;
@@ -237,8 +256,8 @@ public:
    * @return The name of the enum value.
    */
   template <typename Enum, int Min, int Max>
-  MGUTILITY_CNSTXPR static enum_name_parse_result<Enum, Min, Max>
-  name() noexcept {
+  MGUTILITY_CNSTXPR static auto name() noexcept
+      -> enum_name_parse_result<detail::underlying_type_t<Enum>, Min, Max> {
     return parse<Enum, Min, Max>();
   }
 };
@@ -258,30 +277,31 @@ template <typename Enum, int Min, int Max> struct enum_array_cache;
  * @tparam Is The enum values.
  */
 template <typename Enum, int Min, int Max> struct enum_array_cache {
+  using underlying = detail::underlying_type_t<Enum>;
+  using parse_result_t = enum_name_parse_result<underlying, Min, Max>;
 
 #if MGUTILITY_CPLUSPLUS > 201402L
 
-  static inline constexpr auto parse_result =
+  static constexpr auto parse_result =
       enum_type::template name<Enum, Min, Max>();
 
 #else
   // C++11: lazy runtime array
-  static enum_name_parse_result<Enum, Min, Max> &value() {
-    static enum_name_parse_result<Enum, Min, Max> arr =
-        enum_type::template name<Enum, Min, Max>();
+  static parse_result_t &value() {
+    static parse_result_t arr = enum_type::template name<Enum, Min, Max>();
 
     return arr;
   }
 #endif
 
   static MGUTILITY_CNSTXPR auto
-  apply_custom(const enum_name_parse_result<Enum, Min, Max> &result) noexcept
+  apply_custom(const parse_result_t &result) noexcept
       -> enum_name_array<Enum, Min, Max> {
     enum_name_array<Enum, Min, Max> arr{};
 
     for (std::size_t idx = 0; idx < result.ranges.size(); ++idx) {
-      arr[idx] = result.blob.view().substr(result.ranges[idx].first,
-                                           result.ranges[idx].second);
+      arr[idx] = result.strings.view().substr(result.ranges[idx].first,
+                                              result.ranges[idx].second);
     }
 
 #if MGUTILITY_CPLUSPLUS >= 201402L

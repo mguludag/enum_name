@@ -99,6 +99,7 @@ Features</h1>
 <ul>
 <li>Supports <code>enum</code> and <code>enum class</code></li>
 <li>Supports enums in namespaces, classes or structs even templated or not</li>
+<li>Very low overhead of compilation for speed and memory usage of the compiler (~7x faster, ~7x less memory usage)</li>
 <li>Supports full compile-time with C++20 and later</li>
 <li>Changing enum range with template parameter <sub>(default range: <code>[0, 256)</code>)</sub> on each call or with your special function for types or adding specialized <code>enum_range&lt;Enum&gt;</code> struct</li>
 <li>Supports and automatically overloaded <code>operator&lt;&lt;</code> and add <code>std::formatter</code> specialization for Enum types to direct using with ostream objects,<code>std::format</code> and <code>fmt::format</code> (when <code>fmtlib</code> is available on system and <code>ENUM_NAME_USE_FMT</code> needs to be defined if compiler doesn't support <code>__has_include</code> macro)</li>
@@ -110,7 +111,7 @@ Features</h1>
 Limitations</h1>
 <ul>
 <li>Compiler versions</li>
-<li>Wider range can increase compile time so user responsible to adjusting for enum's range</li>
+<li>~Wider range can increase compile time so user responsible to adjusting for enum's range~</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md193"></a>
 Fetch library with CMake</h1>

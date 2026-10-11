@@ -12,6 +12,7 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 
 - Supports `enum` and `enum class`
 - Supports enums in namespaces, classes or structs even templated or not
+- Very low overhead of compilation for speed and memory usage of the compiler (~7x faster, ~7x less memory usage)
 - Supports full compile-time with C++20 and later
 - Changing enum range with template parameter <sub>(default range: `[0, 256)`)</sub> on each call or with your special function for types or adding specialized `enum_range<Enum>` struct
 - Supports and automatically overloaded `operator<<` and add `std::formatter` specialization for Enum types to direct using with ostream objects,`std::format` and `fmt::format` (when `fmtlib` is available on system and `ENUM_NAME_USE_FMT` needs to be defined if compiler doesn't support `__has_include` macro)
@@ -22,7 +23,7 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 ## Limitations
 
 - Compiler [versions](#supported-compilers)
-- Wider range can increase compile time so user responsible to adjusting for enum's range
+- ~Wider range can increase compile time so user responsible to adjusting for enum's range~
 
 ## Fetch library with CMake
 

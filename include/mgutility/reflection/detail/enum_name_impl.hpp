@@ -100,9 +100,10 @@ namespace detail {
  * @tparam Min The minimum enum value.
  * @tparam Max The maximum enum value.
  */
-template <typename U, int Min, int Max> struct enum_name_parse_result {
+template <typename U, int Min, int Max, std::size_t BlobSize>
+struct enum_name_parse_result {
   static constexpr auto size = std::size_t{Max - Min};
-  fixed_string<MGUTILITY_GLOBAL_ENUM_BLOB_SIZE> strings;
+  fixed_string<BlobSize> strings;
   std::array<pair<std::size_t, std::size_t>, size> ranges;
 };
 
@@ -116,6 +117,59 @@ using enum_name_array =
  */
 struct enum_type {
 private:
+  MGUTILITY_CNSTXPR static auto trim(mgutility::string_view str) noexcept
+      -> mgutility::string_view {
+    while (!str.empty() && str.front() == ' ') {
+      str = str.substr(1);
+    }
+
+    while (!str.empty() && str.back() == ' ') {
+      str = str.substr(0, str.size() - 1);
+    }
+
+    return str;
+  }
+
+  MGUTILITY_CNSTXPR static auto strip_prefix(
+      mgutility::string_view token) noexcept -> mgutility::string_view {
+    auto pos = token.find(':');
+    if (pos != mgutility::string_view::npos && pos + 2 <= token.size()) {
+      token = token.substr(pos + 2);
+    }
+    return token;
+  }
+
+  MGUTILITY_CNSTXPR static auto skip_token(
+      mgutility::string_view token) noexcept -> bool {
+    return token.find('(') != mgutility::string_view::npos ||
+           token.rfind(')') != mgutility::string_view::npos;
+  }
+
+  MGUTILITY_CNSTXPR static auto normalized_token(
+      mgutility::string_view token) noexcept -> mgutility::string_view {
+    token = trim(token);
+    if (token.empty() || skip_token(token)) {
+      return {};
+    }
+    return strip_prefix(token);
+  }
+
+  MGUTILITY_CNSTXPR static auto compute_blob_size(
+      mgutility::string_view enum_names) noexcept -> std::size_t {
+    std::size_t total = 1;
+    while (!enum_names.empty()) {
+      auto pos = enum_names.find(',');
+      auto token = enum_names.substr(0, pos);
+      token = normalized_token(token);
+      total += token.size();
+      if (pos == mgutility::string_view::npos) {
+        break;
+      }
+      enum_names = enum_names.substr(pos + 1);
+    }
+    return total;
+  }
+
   /**
    * @brief Extracts raw name from compiler's __PRETTY_FUNCTION__.
    *
@@ -164,84 +218,91 @@ private:
    * @return The parsed enum name.
    */
   template <typename Enum, int Min, int Max>
-  MGUTILITY_CNSTXPR static auto parse() noexcept
-      -> enum_name_parse_result<detail::underlying_type_t<Enum>, Min, Max> {
+  MGUTILITY_CNSTXPR static auto parse() noexcept {
     using U = detail::underlying_type_t<Enum>;
-    using result_type = enum_name_parse_result<U, Min, Max>;
 
-    MGUTILITY_CNSTXPR auto str =
+#if MGUTILITY_CPLUSPLUS > 201402L
+    constexpr auto str =
         raw_name<Enum>(detail::make_enum_sequence<Enum, Min, Max>{});
 
 #if defined(__clang__) || defined(__GNUC__)
 #if defined(__clang__)
-    auto end = str.rfind(']');
+    constexpr auto end = str.rfind(']');
 #elif defined(__GNUC__) && !defined(__clang__)
-    auto end = str.rfind(';');
+    constexpr auto end = str.rfind(';');
 #endif
-
-    auto enum_names = str.substr(0, end);
-
+    constexpr auto enum_names = str.substr(0, end);
 #elif defined(_MSC_VER)
-    // MSVC: different format
-    auto pos = str.find(',');
-    if (pos == mgutility::string_view::npos)
-      return {};
-
-    ++pos;
-
-    auto end = str.rfind('>');
-    auto enum_names = str.substr(pos, end - pos);
-
+    constexpr auto pos = str.find(',');
+    constexpr auto enum_names = pos == mgutility::string_view::npos
+                                     ? mgutility::string_view{}
+                                     : str.substr(pos + 1,
+                                                  str.rfind('>') - pos - 1);
 #else
-    return {};
+    constexpr auto enum_names = mgutility::string_view{};
 #endif
 
-    if (enum_names.empty()) {
-      return {};
+    constexpr auto blob_size = compute_blob_size(enum_names);
+    using result_type = enum_name_parse_result<U, Min, Max, blob_size>;
+    auto enum_names_copy = enum_names;
+#else
+    MGUTILITY_CNSTXPR auto str =
+        raw_name<Enum>(detail::make_enum_sequence<Enum, Min, Max>{});
+    auto enum_names = [&]() -> mgutility::string_view {
+#if defined(__clang__) || defined(__GNUC__)
+#if defined(__clang__)
+      auto end = str.rfind(']');
+#elif defined(__GNUC__) && !defined(__clang__)
+      auto end = str.rfind(';');
+#endif
+      return str.substr(0, end);
+#elif defined(_MSC_VER)
+      auto pos = str.find(',');
+      return pos == mgutility::string_view::npos
+                 ? mgutility::string_view{}
+                 : str.substr(pos + 1, str.rfind('>') - pos - 1);
+#else
+      return mgutility::string_view{};
+#endif
+    }();
+
+    using result_type = enum_name_parse_result<U, Min, Max,
+                                              MGUTILITY_GLOBAL_ENUM_BLOB_SIZE>;
+#endif
+
+    if (enum_names_copy.empty()) {
+      return result_type{};
     }
 
     result_type result{};
 
     std::size_t idx = 0;
 
-    while (!enum_names.empty() && idx < result.ranges.size()) {
-      auto pos = enum_names.find(',');
-      if (pos != mgutility::string_view::npos) {
-        auto token = enum_names.substr(0, pos);
+    while (!enum_names_copy.empty() && idx < result.ranges.size()) {
+      auto pos = enum_names_copy.find(',');
+      auto token = enum_names_copy.substr(0, pos);
+      token = trim(token);
 
-        // remove whitespace
-        while (!token.empty() && token.front() == ' ') {
-          token = token.substr(1);
-        }
-
-        while (!token.empty() && token.back() == ' ') {
-          token = token.substr(0, token.size() - 1);
-        }
-
-        std::size_t begin = token.find('(');
-        std::size_t end = token.rfind(')');
-        if (begin != mgutility::string_view::npos ||
-            end != mgutility::string_view::npos) {
-          result.ranges[idx++] = {0, 0};
-          enum_names = enum_names.substr(pos + 1);
-          continue;
-        }
-
-        std::size_t start = 0;
-        if (token.find(':') != mgutility::string_view::npos) {
-          start = token.find(':') + 2;
-          token = token.substr(start);
-        }
-
-        // Write into the fixed-size global buffer
-        auto offset = result.strings.size();
-        result.strings.append(token);
-        result.ranges[idx++] = {offset, token.size()};
-
-        enum_names = enum_names.substr(pos + 1);
+      if (token.find('(') != mgutility::string_view::npos ||
+          token.rfind(')') != mgutility::string_view::npos) {
+        result.ranges[idx++] = {0, 0};
+        enum_names_copy = pos == mgutility::string_view::npos
+                             ? mgutility::string_view{}
+                             : enum_names_copy.substr(pos + 1);
         continue;
       }
-      enum_names = {};
+
+      if (token.find(':') != mgutility::string_view::npos) {
+        token = token.substr(token.find(':') + 2);
+      }
+
+      auto offset = result.strings.size();
+      result.strings.append(token);
+      result.ranges[idx++] = {offset, token.size()};
+
+      enum_names_copy = pos == mgutility::string_view::npos
+                           ? mgutility::string_view{}
+                           : enum_names_copy.substr(pos + 1);
     }
 
     return result;
@@ -257,8 +318,8 @@ public:
    */
   template <typename Enum, int Min, int Max>
   MGUTILITY_CNSTXPR static auto name() noexcept
-      -> enum_name_parse_result<detail::underlying_type_t<Enum>, Min, Max> {
-    return parse<Enum, Min, Max>();
+      -> decltype(enum_type::template parse<Enum, Min, Max>()) {
+    return enum_type::template parse<Enum, Min, Max>();
   }
 };
 
@@ -278,7 +339,7 @@ template <typename Enum, int Min, int Max> struct enum_array_cache;
  */
 template <typename Enum, int Min, int Max> struct enum_array_cache {
   using underlying = detail::underlying_type_t<Enum>;
-  using parse_result_t = enum_name_parse_result<underlying, Min, Max>;
+  using parse_result_t = decltype(enum_type::template name<Enum, Min, Max>());
 
 #if MGUTILITY_CPLUSPLUS > 201402L
 

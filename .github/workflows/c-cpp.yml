@@ -74,11 +74,14 @@ jobs:
     steps:
       - name: Update packages
         run: |
-          apt-get update
-          if ! apt-get install -y curl git pkg-config libsystemd-dev; then
-            apt-get update
-            apt-get install -y curl git pkg-config libsystemd-dev
+          if grep -q "bullseye" /etc/os-release 2>/dev/null; then
+            sed -i 's|http://debian.org|http://debian.org|g' /etc/apt/sources.list
+            sed -i 's|http://debian.org|http://debian.org|g' /etc/apt/sources.list
+            sed -i '/bullseye-updates/d' /etc/apt/sources.list
+            echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until
           fi
+          apt-get update
+          apt-get install -y curl git pkg-config libsystemd-dev
       - uses: actions/checkout@v4
         with:
           submodules: true

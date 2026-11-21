@@ -37,13 +37,13 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { compiler: gcc, version: 9, build_type: Release, cppstd: 11 }
-          - { compiler: gcc, version: 9, build_type: Release, cppstd: 14 }
-          - { compiler: gcc, version: 9, build_type: Release, cppstd: 17 }
-          - { compiler: gcc, version: 10, build_type: Debug, cppstd: 20 }
-          - { compiler: gcc, version: 12, build_type: Release, cppstd: 20 }
-          - { compiler: gcc, version: 13, build_type: Release, cppstd: 20 }
-          - { compiler: gcc, version: 14, build_type: Release, cppstd: 23 }
+          - { compiler: gcc, version: 9, build_type: Release, cppstd: 11, image: "ubuntu:22.04" }
+          - { compiler: gcc, version: 9, build_type: Release, cppstd: 14, image: "ubuntu:22.04" }
+          - { compiler: gcc, version: 9, build_type: Release, cppstd: 17, image: "ubuntu:22.04" }
+          - { compiler: gcc, version: 10, build_type: Debug, cppstd: 20, image: "ubuntu:22.04" }
+          - { compiler: gcc, version: 12, build_type: Release, cppstd: 20, image: "ubuntu:24.04" }
+          - { compiler: gcc, version: 13, build_type: Release, cppstd: 20, image: "ubuntu:24.04" }
+          - { compiler: gcc, version: 14, build_type: Release, cppstd: 23, image: "ubuntu:24.04" }
           - { compiler: clang, version: 11, build_type: Release, cppstd: 11 }
           - { compiler: clang, version: 11, build_type: Release, cppstd: 14 }
           - { compiler: clang, version: 11, build_type: Release, cppstd: 17 }
@@ -69,37 +69,36 @@ jobs:
               asan: OFF,
             }
     container:
-      image: ${{ matrix.config.compiler == 'clang' && 'teeks99/clang-ubuntu' || matrix.config.compiler }}:${{ matrix.config.version }}
-    name: "${{ matrix.config.compiler}} ${{ matrix.config.version }} (C++${{ matrix.config.cppstd }}, ${{ matrix.config.build_type }})"
+      image: ${{ matrix.config.image || format('teeks99/clang-ubuntu:{0}', matrix.config.version) }}
+    name: "${{ matrix.config.compiler }} ${{ matrix.config.version }} (C++${{ matrix.config.cppstd }}, ${{ matrix.config.build_type }})"
     steps:
       - name: Update packages
         run: |
-          if grep -q "bullseye" /etc/os-release 2>/dev/null; then
-            sed -i 's|http://debian.org|http://debian.org|g' /etc/apt/sources.list
-            sed -i 's|http://debian.org|http://debian.org|g' /etc/apt/sources.list
-            sed -i '/bullseye-updates/d' /etc/apt/sources.list
-            echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until
-          fi
           apt-get update
-          apt-get install -y curl git pkg-config libsystemd-dev
+          apt-get install -y curl git pkg-config libsystemd-dev build-essential
       - uses: actions/checkout@v4
         with:
           submodules: true
       - name: Install CMake
         run: |
           CMAKE_VERSION="3.24.2"
-          curl -sSL https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh -o install-cmake.sh
+          curl -sSL https://github.com{CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh -o install-cmake.sh
           chmod +x install-cmake.sh
           ./install-cmake.sh --prefix=/usr/local --skip-license
       - name: Setup Compiler
-        if: matrix.config.compiler == 'clang'
         run: |
-          if [[ "${{ matrix.config.version }}" -ge 4 ]]; then
-            scripts/ci_setup_clang.sh "${{ matrix.config.version }}"
-            echo "CXXFLAGS=-stdlib=libc++" >> $GITHUB_ENV
+          if [[ "${{ matrix.config.compiler }}" == "gcc" ]]; then
+            apt-get install -y gcc-${{ matrix.config.version }} g++-${{ matrix.config.version }}
+            echo "CC=gcc-${{ matrix.config.version }}" >> $GITHUB_ENV
+            echo "CXX=g++-${{ matrix.config.version }}" >> $GITHUB_ENV
+          elif [[ "${{ matrix.config.compiler }}" == "clang" ]]; then
+            if [[ "${{ matrix.config.version }}" -ge 4 ]]; then
+              scripts/ci_setup_clang.sh "${{ matrix.config.version }}"
+              echo "CXXFLAGS=-stdlib=libc++" >> $GITHUB_ENV
+            fi
+            echo "CC=clang-${{ matrix.config.version }}" >> $GITHUB_ENV
+            echo "CXX=clang++-${{ matrix.config.version }}" >> $GITHUB_ENV
           fi
-          echo "CC=clang-${{ matrix.config.version }}" >> $GITHUB_ENV
-          echo "CXX=clang++-${{ matrix.config.version }}" >> $GITHUB_ENV
       - name: Build
         run: |
           mkdir -p build && cd build
@@ -109,6 +108,7 @@ jobs:
             -DCMAKE_CXX_STANDARD=${{ matrix.config.cppstd }}
           make -j2
           ctest -j2 --output-on-failure
+
 
   check-single-include:
     runs-on: ubuntu-latest

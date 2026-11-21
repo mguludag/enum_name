@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['emplace_0',['emplace',['../classmgutility_1_1optional.html#aafd73c0d09db703e5e6a4e731b192ccb',1,'mgutility::optional::emplace(T value)'],['../classmgutility_1_1optional.html#a1c9693d3f4714f7dff5b56900450d2fd',1,'mgutility::optional::emplace(Args &amp;&amp;...args)']]],
-  ['empty_1',['empty',['../classmgutility_1_1basic__string__view.html#a37b876e4fd007b94772dd289b58a1bce',1,'mgutility::basic_string_view']]],
-  ['end_2',['end',['../classmgutility_1_1enum__for__each.html#a6ab0021b410129cbb2d45a21997bb9d5',1,'mgutility::enum_for_each::end()'],['../classmgutility_1_1basic__string__view.html#a0b623628e1fed88cd8f2489ec22782cd',1,'mgutility::basic_string_view::end()'],['../classmgutility_1_1enum__for__each.html#a6ab0021b410129cbb2d45a21997bb9d5',1,'mgutility::enum_for_each::end()']]],
-  ['enum_5fcast_3',['enum_cast',['../namespacemgutility.html#a945fab3988ccb5de52589c67ee654e38',1,'mgutility']]],
-  ['enum_5ffor_5feach_4',['enum_for_each',['../classmgutility_1_1enum__for__each.html#a136743f726f0af0b04c027dfa3ca08cc',1,'mgutility::enum_for_each::enum_for_each()=default'],['../classmgutility_1_1enum__for__each.html#a136743f726f0af0b04c027dfa3ca08cc',1,'mgutility::enum_for_each::enum_for_each()=default']]],
-  ['enum_5fname_5',['enum_name',['../namespacemgutility.html#acd6b8335869248ad4f8525ef4371ea89',1,'mgutility']]]
+  ['data_0',['data',['../classmgutility_1_1basic__string__view.html#ab37f2035ecf1724d175b3b4a553b97ab',1,'mgutility::basic_string_view']]],
+  ['dedent_1',['dedent',['../text_8h.html#a6e1330217a38af10883af70207c70b4f',1,'utils::text']]],
+  ['default_5fhandler_2',['default_handler',['../classutils_1_1detail_1_1callback__traits_3_01R_07Args_8_8_8_08_4.html#af50f233d613cbce11286c70101809922',1,'utils::detail::callback_traits&lt; R(Args...)&gt;']]]
 ];

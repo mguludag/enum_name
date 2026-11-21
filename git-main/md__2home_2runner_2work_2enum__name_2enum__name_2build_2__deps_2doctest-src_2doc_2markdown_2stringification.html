@@ -86,62 +86,63 @@ $(function() {
   <div class="headertitle"><div class="title">String conversions</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md163"></a> <b>doctest</b> needs to be able to convert types you use in assertions and logging expressions into strings (for logging and reporting purposes). Most built-in types are supported out of the box but there are three ways that you can tell <b>doctest</b> how to convert your own types (or other, third-party types) into strings.</p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md170"></a> <b>doctest</b> needs to be able to convert types you use in assertions and logging expressions into strings (for logging and reporting purposes). Most built-in types are supported out of the box but there are three ways that you can tell <b>doctest</b> how to convert your own types (or other, third-party types) into strings.</p>
 <p>For stringifying enums checkout <a href="https://github.com/doctest/doctest/issues/121">this issue</a>.</p>
-<h1><a class="anchor" id="autotoc_md164"></a>
+<h1><a class="anchor" id="autotoc_md171"></a>
 <code>operator&lt;&lt;</code> overload for <code>std::ostream</code></h1>
 <p>This is the standard way of providing string conversions in C++ - and the chances are you may already provide this for your own purposes. If you're not familiar with this idiom it involves writing a free function of the form:</p>
 <div class="fragment"><div class="line"> ++</div>
-<div class="line"><a class="code hl_class" href="classstd_1_1basic__ostream.html">std::ostream</a>&amp; operator&lt;&lt; (<a class="code hl_class" href="classstd_1_1basic__ostream.html">std::ostream</a>&amp; os, <span class="keyword">const</span> T&amp; value) {</div>
+<div class="line"><a class="code hl_class" href="classstd_1_1basic__ostream.html">std::ostream</a> &amp;operator&lt;&lt;(<a class="code hl_class" href="classstd_1_1basic__ostream.html">std::ostream</a> &amp;os, <span class="keyword">const</span> T &amp;value) {</div>
 <div class="line">    os &lt;&lt; convertMyTypeToString(value);</div>
 <div class="line">    <span class="keywordflow">return</span> os;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassstd_1_1basic__ostream_html"><div class="ttname"><a href="classstd_1_1basic__ostream.html">std::basic_ostream</a></div><div class="ttdef"><b>Definition</b> doctest.h:530</div></div>
+<div class="ttc" id="aclassstd_1_1basic__ostream_html"><div class="ttname"><a href="classstd_1_1basic__ostream.html">std::basic_ostream</a></div><div class="ttdef"><b>Definition</b> doctest.h:653</div></div>
 </div><!-- fragment --><p>(where <code>T</code> is your type and <code>convertMyTypeToString</code> is where you'll write whatever code is necessary to make your type printable - it doesn't have to be in another function).</p>
 <p>You should put this function in the same namespace as your type.</p>
 <p>Alternatively you may prefer to write it as a member function:</p>
 <div class="fragment"><div class="line"> ++</div>
-<div class="line"><a class="code hl_class" href="classstd_1_1basic__ostream.html">std::ostream</a>&amp; T::operator&lt;&lt;(<a class="code hl_class" href="classstd_1_1basic__ostream.html">std::ostream</a>&amp; os)<span class="keyword"> const </span>{</div>
+<div class="line"><a class="code hl_class" href="classstd_1_1basic__ostream.html">std::ostream</a> &amp;T::operator&lt;&lt;(<a class="code hl_class" href="classstd_1_1basic__ostream.html">std::ostream</a> &amp;os)<span class="keyword"> const </span>{</div>
 <div class="line">    os &lt;&lt; convertMyTypeToString(*<span class="keyword">this</span>);</div>
 <div class="line">    <span class="keywordflow">return</span> os;</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md165"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md172"></a>
 <code>doctest::toString</code> overload</h1>
 <p>If you don't want to provide an <code>operator&lt;&lt;</code> overload, or you want to convert your type differently for testing purposes, you can provide an overload for <code>toString()</code> for your type which returns <code><a class="el" href="classdoctest_1_1String.html">doctest::String</a></code>.</p>
 <div class="fragment"><div class="line"> ++</div>
 <div class="line"><span class="keyword">namespace </span>user {</div>
-<div class="line">    <span class="keyword">struct </span>udt {};</div>
-<div class="line">    </div>
-<div class="line">    <a class="code hl_class" href="classdoctest_1_1String.html">doctest::String</a> toString(<span class="keyword">const</span> udt&amp; value) {</div>
-<div class="line">        <span class="keywordflow">return</span> convertMyTypeToString(value);</div>
-<div class="line">    }</div>
+<div class="line"><span class="keyword">struct </span>udt {};</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_class" href="classdoctest_1_1String.html">doctest::String</a> toString(<span class="keyword">const</span> udt &amp;value) {</div>
+<div class="line">    <span class="keywordflow">return</span> convertMyTypeToString(value);</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassdoctest_1_1String_html"><div class="ttname"><a href="classdoctest_1_1String.html">doctest::String</a></div><div class="ttdef"><b>Definition</b> doctest.h:588</div></div>
+<div class="line">} <span class="comment">// namespace user</span></div>
+<div class="ttc" id="aclassdoctest_1_1String_html"><div class="ttname"><a href="classdoctest_1_1String.html">doctest::String</a></div><div class="ttdef"><b>Definition</b> doctest.h:871</div></div>
 </div><!-- fragment --><p>Note that the function must be in the same namespace as your type. If the type is not in any namespace - then the overload should be in the global namespace as well. <code>convertMyTypeToString</code> is where you'll write whatever code is necessary to make your type printable.</p>
-<h1><a class="anchor" id="autotoc_md166"></a>
+<h1><a class="anchor" id="autotoc_md173"></a>
 <code>doctest::StringMaker&lt;T&gt;</code> specialisation</h1>
 <p>There are some cases where overloading <code>toString</code> does not work as expected. Specialising <code>StringMaker&lt;T&gt;</code> gives you more precise and reliable control - but at the cost of slightly more code and complexity:</p>
 <div class="fragment"><div class="line"> ++</div>
 <div class="line"><span class="keyword">namespace </span>doctest {</div>
-<div class="line">    <span class="keyword">template</span>&lt;&gt; <span class="keyword">struct </span>StringMaker&lt;T&gt; {</div>
-<div class="line">        <span class="keyword">static</span> String convert(<span class="keyword">const</span> T&amp; value) {</div>
-<div class="line">            <span class="keywordflow">return</span> convertMyTypeToString(value);</div>
-<div class="line">        }</div>
-<div class="line">    };</div>
-<div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md167"></a>
+<div class="line"><span class="keyword">template</span> &lt;&gt;</div>
+<div class="line"><span class="keyword">struct </span>StringMaker&lt;T&gt; {</div>
+<div class="line">    <span class="keyword">static</span> String convert(<span class="keyword">const</span> T &amp;value) {</div>
+<div class="line">        <span class="keywordflow">return</span> convertMyTypeToString(value);</div>
+<div class="line">    }</div>
+<div class="line">};</div>
+<div class="line">} <span class="comment">// namespace doctest</span></div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md174"></a>
 Translating exceptions</h1>
 <p>By default all exceptions deriving from <code>std::exception</code> will be translated to strings by calling the <code>what()</code> method (also C strings). For exception types that do not derive from <code>std::exception</code> - or if <code>what()</code> does not return a suitable string - use <code>REGISTER_EXCEPTION_TRANSLATOR</code>. This defines a function that takes your exception type and returns a <code><a class="el" href="classdoctest_1_1String.html">doctest::String</a></code>. It can appear anywhere in the code - it doesn't have to be in the same translation unit. For example:</p>
 <div class="fragment"><div class="line"> ++</div>
-<div class="line">REGISTER_EXCEPTION_TRANSLATOR(<a class="code hl_struct" href="structMyType.html">MyType</a>&amp; ex) {</div>
+<div class="line">REGISTER_EXCEPTION_TRANSLATOR(<a class="code hl_struct" href="structMyType.html">MyType</a> &amp;ex) {</div>
 <div class="line">    <span class="keywordflow">return</span> <a class="code hl_class" href="classdoctest_1_1String.html">doctest::String</a>(ex.message());</div>
 <div class="line">}</div>
-<div class="ttc" id="astructMyType_html"><div class="ttname"><a href="structMyType.html">MyType</a></div><div class="ttdef"><b>Definition</b> stringification.cpp:120</div></div>
+<div class="ttc" id="astructMyType_html"><div class="ttname"><a href="structMyType.html">MyType</a></div><div class="ttdef"><b>Definition</b> stringification.cpp:137</div></div>
 </div><!-- fragment --><p>Note that the exception may be accepted without a reference but it is considered bad practice in C++.</p>
 <p>An alternative way to register an exception translator is to do the following in some function - before executing any tests:</p>
-<div class="fragment"><div class="line">++</div>
-<div class="line">   <span class="comment">// adding a lambda - the signature required is `doctest::String(exception_type)`</span></div>
-<div class="line">   doctest::registerExceptionTranslator&lt;int&gt;([](<span class="keywordtype">int</span> in){ <span class="keywordflow">return</span> doctest::toString(in); });</div>
+<div class="fragment"><div class="line"> ++</div>
+<div class="line"><span class="comment">// adding a lambda - the signature required is `doctest::String(exception_type)`</span></div>
+<div class="line">doctest::registerExceptionTranslator&lt;int&gt;([](<span class="keywordtype">int</span> in) { <span class="keywordflow">return</span> doctest::toString(in); });</div>
 </div><!-- fragment --><p>The order of registering exception translators can be controlled - simply call the explicit function in the required order or list the exception translators with the macro in a top-to-bottom fashion in a single translation unit - everything that auto-registers in doctest works in a top-to-bottom way for a single translation unit (source file).</p>
 <p>You could also <a href="https://github.com/catchorg/Catch2/issues/539#issuecomment-454549904">override the translation mechanism</a> for exceptions deriving from <code>std::exception</code>.</p>
 <hr  />

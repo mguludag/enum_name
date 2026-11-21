@@ -86,8 +86,8 @@ $(function() {
   <div class="headertitle"><div class="title">Features and design goals</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md141"></a> <b>doctest</b> has been designed from the start to be as <b>light</b> and <b>unintrusive</b> as possible. These key features should be kept.</p>
-<h1><a class="anchor" id="autotoc_md142"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md149"></a> <b>doctest</b> has been designed from the start to be as <b>light</b> and <b>unintrusive</b> as possible. These key features should be kept.</p>
+<h1><a class="anchor" id="autotoc_md150"></a>
 Unintrusive (transparent):</h1>
 <ul>
 <li>everything testing-related can be removed from the binary executable by defining the <a href="configuration.md#doctest_config_disable">**<code>DOCTEST_CONFIG_DISABLE</code>**</a> identifier</li>
@@ -107,7 +107,7 @@ Unintrusive (transparent):</h1>
 <li>can set options <a class="el" href="md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2main.html"><b>procedurally</b></a> and not deal with passing <code>argc</code>/<code>argv</code> from the command line</li>
 <li>doesn't leave warnings disabled after itself</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md143"></a>
+<h1><a class="anchor" id="autotoc_md151"></a>
 Extremely portable:</h1>
 <p><b>SOME OF THIS IS OUTDATED</b></p>
 <ul>
@@ -126,7 +126,7 @@ Extremely portable:</h1>
 </ul>
 </li>
 </ul>
-<h1><a class="anchor" id="autotoc_md144"></a>
+<h1><a class="anchor" id="autotoc_md152"></a>
 Other features:</h1>
 <ul>
 <li>really easy to get started - it's just 1 header file - see the <a class="el" href="md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2tutorial.html"><b>tutorial</b></a></li>
@@ -135,6 +135,7 @@ Other features:</h1>
 <li>tests are registered automatically - no need to add them to a collection manually</li>
 <li><a href="tutorial.md#test-cases-and-subcases"><b>Subcases</b></a> - an intuitive way to share common setup and teardown code for test cases (alternative to <a href="testcases.md#test-fixtures"><b>test fixtures</b></a> which are also supported)</li>
 <li><a href="parameterized-tests.md#templated-test-cases---parameterized-by-type"><b>templated test cases</b></a> - parameterized by type</li>
+<li><a href="parameterized-tests.md#value-parameterized-test-cases"><b>value-parameterized test cases</b></a> via <code>GENERATE</code></li>
 <li>supports <a class="el" href="md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2logging.html"><b>logging macros</b></a> for capturing local variables and strings - as a message for when an assert fails - with lazy stringification and no allocations when possible!</li>
 <li>crash handling support - uses signals for UNIX and SEH for Windows</li>
 <li><a href="faq.md#is-doctest-thread-aware"><b>thread-safe</b></a> - asserts (and logging) can be used from multiple threads spawned from a single test case - <a href="../../examples/all_features/concurrency.cpp"><b>example</b></a></li>
@@ -159,7 +160,7 @@ Other features:</h1>
 <li>a <code>main()</code> can be provided when implementing the library with the <a href="main.md#doctest_config_implement_with_main">**<code>DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN</code>**</a> identifier</li>
 <li>can write tests in headers - they will still be registered only once in the executable/shared object</li>
 <li><a class="el" href="md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2commandline.html"><b>range-based</b></a> execution of tests within a binary - see the <a href="../../examples/range_based_execution.py"><b>example python script</b></a></li>
-<li><a class="el" href="md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2extensions.html"><b>extension headers</b></a> for extra functionality which doesn't need to go into the main <code>doctest.h</code> header</li>
+<li><a class="el" href="md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2extensions.html"><b>extension headers</b></a> for extra functionality which doesn't need to go into the main <code><a class="el" href="doctest_8h_source.html">doctest.h</a></code> header</li>
 <li>colored output in the console</li>
 <li>controlling the order of test execution</li>
 <li>different <code><a class="el" href="classdoctest_1_1Context.html">doctest::Context</a></code>s can be created and run many times within a single execution of the program</li>

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['what_0',['what',['../structmgutility_1_1bad__optional__access.html#af173560b0b4fa03df95450c19b6445d1',1,'mgutility::bad_optional_access']]]
+  ['value_0',['value',['../classmgutility_1_1optional.html#ac1028387cac8311f37d30683aa0e6dee',1,'mgutility::optional::value()'],['../classmgutility_1_1optional.html#abc9fc767c073e865acbad79df5237bd1',1,'mgutility::optional::value() const']]],
+  ['value_5for_1',['value_or',['../classmgutility_1_1optional.html#acb65e681b1e5c84f0c00059a9e61903d',1,'mgutility::optional::value_or(T &amp;&amp;value)'],['../classmgutility_1_1optional.html#a14f3152ede420d3799dc3ec9f8ec1a10',1,'mgutility::optional::value_or(T &amp;&amp;value) const'],['../classmgutility_1_1optional.html#aee67dde557acbd11fe3c0a8455cab862',1,'mgutility::optional::value_or(const T &amp;value)'],['../classmgutility_1_1optional.html#acf92119863dd7ae1cc5ae387151751b9',1,'mgutility::optional::value_or(const T &amp;value) const']]]
 ];

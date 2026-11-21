@@ -86,7 +86,7 @@ $(function() {
   <div class="headertitle"><div class="title">Assertion macros</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md48"></a> Most test frameworks have a large collection of assertion macros to capture all possible conditional forms (<code>_EQUALS</code>, <code>_NOTEQUALS</code>, <code>_GREATER_THAN</code> etc).</p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md55"></a> Most test frameworks have a large collection of assertion macros to capture all possible conditional forms (<code>_EQUALS</code>, <code>_NOTEQUALS</code>, <code>_GREATER_THAN</code> etc).</p>
 <p><b>doctest</b> is different (but it's like <a href="https://github.com/catchorg/Catch2"><b>Catch</b></a> in this regard). Because it decomposes comparison expressions most of these forms are reduced to one or two that you will use all the time. That said, there is a rich set of auxiliary macros as well.</p>
 <p>There are 3 levels of assert severity for all assertion macros:</p>
 <ul>
@@ -98,7 +98,7 @@ $(function() {
 <p>All asserts evaluate the expressions only once and if they fail - the values are <a class="el" href="md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2stringification.html"><b>stringified</b></a> properly.</p>
 <p>Since <b>doctest</b> is <a href="faq.md#is-doctest-thread-aware"><b>thread-safe</b></a> all asserts and <a class="el" href="md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2logging.html"><b>logging</b></a> macros can be used in threads spawned from test cases.</p>
 <p>Note that the <code>REQUIRE</code> level of asserts uses exceptions to end the current test case. It might be dangerous to use this level of asserts inside destructors of user-defined classes - if a destructor is called during stack unwinding due to an exception and a <code>REQUIRE</code> assert fails then the program will terminate. Also since C++11 all destructors are by default <code>noexcept(true)</code> unless specified otherwise so such an assert will lead to <code>std::terminate()</code> being called.</p>
-<h1><a class="anchor" id="autotoc_md49"></a>
+<h1><a class="anchor" id="autotoc_md56"></a>
 Expression decomposing asserts</h1>
 <p>These are of the form <code>CHECK(expression)</code> (Same for <code>REQUIRE</code> and <code>WARN</code>).</p>
 <div class="fragment"></div><!-- fragment --><p> can be a binary comparison like <code>a == b</code> or just a single thing like <code>vec.isEmpty()</code>.</p>
@@ -127,7 +127,7 @@ Expression decomposing asserts</h1>
 <div class="line"> </div>
 <div class="line">CHECK(b &lt; c); <span class="comment">// here only the first INFO() will be relevant</span></div>
 </div><!-- fragment --><p>For more information about the <code>INFO()</code> macro visit the <a class="el" href="md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2logging.html">logging page</a>.</p>
-<h1><a class="anchor" id="autotoc_md50"></a>
+<h1><a class="anchor" id="autotoc_md57"></a>
 Binary and unary asserts</h1>
 <p>These asserts don't use templates to decompose the comparison expressions for the left and right parts.</p>
 <p>These have the same guarantees as the expression decomposing ones but <a href="benchmarks.md#cost-of-an-assertion-macro"><b>57-68% faster</b></a> for compilation.</p>
@@ -144,7 +144,7 @@ Binary and unary asserts</h1>
 <li><code>&lt;LEVEL&gt;_UNARY_FALSE(expr)</code> - same as <code>&lt;LEVEL&gt;_FALSE(expr)</code></li>
 </ul>
 <p>Using the <a href="configuration.md#doctest_config_super_fast_asserts">**<code>DOCTEST_CONFIG_SUPER_FAST_ASSERTS</code>**</a> config option can make the binary asserts to compile up to <a href="benchmarks.md#cost-of-an-assertion-macro"><b>84-91%</b></a> faster!</p>
-<h1><a class="anchor" id="autotoc_md51"></a>
+<h1><a class="anchor" id="autotoc_md58"></a>
 Exceptions</h1>
 <div class="fragment"><div class="line">&lt;LEVEL&gt;</div>
 </div><!-- fragment --><p> is one of 3 possible: <code>REQUIRE</code>/<code>CHECK</code>/<code>WARN</code>.</p>
@@ -158,7 +158,7 @@ Exceptions</h1>
 <p>Expects that an exception of the <em>specified type</em> is thrown during evaluation of the expression.</p>
 <p>Note that <code>const</code> and <code>&amp;</code> are added to the exception type if missing (users shouldn't care) - the standard practice for exceptions in C++ is <code>Throw by value, catch by (const) reference</code>.</p>
 <div class="fragment"><div class="line"> ++</div>
-<div class="line">CHECK_THROWS_AS(func(), <span class="keyword">const</span> std::exception&amp;);</div>
+<div class="line">CHECK_THROWS_AS(func(), <span class="keyword">const</span> std::exception &amp;);</div>
 <div class="line">CHECK_THROWS_AS(func(), std::exception); <span class="comment">// same as above</span></div>
 </div><!-- fragment --><ul>
 <li><code>&lt;LEVEL&gt;_THROWS_WITH(expression, c_string)</code></li>
@@ -179,40 +179,40 @@ Exceptions</h1>
 <p>Note that these asserts also have a <code>_MESSAGE</code> form - like <code>CHECK_THROWS_MESSAGE(expression, message)</code> - these work identically to the <code>_MESSAGE</code> form of the normal macros (<code>CHECK_MESSAGE(a &lt; b, "this shouldn't fail")</code>) described earlier.</p>
 <p>Also note that a singular expression is expected, this means either a function call, an IIFE (immediately invoked function expressions) like <code>[&amp;]() { throw 1; }()</code> (note the <code>()</code> at the end) or something comparable. Passing in a function or lambda by itself will <b>not</b> work.</p>
 <p>One may use the <a href="configuration.md#doctest_config_void_cast_expressions">**<code>DOCTEST_CONFIG_VOID_CAST_EXPRESSIONS</code>**</a> config identifier to cast the expression in these asserts to void to avoid warnings or other issues - for example nodiscard statements whose result isn't checked. This will however limit the ability to write entire <code>{}</code> blocks of code as the expression (or multiple statements) but in that case a simple lambda can be used. This should have been the default behavior from day 1 of the framework...</p>
-<h1><a class="anchor" id="autotoc_md52"></a>
+<h1><a class="anchor" id="autotoc_md59"></a>
 Using asserts out of a testing context</h1>
 <p>Asserts can be used outside of a testing context (in code not called from a <code>TEST_CASE()</code>) instead of <a href="https://en.cppreference.com/w/cpp/error/assert"><code>assert()</code></a>.</p>
 <p>A <code><a class="el" href="classdoctest_1_1Context.html">doctest::Context</a></code> object still has to be created somewhere and set as the default one using the <code>setAsDefaultForAssertsOutOfTestCases()</code> method - and then asserts will work. A handler can be registered by calling the <code>setAssertHandler()</code> method on the context object. If no handler is set then <code>std::abort()</code> is called on failure.</p>
 <p>The results would be best when using the <a href="configuration.md#doctest_config_super_fast_asserts">**<code>DOCTEST_CONFIG_SUPER_FAST_ASSERTS</code>**</a> config identifier.</p>
 <p>Checkout the <a href="../../examples/all_features/asserts_used_outside_of_tests.cpp"><b>example</b></a> showcasing how that is done. For more information see the <a href="https://github.com/doctest/doctest/issues/114"><b>issue for the feature request</b></a>.</p>
 <p>Currently <a class="el" href="md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2logging.html"><b>logging macros</b></a> cannot be used for extra context for asserts outside of a test run. That means that the <code>_MESSAGE</code> variants of asserts are also not usable - since they are just a packed <code>INFO()</code> with an assert right after it.</p>
-<h1><a class="anchor" id="autotoc_md53"></a>
+<h1><a class="anchor" id="autotoc_md60"></a>
 String containment</h1>
 <div class="fragment"><div class="line">::Contains</div>
 </div><!-- fragment --><p> can be used to check whether the string passed to its constructor is contained within the string it is compared with. Here's a simple example:</p>
 <div class="fragment"><div class="line"> ++</div>
 <div class="line">REQUIRE(<span class="stringliteral">&quot;foobar&quot;</span> == <a class="code hl_class" href="classdoctest_1_1Contains.html">doctest::Contains</a>(<span class="stringliteral">&quot;foo&quot;</span>));</div>
-<div class="ttc" id="aclassdoctest_1_1Contains_html"><div class="ttname"><a href="classdoctest_1_1Contains.html">doctest::Contains</a></div><div class="ttdef"><b>Definition</b> doctest.h:674</div></div>
+<div class="ttc" id="aclassdoctest_1_1Contains_html"><div class="ttname"><a href="classdoctest_1_1Contains.html">doctest::Contains</a></div><div class="ttdef"><b>Definition</b> doctest.h:1284</div></div>
 </div><!-- fragment --><p>It can also be used with the <code>THROWS_WITH</code> family of assertion macros to check whether the thrown exception <a href="stringification.md#translating-exceptions">translated to a string</a> contains the provided string. Here's another example: </p><div class="fragment"><div class="line"> ++</div>
 <div class="line">REQUIRE_THROWS_WITH(func(), <a class="code hl_class" href="classdoctest_1_1Contains.html">doctest::Contains</a>(<span class="stringliteral">&quot;Oopsie&quot;</span>));</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md54"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md61"></a>
 Floating point comparisons</h1>
 <p>When comparing floating point numbers - especially if at least one of them has been computed - great care must be taken to allow for rounding errors and inexact representations.</p>
 <p><b>doctest</b> provides a way to perform tolerant comparisons of floating point values through the use of a wrapper class called <code><a class="el" href="structdoctest_1_1Approx.html">doctest::Approx</a></code>. <code><a class="el" href="structdoctest_1_1Approx.html">doctest::Approx</a></code> can be used on either side of a comparison expression. It overloads the comparisons operators to take a relative tolerance into account. Here's a simple example:</p>
 <div class="fragment"><div class="line"> ++</div>
 <div class="line">REQUIRE(performComputation() == <a class="code hl_struct" href="structdoctest_1_1Approx.html">doctest::Approx</a>(2.1));</div>
-<div class="ttc" id="astructdoctest_1_1Approx_html"><div class="ttname"><a href="structdoctest_1_1Approx.html">doctest::Approx</a></div><div class="ttdef"><b>Definition</b> doctest.h:1210</div></div>
+<div class="ttc" id="astructdoctest_1_1Approx_html"><div class="ttname"><a href="structdoctest_1_1Approx.html">doctest::Approx</a></div><div class="ttdef"><b>Definition</b> doctest.h:1313</div></div>
 </div><!-- fragment --><p>By default a small epsilon value (relative - in percentages) is used that covers many simple cases of rounding errors. When this is insufficient the epsilon value (the amount within which a difference either way is ignored) can be specified by calling the <code>epsilon()</code> method on the <code><a class="el" href="structdoctest_1_1Approx.html">doctest::Approx</a></code> instance. e.g.:</p>
 <div class="fragment"><div class="line"> ++</div>
 <div class="line">REQUIRE(22.0/7 == <a class="code hl_struct" href="structdoctest_1_1Approx.html">doctest::Approx</a>(3.141).epsilon(0.01)); <span class="comment">// allow for a 1% error</span></div>
 </div><!-- fragment --><p>When dealing with very large or very small numbers it can be useful to specify a scale, which can be achieved by calling the <code>scale()</code> method on the <code><a class="el" href="structdoctest_1_1Approx.html">doctest::Approx</a></code> instance.</p>
-<h1><a class="anchor" id="autotoc_md55"></a>
+<h1><a class="anchor" id="autotoc_md62"></a>
 NaN checking</h1>
 <p>Two NaN floating point numbers do not compare equal to each other. This makes it quite inconvenient to check for NaN while capturing the value. </p><div class="fragment"><div class="line"> ++</div>
-<div class="line">CHECK(std::isnan(performComputation()); <span class="comment">// does not capture the result of the call</span></div>
+<div class="line">CHECK(std::isnan(performComputation())); <span class="comment">// does not capture the result of the call</span></div>
 </div><!-- fragment --><p><b>doctest</b> provides <code><a class="el" href="structdoctest_1_1IsNaN.html">doctest::IsNaN</a></code> which can be used in assertions to check if a float (or any other floating point fundamental type) is indeed NaN, outputting the actual value if it is not. </p><div class="fragment"><div class="line"> ++</div>
-<div class="line">CHECK(<a class="code hl_struct" href="structdoctest_1_1IsNaN.html">doctest::IsNaN</a>(performComputation()); <span class="comment">// captures the result!</span></div>
-<div class="ttc" id="astructdoctest_1_1IsNaN_html"><div class="ttname"><a href="structdoctest_1_1IsNaN.html">doctest::IsNaN</a></div><div class="ttdef"><b>Definition</b> doctest.h:1292</div></div>
+<div class="line">CHECK(<a class="code hl_struct" href="structdoctest_1_1IsNaN.html">doctest::IsNaN</a>(performComputation())); <span class="comment">// captures the result!</span></div>
+<div class="ttc" id="astructdoctest_1_1IsNaN_html"><div class="ttname"><a href="structdoctest_1_1IsNaN.html">doctest::IsNaN</a></div><div class="ttdef"><b>Definition</b> doctest.h:1406</div></div>
 </div><!-- fragment --><p><code>IsNaN</code> is able to capture the value, even if negated via <code>!</code>.</p>
 <hr  />
 <ul>

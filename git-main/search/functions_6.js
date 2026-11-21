@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['log_0',['log',['../structdoctest_1_1detail_1_1ResultBuilder.html#a2af75dd1d8db8d3aa949d78025854085',1,'doctest::detail::ResultBuilder']]]
+  ['inline_5ffile_0',['inline_file',['../namespaceamalgamate.html#adb73a56911818aa9fb34662c49068d69',1,'amalgamate']]]
 ];

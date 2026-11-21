@@ -86,15 +86,15 @@ $(function() {
   <div class="headertitle"><div class="title">enum_name</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md189"></a> Converting (scoped)enum values to/from string names written in C++&gt;=11.</p>
-<h1><a class="anchor" id="autotoc_md190"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md197"></a> Converting (scoped)enum values to/from string names written in C++&gt;=11.</p>
+<h1><a class="anchor" id="autotoc_md198"></a>
 Supported Compilers</h1>
 <ul>
 <li>Clang &gt; 5</li>
 <li>GCC &gt; 8</li>
 <li>MSVC &gt; 2015</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md191"></a>
+<h1><a class="anchor" id="autotoc_md199"></a>
 Features</h1>
 <ul>
 <li>Supports <code>enum</code> and <code>enum class</code></li>
@@ -107,13 +107,13 @@ Features</h1>
 <li>Supports bitmasked enums and auto detect them</li>
 <li>Supports iterate over enum (names and values) with <code><a class="el" href="classmgutility_1_1enum__for__each.html" title="A class template for iterating over enum values.">mgutility::enum_for_each</a>&lt;T&gt;()</code> class and it is compatible with standard ranges and views</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md192"></a>
+<h1><a class="anchor" id="autotoc_md200"></a>
 Limitations</h1>
 <ul>
 <li>Compiler versions</li>
 <li>~Wider range can increase compile time so user responsible to adjusting for enum's range~</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md193"></a>
+<h1><a class="anchor" id="autotoc_md201"></a>
 Fetch library with CMake</h1>
 <div class="fragment"><div class="line">include(FetchContent)</div>
 <div class="line"> </div>
@@ -128,7 +128,7 @@ Fetch library with CMake</h1>
 <div class="line">#...</div>
 <div class="line"> </div>
 <div class="line">target_link_libraries(${PROJECT_NAME} PRIVATE mgutility::enum_name)</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md194"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md202"></a>
 CMake options</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -144,7 +144,7 @@ CMake options</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">ENUM_NAME_INSTALL   </td><td class="markdownTableBodyNone">Install the enum_name library   </td><td class="markdownTableBodyNone">OFF   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md195"></a>
+<h1><a class="anchor" id="autotoc_md203"></a>
 Example usage (<a href="https://godbolt.org/z/WGvEYYh1b">try it!</a>)</h1>
 <div class="fragment"><div class="line"> ++</div>
 <div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>

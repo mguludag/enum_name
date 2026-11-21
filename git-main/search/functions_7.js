@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['name_0',['name',['../structmgutility_1_1detail_1_1enum__type.html#a621332f0c493787058f53c7ea5db3053',1,'mgutility::detail::enum_type::name() noexcept -&gt; enum_name_parse_result&lt; detail::underlying_type_t&lt; Enum &gt;, Min, Max &gt;'],['../structmgutility_1_1detail_1_1enum__type.html#a621332f0c493787058f53c7ea5db3053',1,'mgutility::detail::enum_type::name() noexcept -&gt; enum_name_parse_result&lt; detail::underlying_type_t&lt; Enum &gt;, Min, Max &gt;']]]
+  ['latest_5fcall_0',['latest_call',['../classutils_1_1callback.html#acda534cbfab0442c111c268ffa77082a',1,'utils::callback']]]
 ];

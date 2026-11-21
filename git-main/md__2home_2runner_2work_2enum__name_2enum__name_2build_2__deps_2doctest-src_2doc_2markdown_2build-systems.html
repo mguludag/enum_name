@@ -86,14 +86,14 @@ $(function() {
   <div class="headertitle"><div class="title">Build systems</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md72"></a> The latest released version of doctest can be obtained from here: <a href="https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h">https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h</a></p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md79"></a> The latest released version of doctest can be obtained from here: <a href="https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h">https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h</a></p>
 <p>You can substitute <code>master</code> with <code>dev</code> or a tag like <code>v1.4.8</code> for a specific version in the URL above.</p>
-<h2><a class="anchor" id="autotoc_md73"></a>
+<h2><a class="anchor" id="autotoc_md80"></a>
 CMake</h2>
 <ul>
 <li><b>doctest</b> is easiest to use as a single file inside your own repository. Then the following minimal example will work:</li>
 </ul>
-<div class="fragment"><div class="line">cmake_minimum_required(VERSION 3.0)</div>
+<div class="fragment"><div class="line">cmake_minimum_required(VERSION 3.14)</div>
 <div class="line">project(cmake_test VERSION 0.0.1 LANGUAGES CXX)</div>
 <div class="line"> </div>
 <div class="line"># Prepare doctest for other targets to use</div>
@@ -101,10 +101,48 @@ CMake</h2>
 <div class="line"> </div>
 <div class="line"># Make test executable</div>
 <div class="line">add_executable(tests main.cpp)</div>
-<div class="line">target_compile_features(tests PRIVATE cxx_std_17)</div>
+<div class="line">target_compile_features(tests PRIVATE cxx_std_17) # or later version</div>
 <div class="line">target_link_libraries(tests PRIVATE doctest::doctest)</div>
 </div><!-- fragment --><ul>
-<li>You can also use the following CMake snippet to automatically fetch the entire <b>doctest</b> repository from github and configure it as an external project:</li>
+<li>You can also use the following CMake snippet to automatically fetch the header from the GitHub repository and use it in your project (set <code>DOCTEST_VERSION</code> to the desired tag, branch or even commit SHA):</li>
+</ul>
+<div class="fragment"><div class="line">set(DOCTEST_VERSION v2.4.11)</div>
+<div class="line">FetchContent_Declare(doctest</div>
+<div class="line">    URL  https://raw.githubusercontent.com/doctest/doctest/${DOCTEST_VERSION}/doctest/doctest.h</div>
+<div class="line">    DOWNLOAD_NO_EXTRACT TRUE</div>
+<div class="line">)</div>
+<div class="line">FetchContent_MakeAvailable(doctest)</div>
+<div class="line"> </div>
+<div class="line">set(DOCTEST_INCLUDE_DIR ${doctest_SOURCE_DIR})</div>
+<div class="line"> </div>
+<div class="line">...</div>
+<div class="line"> </div>
+<div class="line"># add it globally</div>
+<div class="line">include_directories(${DOCTEST_INCLUDE_DIR})</div>
+<div class="line"> </div>
+<div class="line"># or per target</div>
+<div class="line">target_include_directories(my_target PUBLIC ${DOCTEST_INCLUDE_DIR})</div>
+</div><!-- fragment --><ul>
+<li>If you want CTest integration, you can fetch and use <b>doctest</b> as a CMake sub-project:</li>
+</ul>
+<div class="fragment"><div class="line">include(FetchContent)</div>
+<div class="line">FetchContent_Declare(</div>
+<div class="line">  doctest</div>
+<div class="line">  GIT_REPOSITORY https://github.com/doctest/doctest</div>
+<div class="line">  GIT_TAG v2.4.11 # tag, branch or even commit SHA</div>
+<div class="line">)</div>
+<div class="line">FetchContent_MakeAvailable(doctest)</div>
+<div class="line"> </div>
+<div class="line"># Include doctest_discover_tests(&lt;target&gt;) function</div>
+<div class="line">include(&quot;${doctest_SOURCE_DIR}/scripts/cmake/doctest.cmake&quot;)</div>
+<div class="line"> </div>
+<div class="line"># Use doctest in a target</div>
+<div class="line">target_link_libraries(my_target PUBLIC doctest::doctest)</div>
+<div class="line"> </div>
+<div class="line"># Or use it globally</div>
+<div class="line">link_libraries(doctest::doctest)</div>
+</div><!-- fragment --><ul>
+<li>An older CMake integration approach is using <code>ExternalProject_Add</code>. It is not recommended for new code, but known to work and is kept here for legacy reasons:</li>
 </ul>
 <div class="fragment"><div class="line">include(ExternalProject)</div>
 <div class="line">find_package(Git REQUIRED)</div>
@@ -136,15 +174,14 @@ CMake</h2>
 <div class="fragment"><div class="line">add_executable(my_tests src_1.cpp src_2.cpp ...)</div>
 <div class="line">target_link_libraries(my_tests doctest)</div>
 </div><!-- fragment --><ul>
-<li>The <code>CMakeLists.txt</code> file of the doctest repository has <code>install()</code> commands so you could also use doctest as a package.</li>
-<li>To discover tests from an executable and register them in ctest you could use <a href="../../scripts/cmake/doctest.cmake"><code>doctest_discover_tests(&lt;target&gt;)</code> from scripts/cmake/doctest.cmake</a> - read the comments in the file on how to use it. It works just like <a href="https://github.com/catchorg/Catch2/blob/master/docs/cmake-integration.md#automatic-test-registration">the same functionality in Catch</a>.</li>
+<li>The <code>CMakeLists.txt</code> file of the doctest repository has <code>install()</code> commands so you could also use <b>doctest</b> as a package.</li>
+<li>To discover tests from an executable and register them in CTest you could use <a href="../../scripts/cmake/doctest.cmake"><code>doctest_discover_tests(&lt;target&gt;)</code> from scripts/cmake/doctest.cmake</a> - read the comments in the file on how to use it. It works just like <a href="https://github.com/catchorg/Catch2/blob/master/docs/cmake-integration.md#automatic-test-registration">the same functionality in Catch</a>.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md74"></a>
+<h2><a class="anchor" id="autotoc_md81"></a>
 Package managers</h2>
 <p><b>doctest</b> is available through the following package managers:</p>
 <ul>
-<li>vcpkg <br  />
-<ul>
+<li>vcpkg<ul>
 <li>You can download and install doctest using the <a href="https://github.com/Microsoft/vcpkg">vcpkg</a> dependency manager: <code>sh git clone <a href="https://github.com/Microsoft/vcpkg.git">https://github.com/Microsoft/vcpkg.git</a> cd vcpkg ./bootstrap-vcpkg.sh #.\bootstrap-vcpkg.bat(for windows) ./vcpkg integrate install ./vcpkg install doctest </code> The doctest port in vcpkg is kept up to date by Microsoft team members and community contributors. If the version is out of date, please create an issue or pull request on the <a href="https://github.com/Microsoft/vcpkg">vcpkg repository</a>.</li>
 </ul>
 </li>
@@ -155,6 +192,14 @@ Package managers</h2>
 </ul>
 </li>
 <li>Homebrew (<code>brew install doctest</code>)</li>
+<li><a href="https://build2.org/">build2</a> and <a href="https://cppget.org/">cppget.org</a><ul>
+<li>You can automatically download and use a specific version of <b>doctest</b> from the stable section of the <a href="https://cppget.org/">cppget.org</a> package repositiory (<a href="https://cppget.org/doctest">cppget.org/doctest</a>) in each of your <a href="https://build2.org">build2</a> projects.</li>
+<li>For that, make sure to add the stable section of the <code>cppget.org</code> repository to your project's <code>repositories.manifest</code> file to be able to fetch the package list. <code> : role: prerequisite location: <a href="https://pkg.cppget.org/1/stable">https://pkg.cppget.org/1/stable</a> #trust: ... </code></li>
+<li>Add the dependency on <b>doctest</b> with your optional specific version constraint to your project's <code>manifest</code> file to make the package available for import. <code> depends: doctest ^ 2.4.10 </code></li>
+<li>Import <b>doctest</b> and add it to the dependencies of your application in your <code>buildfile</code>. Please note, it is still a single header-only library and nothing will be linked. Only the path of the header file will be made available to the executable. <code> import doctest = doctestlib{doctest} exe{my-exe}: {hxx cxx}{**} $doctest </code></li>
+<li>For further information, please refer to <a href="https://build2.org/doc.xhtml">build2 | Documentation</a>, <a href="https://cppget.org/doctest">cppget.org/doctest</a>, or <a href="https://github.com/build2-packaging/doctest">GitHub: build2-packaging/doctest</a> for bug reports.</li>
+</ul>
+</li>
 </ul>
 <hr  />
 <p><a href="readme.md#reference">Home</a></p>

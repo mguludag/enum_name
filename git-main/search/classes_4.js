@@ -18,8 +18,7 @@ var searchData=
   ['enum_5fsequence_5ffrom_5findex_15',['enum_sequence_from_index',['../structmgutility_1_1detail_1_1enum__sequence__from__index.html',1,'mgutility::detail']]],
   ['enum_5fsequence_5ffrom_5findex_3c_20enum_2c_20min_2c_20index_5fsequence_3c_20i_2e_2e_2e_20_3e_20_3e_16',['enum_sequence_from_index&lt; Enum, Min, index_sequence&lt; I... &gt; &gt;',['../structmgutility_1_1detail_1_1enum__sequence__from__index_3_01Enum_00_01Min_00_01index__sequence_3_01I_8_8_8_01_4_01_4.html',1,'mgutility::detail']]],
   ['enum_5ftype_17',['enum_type',['../structmgutility_1_1detail_1_1enum__type.html',1,'mgutility::detail']]],
-  ['errnoguard_18',['ErrnoGuard',['../classdoctest_1_1detail_1_1ErrnoGuard.html',1,'doctest::detail']]],
-  ['exceptiontranslator_19',['ExceptionTranslator',['../classdoctest_1_1detail_1_1ExceptionTranslator.html',1,'doctest::detail']]],
-  ['expression_5flhs_20',['Expression_lhs',['../structdoctest_1_1detail_1_1Expression__lhs.html',1,'doctest::detail']]],
-  ['expressiondecomposer_21',['ExpressionDecomposer',['../structdoctest_1_1detail_1_1ExpressionDecomposer.html',1,'doctest::detail']]]
+  ['exceptiontranslator_18',['ExceptionTranslator',['../classdoctest_1_1detail_1_1ExceptionTranslator.html',1,'doctest::detail']]],
+  ['expression_5flhs_19',['Expression_lhs',['../structdoctest_1_1detail_1_1Expression__lhs.html',1,'doctest::detail']]],
+  ['expressiondecomposer_20',['ExpressionDecomposer',['../structdoctest_1_1detail_1_1ExpressionDecomposer.html',1,'doctest::detail']]]
 ];

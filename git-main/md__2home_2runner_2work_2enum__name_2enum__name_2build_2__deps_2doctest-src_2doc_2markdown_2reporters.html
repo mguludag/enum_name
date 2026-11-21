@@ -86,7 +86,7 @@ $(function() {
   <div class="headertitle"><div class="title">Reporters</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md161"></a> Doctest has a modular reporter/listener system with which users can write their own reporters and register them. The reporter interface can also be used for "listening" to events.</p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md168"></a> Doctest has a modular reporter/listener system with which users can write their own reporters and register them. The reporter interface can also be used for "listening" to events.</p>
 <p>You can list all registered reporters/listeners with <code>--list-reporters</code>. There are a few implemented reporters in the framework:</p><ul>
 <li><code>console</code> - streaming - writes normal lines of text with coloring if a capable terminal is detected</li>
 <li><code>xml</code> - streaming - writes in xml format tailored to doctest</li>
@@ -102,35 +102,35 @@ $(function() {
 <div class="line"> </div>
 <div class="line"><span class="keyword">using namespace </span>doctest;</div>
 <div class="line"> </div>
-<div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structMyXmlReporter.html">MyXmlReporter</a> : <span class="keyword">public</span> <a class="code hl_struct" href="structdoctest_1_1IReporter.html">IReporter</a></div>
-<div class="line">{</div>
+<div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structMyXmlReporter.html">MyXmlReporter</a> : <span class="keyword">public</span> <a class="code hl_struct" href="structdoctest_1_1IReporter.html">IReporter</a> {</div>
 <div class="line">    <span class="comment">// caching pointers/references to objects of these types - safe to do</span></div>
-<div class="line">    <a class="code hl_class" href="classstd_1_1basic__ostream.html">std::ostream</a>&amp;         stdout_stream;</div>
-<div class="line">    <span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1ContextOptions.html">ContextOptions</a>&amp; opt;</div>
-<div class="line">    <span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1TestCaseData.html">TestCaseData</a>*   tc;</div>
-<div class="line">    std::mutex            mutex;</div>
+<div class="line">    <a class="code hl_class" href="classstd_1_1basic__ostream.html">std::ostream</a> &amp;stdout_stream;</div>
+<div class="line">    <span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1ContextOptions.html">ContextOptions</a> &amp;opt;</div>
+<div class="line">    <span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1TestCaseData.html">TestCaseData</a> *tc;</div>
+<div class="line">    std::mutex mutex;</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// constructor has to accept the ContextOptions by ref as a single argument</span></div>
-<div class="line">    <a class="code hl_struct" href="structMyXmlReporter.html">MyXmlReporter</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1ContextOptions.html">ContextOptions</a>&amp; in)</div>
-<div class="line">            : stdout_stream(*in.cout)</div>
-<div class="line">            , opt(in) {}</div>
+<div class="line">    <a class="code hl_struct" href="structMyXmlReporter.html">MyXmlReporter</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1ContextOptions.html">ContextOptions</a> &amp;in)</div>
+<div class="line">        : stdout_stream(*in.cout), opt(in) {}</div>
 <div class="line"> </div>
-<div class="line">    <span class="keywordtype">void</span> report_query(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1QueryData.html">QueryData</a>&amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{}</div>
+<div class="line">    <span class="keywordtype">void</span> report_query(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1QueryData.html">QueryData</a> &amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{}</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordtype">void</span> test_run_start()<span class="keyword"> override </span>{}</div>
 <div class="line"> </div>
-<div class="line">    <span class="keywordtype">void</span> test_run_end(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1TestRunStats.html">TestRunStats</a>&amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{}</div>
+<div class="line">    <span class="keywordtype">void</span> test_run_end(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1TestRunStats.html">TestRunStats</a> &amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{}</div>
 <div class="line"> </div>
-<div class="line">    <span class="keywordtype">void</span> test_case_start(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1TestCaseData.html">TestCaseData</a>&amp; in)<span class="keyword"> override </span>{ tc = &amp;in; }</div>
+<div class="line">    <span class="keywordtype">void</span> test_case_start(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1TestCaseData.html">TestCaseData</a> &amp;in)<span class="keyword"> override </span>{</div>
+<div class="line">        tc = &amp;in;</div>
+<div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// called when a test case is reentered because of unfinished subcases</span></div>
-<div class="line">    <span class="keywordtype">void</span> test_case_reenter(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1TestCaseData.html">TestCaseData</a>&amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{}</div>
+<div class="line">    <span class="keywordtype">void</span> test_case_reenter(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1TestCaseData.html">TestCaseData</a> &amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{}</div>
 <div class="line"> </div>
-<div class="line">    <span class="keywordtype">void</span> test_case_end(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1CurrentTestCaseStats.html">CurrentTestCaseStats</a>&amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{}</div>
+<div class="line">    <span class="keywordtype">void</span> test_case_end(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1CurrentTestCaseStats.html">CurrentTestCaseStats</a> &amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{}</div>
 <div class="line"> </div>
-<div class="line">    <span class="keywordtype">void</span> test_case_exception(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1TestCaseException.html">TestCaseException</a>&amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{}</div>
+<div class="line">    <span class="keywordtype">void</span> test_case_exception(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1TestCaseException.html">TestCaseException</a> &amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{}</div>
 <div class="line"> </div>
-<div class="line">    <span class="keywordtype">void</span> subcase_start(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1SubcaseSignature.html">SubcaseSignature</a>&amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{</div>
+<div class="line">    <span class="keywordtype">void</span> subcase_start(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1SubcaseSignature.html">SubcaseSignature</a> &amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{</div>
 <div class="line">        std::lock_guard&lt;std::mutex&gt; lock(mutex);</div>
 <div class="line">    }</div>
 <div class="line"> </div>
@@ -138,11 +138,11 @@ $(function() {
 <div class="line">        std::lock_guard&lt;std::mutex&gt; lock(mutex);</div>
 <div class="line">    }</div>
 <div class="line"> </div>
-<div class="line">    <span class="keywordtype">void</span> log_assert(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1AssertData.html">AssertData</a>&amp; in)<span class="keyword"> override </span>{</div>
+<div class="line">    <span class="keywordtype">void</span> log_assert(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1AssertData.html">AssertData</a> &amp;in)<span class="keyword"> override </span>{</div>
 <div class="line">        <span class="comment">// don&#39;t include successful asserts by default - this is done here</span></div>
 <div class="line">        <span class="comment">// instead of in the framework itself because doctest doesn&#39;t know</span></div>
 <div class="line">        <span class="comment">// if/when a reporter/listener cares about successful results</span></div>
-<div class="line">        <span class="keywordflow">if</span>(!in.m_failed &amp;&amp; !opt.success)</div>
+<div class="line">        <span class="keywordflow">if</span> (!in.m_failed &amp;&amp; !opt.success)</div>
 <div class="line">            <span class="keywordflow">return</span>;</div>
 <div class="line"> </div>
 <div class="line">        <span class="comment">// make sure there are no races - this is done here instead of in the</span></div>
@@ -153,14 +153,14 @@ $(function() {
 <div class="line">        <span class="comment">// ...</span></div>
 <div class="line">    }</div>
 <div class="line"> </div>
-<div class="line">    <span class="keywordtype">void</span> log_message(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1MessageData.html">MessageData</a>&amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{</div>
+<div class="line">    <span class="keywordtype">void</span> log_message(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1MessageData.html">MessageData</a> &amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{</div>
 <div class="line">        <span class="comment">// messages too can be used in a multi-threaded context - like asserts</span></div>
 <div class="line">        std::lock_guard&lt;std::mutex&gt; lock(mutex);</div>
 <div class="line"> </div>
 <div class="line">        <span class="comment">// ...</span></div>
 <div class="line">    }</div>
 <div class="line"> </div>
-<div class="line">    <span class="keywordtype">void</span> test_case_skipped(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1TestCaseData.html">TestCaseData</a>&amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{}</div>
+<div class="line">    <span class="keywordtype">void</span> test_case_skipped(<span class="keyword">const</span> <a class="code hl_struct" href="structdoctest_1_1TestCaseData.html">TestCaseData</a> &amp; <span class="comment">/*in*/</span>)<span class="keyword"> override </span>{}</div>
 <div class="line">};</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// &quot;1&quot; is the priority - used for ordering when multiple reporters are used</span></div>
@@ -168,18 +168,18 @@ $(function() {
 <div class="line"> </div>
 <div class="line"><span class="comment">// registering the same class as a reporter and as a listener is nonsense but it&#39;s possible</span></div>
 <div class="line">REGISTER_LISTENER(<span class="stringliteral">&quot;my_listener&quot;</span>, 1, <a class="code hl_struct" href="structMyXmlReporter.html">MyXmlReporter</a>);</div>
-<div class="ttc" id="aclassstd_1_1basic__ostream_html"><div class="ttname"><a href="classstd_1_1basic__ostream.html">std::basic_ostream</a></div><div class="ttdef"><b>Definition</b> doctest.h:530</div></div>
-<div class="ttc" id="astructMyXmlReporter_html"><div class="ttname"><a href="structMyXmlReporter.html">MyXmlReporter</a></div><div class="ttdef"><b>Definition</b> reporters_and_listeners.cpp:21</div></div>
-<div class="ttc" id="astructdoctest_1_1AssertData_html"><div class="ttname"><a href="structdoctest_1_1AssertData.html">doctest::AssertData</a></div><div class="ttdef"><b>Definition</b> doctest.h:825</div></div>
-<div class="ttc" id="astructdoctest_1_1ContextOptions_html"><div class="ttname"><a href="structdoctest_1_1ContextOptions.html">doctest::ContextOptions</a></div><div class="ttdoc">OCLINT too many fields.</div><div class="ttdef"><b>Definition</b> doctest.h:894</div></div>
-<div class="ttc" id="astructdoctest_1_1CurrentTestCaseStats_html"><div class="ttname"><a href="structdoctest_1_1CurrentTestCaseStats.html">doctest::CurrentTestCaseStats</a></div><div class="ttdef"><b>Definition</b> doctest.h:2018</div></div>
-<div class="ttc" id="astructdoctest_1_1IReporter_html"><div class="ttname"><a href="structdoctest_1_1IReporter.html">doctest::IReporter</a></div><div class="ttdef"><b>Definition</b> doctest.h:2050</div></div>
-<div class="ttc" id="astructdoctest_1_1MessageData_html"><div class="ttname"><a href="structdoctest_1_1MessageData.html">doctest::MessageData</a></div><div class="ttdef"><b>Definition</b> doctest.h:866</div></div>
-<div class="ttc" id="astructdoctest_1_1QueryData_html"><div class="ttname"><a href="structdoctest_1_1QueryData.html">doctest::QueryData</a></div><div class="ttdef"><b>Definition</b> doctest.h:2043</div></div>
-<div class="ttc" id="astructdoctest_1_1SubcaseSignature_html"><div class="ttname"><a href="structdoctest_1_1SubcaseSignature.html">doctest::SubcaseSignature</a></div><div class="ttdef"><b>Definition</b> doctest.h:874</div></div>
-<div class="ttc" id="astructdoctest_1_1TestCaseData_html"><div class="ttname"><a href="structdoctest_1_1TestCaseData.html">doctest::TestCaseData</a></div><div class="ttdef"><b>Definition</b> doctest.h:809</div></div>
-<div class="ttc" id="astructdoctest_1_1TestCaseException_html"><div class="ttname"><a href="structdoctest_1_1TestCaseException.html">doctest::TestCaseException</a></div><div class="ttdef"><b>Definition</b> doctest.h:2027</div></div>
-<div class="ttc" id="astructdoctest_1_1TestRunStats_html"><div class="ttname"><a href="structdoctest_1_1TestRunStats.html">doctest::TestRunStats</a></div><div class="ttdef"><b>Definition</b> doctest.h:2033</div></div>
+<div class="ttc" id="aclassstd_1_1basic__ostream_html"><div class="ttname"><a href="classstd_1_1basic__ostream.html">std::basic_ostream</a></div><div class="ttdef"><b>Definition</b> doctest.h:653</div></div>
+<div class="ttc" id="astructMyXmlReporter_html"><div class="ttname"><a href="structMyXmlReporter.html">MyXmlReporter</a></div><div class="ttdef"><b>Definition</b> reporters_and_listeners.cpp:18</div></div>
+<div class="ttc" id="astructdoctest_1_1AssertData_html"><div class="ttname"><a href="structdoctest_1_1AssertData.html">doctest::AssertData</a></div><div class="ttdef"><b>Definition</b> doctest.h:1615</div></div>
+<div class="ttc" id="astructdoctest_1_1ContextOptions_html"><div class="ttname"><a href="structdoctest_1_1ContextOptions.html">doctest::ContextOptions</a></div><div class="ttdef"><b>Definition</b> doctest.h:1445</div></div>
+<div class="ttc" id="astructdoctest_1_1CurrentTestCaseStats_html"><div class="ttname"><a href="structdoctest_1_1CurrentTestCaseStats.html">doctest::CurrentTestCaseStats</a></div><div class="ttdef"><b>Definition</b> doctest.h:2748</div></div>
+<div class="ttc" id="astructdoctest_1_1IReporter_html"><div class="ttname"><a href="structdoctest_1_1IReporter.html">doctest::IReporter</a></div><div class="ttdef"><b>Definition</b> doctest.h:2776</div></div>
+<div class="ttc" id="astructdoctest_1_1MessageData_html"><div class="ttname"><a href="structdoctest_1_1MessageData.html">doctest::MessageData</a></div><div class="ttdef"><b>Definition</b> doctest.h:2479</div></div>
+<div class="ttc" id="astructdoctest_1_1QueryData_html"><div class="ttname"><a href="structdoctest_1_1QueryData.html">doctest::QueryData</a></div><div class="ttdef"><b>Definition</b> doctest.h:2770</div></div>
+<div class="ttc" id="astructdoctest_1_1SubcaseSignature_html"><div class="ttname"><a href="structdoctest_1_1SubcaseSignature.html">doctest::SubcaseSignature</a></div><div class="ttdef"><b>Definition</b> doctest.h:2120</div></div>
+<div class="ttc" id="astructdoctest_1_1TestCaseData_html"><div class="ttname"><a href="structdoctest_1_1TestCaseData.html">doctest::TestCaseData</a></div><div class="ttdef"><b>Definition</b> doctest.h:2219</div></div>
+<div class="ttc" id="astructdoctest_1_1TestCaseException_html"><div class="ttname"><a href="structdoctest_1_1TestCaseException.html">doctest::TestCaseException</a></div><div class="ttdef"><b>Definition</b> doctest.h:2756</div></div>
+<div class="ttc" id="astructdoctest_1_1TestRunStats_html"><div class="ttname"><a href="structdoctest_1_1TestRunStats.html">doctest::TestRunStats</a></div><div class="ttdef"><b>Definition</b> doctest.h:2761</div></div>
 </div><!-- fragment --><p>Custom <code>IReporter</code> implementations must be registered with one of:</p>
 <ul>
 <li><code>REGISTER_REPORTER</code>, for when the new reporter is an option that users may choose at run-time.</li>

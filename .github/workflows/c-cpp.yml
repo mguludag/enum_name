@@ -73,7 +73,12 @@ jobs:
     name: "${{ matrix.config.compiler}} ${{ matrix.config.version }} (C++${{ matrix.config.cppstd }}, ${{ matrix.config.build_type }})"
     steps:
       - name: Update packages
-        run: apt-get update && apt-get install -y curl git pkg-config libsystemd-dev
+        run: |
+          apt-get update
+          if ! apt-get install -y curl git pkg-config libsystemd-dev; then
+            apt-get update
+            apt-get install -y curl git pkg-config libsystemd-dev
+          fi
       - uses: actions/checkout@v4
         with:
           submodules: true

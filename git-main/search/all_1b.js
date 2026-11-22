@@ -4,7 +4,7 @@ var searchData=
   ['read_5ffile_5fcontent_1',['read_file_content',['../namespaceamalgamate.html#acd134ed5c92a8a2ee427ff3320635417',1,'amalgamate']]],
   ['readme_2',['README',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2README.html',1,'']]],
   ['reference_3',['Reference',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2readme.html',1,'']]],
-  ['registered_4',['Why are my tests in a static library not getting registered?',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2faq.html#autotoc_md140',1,'']]],
+  ['registered_4',['Why are my tests in a static library not getting registered?',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2faq.html#autotoc_md141',1,'']]],
   ['relationalcomparator_5',['RelationalComparator',['../structdoctest_1_1detail_1_1RelationalComparator.html',1,'doctest::detail']]],
   ['release_5fprocess_6',['release_process',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2scripts_2release__process.html',1,'']]],
   ['remove_5fconst_7',['remove_const',['../structdoctest_1_1detail_1_1types_1_1remove__const.html',1,'doctest::detail::types']]],
@@ -12,12 +12,12 @@ var searchData=
   ['remove_5freference_9',['remove_reference',['../structdoctest_1_1detail_1_1types_1_1remove__reference.html',1,'doctest::detail::types']]],
   ['remove_5freference_3c_20t_20_26_20_3e_10',['remove_reference&lt; T &amp; &gt;',['../structdoctest_1_1detail_1_1types_1_1remove__reference_3_01T_01_6_01_4.html',1,'doctest::detail::types']]],
   ['remove_5freference_3c_20t_20_26_26_20_3e_11',['remove_reference&lt; T &amp;&amp; &gt;',['../structdoctest_1_1detail_1_1types_1_1remove__reference_3_01T_01_6_6_01_4.html',1,'doctest::detail::types']]],
-  ['reporters_12',['Reporters',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2extensions.html#autotoc_md130',1,'Other reporters'],['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2reporters.html',1,'Reporters'],['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2extensions.html#autotoc_md127',1,'The main entry points and mpi reporters']]],
-  ['reports_13',['Bug reports',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CONTRIBUTING.html#autotoc_md48',1,'']]],
-  ['requests_14',['Pull requests',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CONTRIBUTING.html#autotoc_md53',1,'']]],
+  ['reporters_12',['Reporters',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2extensions.html#autotoc_md131',1,'Other reporters'],['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2reporters.html',1,'Reporters'],['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2extensions.html#autotoc_md128',1,'The main entry points and mpi reporters']]],
+  ['reports_13',['Bug reports',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CONTRIBUTING.html#autotoc_md49',1,'']]],
+  ['requests_14',['Pull requests',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2CONTRIBUTING.html#autotoc_md54',1,'']]],
   ['reset_15',['reset',['../classmgutility_1_1optional.html#aa5d9dc1c598a5735584b903dcf98c9f4',1,'mgutility::optional::reset()'],['../classmgutility_1_1optional.html#aa5d9dc1c598a5735584b903dcf98c9f4',1,'mgutility::optional::reset()']]],
   ['result_16',['Result',['../structdoctest_1_1detail_1_1Result.html',1,'doctest::detail']]],
   ['resultbuilder_17',['ResultBuilder',['../structdoctest_1_1detail_1_1ResultBuilder.html',1,'doctest::detail']]],
   ['rfind_18',['rfind',['../classmgutility_1_1basic__string__view.html#aa2ee34f07ee7ec37344898d4f5ea57f9',1,'mgutility::basic_string_view']]],
-  ['runtime_20benchmarks_19',['Runtime benchmarks',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2benchmarks.html#autotoc_md75',1,'']]]
+  ['runtime_20benchmarks_19',['Runtime benchmarks',['../md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2benchmarks.html#autotoc_md76',1,'']]]
 ];

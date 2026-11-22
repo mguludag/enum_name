@@ -1,27 +1,7 @@
 var searchData=
 [
-  ['icontextscope_0',['IContextScope',['../structdoctest_1_1IContextScope.html',1,'doctest']]],
-  ['iexceptiontranslator_1',['IExceptionTranslator',['../structdoctest_1_1detail_1_1IExceptionTranslator.html',1,'doctest::detail']]],
-  ['index_5fsequence_2',['index_sequence',['../structmgutility_1_1detail_1_1index__sequence.html',1,'mgutility::detail']]],
-  ['index_5fsequence_5fconcat_3',['index_sequence_concat',['../structmgutility_1_1detail_1_1index__sequence__concat.html',1,'mgutility::detail']]],
-  ['index_5fsequence_5fconcat_3c_20index_5fsequence_3c_20i1_2e_2e_2e_20_3e_2c_20index_5fsequence_3c_20i2_2e_2e_2e_20_3e_20_3e_4',['index_sequence_concat&lt; index_sequence&lt; I1... &gt;, index_sequence&lt; I2... &gt; &gt;',['../structmgutility_1_1detail_1_1index__sequence__concat_3_01index__sequence_3_01I1_8_8_8_01_4_00_0192d4c5aa2dd9da9a126c29ca9b2579cf.html',1,'mgutility::detail']]],
-  ['ireporter_5',['IReporter',['../structdoctest_1_1IReporter.html',1,'doctest']]],
-  ['is_5farray_6',['is_array',['../structdoctest_1_1detail_1_1types_1_1is__array.html',1,'doctest::detail::types']]],
-  ['is_5farray_3c_20t_5bsize_5d_3e_7',['is_array&lt; T[SIZE]&gt;',['../structdoctest_1_1detail_1_1types_1_1is__array_3_01T_0fSIZE_0e_4.html',1,'doctest::detail::types']]],
-  ['is_5fcontainer_8',['is_container',['../structdoctest_1_1detail_1_1is__container.html',1,'doctest::detail']]],
-  ['is_5fcontainer_3c_20t_2c_20types_3a_3avoid_5ft_3c_20typename_20t_3a_3avalue_5ftype_2c_20typename_20t_3a_3aiterator_2c_20decltype_28declval_3c_20t_20_3e_28_29_2ebegin_28_29_29_2c_20decltype_28declval_3c_20t_20_3e_28_29_2eend_28_29_29_3e_20_3e_9',['is_container&lt; T, types::void_t&lt; typename T::value_type, typename T::iterator, decltype(declval&lt; T &gt;().begin()), decltype(declval&lt; T &gt;().end())&gt; &gt;',['../structdoctest_1_1detail_1_1is__container_3_01T_00_01types_1_1void__t_3_01typename_01T_1_1value__8b46371e09d85b3c0683c1662c7f674e.html',1,'doctest::detail']]],
-  ['is_5fenum_10',['is_enum',['../structdoctest_1_1detail_1_1types_1_1is__enum.html',1,'doctest::detail::types']]],
-  ['is_5fpair_11',['is_pair',['../structdoctest_1_1detail_1_1is__pair.html',1,'doctest::detail']]],
-  ['is_5fpair_3c_20t_2c_20types_3a_3avoid_5ft_3c_20typename_20t_3a_3afirst_5ftype_2c_20typename_20t_3a_3asecond_5ftype_2c_20decltype_28declval_3c_20t_20_3e_28_29_2efirst_29_2c_20decltype_28declval_3c_20t_20_3e_28_29_2esecond_29_3e_20_3e_12',['is_pair&lt; T, types::void_t&lt; typename T::first_type, typename T::second_type, decltype(declval&lt; T &gt;().first), decltype(declval&lt; T &gt;().second)&gt; &gt;',['../structdoctest_1_1detail_1_1is__pair_3_01T_00_01types_1_1void__t_3_01typename_01T_1_1first__type_33066fab692ee0ed0634327bb9805408.html',1,'doctest::detail']]],
-  ['is_5fpointer_13',['is_pointer',['../structdoctest_1_1detail_1_1types_1_1is__pointer.html',1,'doctest::detail::types']]],
-  ['is_5fpointer_3c_20t_20_2a_20_3e_14',['is_pointer&lt; T * &gt;',['../structdoctest_1_1detail_1_1types_1_1is__pointer_3_01T_01_5_01_4.html',1,'doctest::detail::types']]],
-  ['is_5frvalue_5freference_15',['is_rvalue_reference',['../structdoctest_1_1detail_1_1types_1_1is__rvalue__reference.html',1,'doctest::detail::types']]],
-  ['is_5frvalue_5freference_3c_20t_20_26_26_20_3e_16',['is_rvalue_reference&lt; T &amp;&amp; &gt;',['../structdoctest_1_1detail_1_1types_1_1is__rvalue__reference_3_01T_01_6_6_01_4.html',1,'doctest::detail::types']]],
-  ['is_5fsame_17',['is_same',['../structdoctest_1_1detail_1_1types_1_1is__same.html',1,'doctest::detail::types']]],
-  ['is_5fsame_3c_20t_2c_20t_20_3e_18',['is_same&lt; T, T &gt;',['../structdoctest_1_1detail_1_1types_1_1is__same_3_01T_00_01T_01_4.html',1,'doctest::detail::types']]],
-  ['is_5fscoped_5fenum_19',['is_scoped_enum',['../structmgutility_1_1detail_1_1is__scoped__enum.html',1,'mgutility::detail']]],
-  ['is_5fstd_5fstring_20',['is_std_string',['../structdoctest_1_1detail_1_1is__std__string.html',1,'doctest::detail']]],
-  ['is_5fstd_5fstring_3c_20t_2c_20typename_20types_3a_3aenable_5fif_3c_20types_3a_3ais_5fsame_3c_20decltype_28declval_3c_20const_20t_20_26_20_3e_28_29_2ec_5fstr_28_29_29_2c_20const_20char_20_2a_20_3e_3a_3avalue_20_26_26types_3a_3ais_5fsame_3c_20decltype_28declval_3c_20const_20t_20_26_20_3e_28_29_2esize_28_29_29_2c_20size_5ft_20_3e_3a_3avalue_20_3e_3a_3atype_20_3e_21',['is_std_string&lt; T, typename types::enable_if&lt; types::is_same&lt; decltype(declval&lt; const T &amp; &gt;().c_str()), const char * &gt;::value &amp;&amp;types::is_same&lt; decltype(declval&lt; const T &amp; &gt;().size()), size_t &gt;::value &gt;::type &gt;',['../structdoctest_1_1detail_1_1is__std__string_3_01T_00_01typename_01types_1_1enable__if_3_01types_1817f288553c5d5c2e121ed7b2e64fe63.html',1,'doctest::detail']]],
-  ['isnan_22',['IsNaN',['../structdoctest_1_1IsNaN.html',1,'doctest']]],
-  ['itranslator_23',['ITranslator',['../structITranslator.html',1,'']]]
+  ['has_5fbit_5for_0',['has_bit_or',['../structmgutility_1_1detail_1_1has__bit__or.html',1,'mgutility::detail']]],
+  ['has_5fbit_5for_3c_20t_2c_20decltype_28_28t_7b_7d_7ct_7b_7d_29_2c_20void_28_29_29_3e_1',['has_bit_or&lt; T, decltype((T{}|T{}), void())&gt;',['../structmgutility_1_1detail_1_1has__bit__or_3_01T_00_01decltype_07_07T_02_03_7T_02_03_08_00_01void_07_08_08_4.html',1,'mgutility::detail']]],
+  ['has_5finsertion_5foperator_2',['has_insertion_operator',['../structdoctest_1_1detail_1_1has__insertion__operator.html',1,'doctest::detail']]],
+  ['has_5finsertion_5foperator_3c_20t_2c_20decltype_28operator_3c_3c_28declval_3c_20std_3a_3aostream_20_26_20_3e_28_29_2c_20declval_3c_20const_20t_20_26_20_3e_28_29_29_2c_20void_28_29_29_3e_3',['has_insertion_operator&lt; T, decltype(operator&lt;&lt;(declval&lt; std::ostream &amp; &gt;(), declval&lt; const T &amp; &gt;()), void())&gt;',['../structdoctest_1_1detail_1_1has__insertion__operator_3_01T_00_01decltype_07operator_3_3_07declvald5a5a279653bbfeef238ad5c984744e2.html',1,'doctest::detail']]]
 ];

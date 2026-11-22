@@ -86,7 +86,7 @@ $(function() {
   <div class="headertitle"><div class="title">The &lt;tt&gt;main()&lt;/tt&gt; entry point</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md159"></a> The usual way of writing tests in C++ has always been into separate source files from the code they test that form an executable containing only tests. In that scenario the default <code>main()</code> provided by <b>doctest</b> is usually sufficient:</p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md160"></a> The usual way of writing tests in C++ has always been into separate source files from the code they test that form an executable containing only tests. In that scenario the default <code>main()</code> provided by <b>doctest</b> is usually sufficient:</p>
 <div class="fragment"><div class="line"> ++</div>
 <div class="line"><span class="preprocessor">#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN</span></div>
 <div class="line"><span class="preprocessor">#include &quot;doctest.h&quot;</span></div>
@@ -124,7 +124,7 @@ $(function() {
 <div class="line">}</div>
 <div class="ttc" id="aclassdoctest_1_1Context_html"><div class="ttname"><a href="classdoctest_1_1Context.html">doctest::Context</a></div><div class="ttdef"><b>Definition</b> doctest.h:2597</div></div>
 </div><!-- fragment --><p>Note the call to <code>.shouldExit()</code> on the context - that is very important - it will be set when a query flag has been used (or the <code>--no-run</code> option is set to <code>true</code>) and it is the user's responsibility to exit the application in a normal way.</p>
-<h2><a class="anchor" id="autotoc_md160"></a>
+<h2><a class="anchor" id="autotoc_md161"></a>
 Dealing with shared objects (DLLs)</h2>
 <p>The framework can be used separately in binaries (executables / shared objects) with each having its own test runner - this way even different versions of doctest can be used - but there will be no simple way to execute the tests from all loaded binaries and have the results aggregated and summarized.</p>
 <p>There is also an option to have the test runner (implementation) built in a binary and shared with others (so there is a single test registry) by exporting its public symbols (the ones needed for writing tests by the user - all the forward declarations of the framework).</p>

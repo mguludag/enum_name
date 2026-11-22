@@ -86,18 +86,18 @@ $(function() {
   <div class="headertitle"><div class="title">Extensions</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md121"></a> The doctest header doesn't include any external or stdlib headers in its interface part in order to provide the most optimal build times but that means it is limited in what it can provide as functionality =&gt; that's when extensions come into play. They are located as header files in <a href="../../doctest/extensions"><code>doctest/extensions</code></a> and each of them is documented in a section here.</p>
-<h1><a class="anchor" id="autotoc_md122"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md122"></a> The doctest header doesn't include any external or stdlib headers in its interface part in order to provide the most optimal build times but that means it is limited in what it can provide as functionality =&gt; that's when extensions come into play. They are located as header files in <a href="../../doctest/extensions"><code>doctest/extensions</code></a> and each of them is documented in a section here.</p>
+<h1><a class="anchor" id="autotoc_md123"></a>
 <a href="../../doctest/extensions/doctest_util.h">Utils</a></h1>
 <p>nothing here yet...</p>
-<h1><a class="anchor" id="autotoc_md123"></a>
+<h1><a class="anchor" id="autotoc_md124"></a>
 <a href="../../doctest/extensions/doctest_mpi.h">Distributed tests with MPI</a></h1>
 <p>[Bruno Maugars and Bérenger Berthoul, ONERA]</p>
 <p>Testing code over distributed processes requires support from the testing framework. <b>Doctest</b> support for MPI parallel communication is provided in the <code>"doctest/extensions/doctest_mpi.h"</code> header.</p>
-<h2><a class="anchor" id="autotoc_md124"></a>
+<h2><a class="anchor" id="autotoc_md125"></a>
 Example</h2>
 <p>See <a href="../../examples/mpi/mpi.cpp"><b>the complete test</b></a> and <a href="../../examples/mpi/main.cpp"><b>the configuration of main()</b></a></p>
-<h3><a class="anchor" id="autotoc_md125"></a>
+<h3><a class="anchor" id="autotoc_md126"></a>
 MPI_TEST_CASE</h3>
 <div class="fragment"><div class="line"> ++</div>
 <div class="line"><span class="preprocessor">#include &quot;doctest/extensions/doctest_mpi.h&quot;</span></div>
@@ -127,10 +127,10 @@ MPI_TEST_CASE</h3>
 <div class="line">    CHECK(test_nb_procs == N);</div>
 <div class="line">    MPI_CHECK(i, test_rank == i); <span class="comment">// for any i&lt;N</span></div>
 <div class="line">}</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md126"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md127"></a>
 Assertions</h3>
 <p>It is possible to use regular assertions in an <code>MPI_TEST_CASE</code>. MPI-specific assertions are also provided and are all prefixed with <code>MPI_</code> (<code>MPI_CHECK</code>, <code>MPI_ASSERT</code>...). The first argument is the rank for which they are checked, and the second is the usual expression to check.</p>
-<h2><a class="anchor" id="autotoc_md127"></a>
+<h2><a class="anchor" id="autotoc_md128"></a>
 The main entry points and mpi reporters</h2>
 <p>You need to launch the unit tests with an <code>mpirun</code> or <code>mpiexec</code> command: </p><div class="fragment"><div class="line">mpirun -np 2 unit_test_executable.exe</div>
 </div><!-- fragment --><div class="fragment"><div class="line">::mpi_init_thread()</div>
@@ -156,7 +156,7 @@ The main entry points and mpi reporters</h2>
 <div class="line">    <span class="keywordflow">return</span> test_result;</div>
 <div class="line">}</div>
 <div class="ttc" id="aclassdoctest_1_1Context_html"><div class="ttname"><a href="classdoctest_1_1Context.html">doctest::Context</a></div><div class="ttdef"><b>Definition</b> doctest.h:2597</div></div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md128"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md129"></a>
 MpiConsoleReporter</h3>
 <p>The <code>MpiConsoleReporter</code> should be substituted to the default reporter. It does the same as the default console reporter for regular assertions, but only outputs on process 0. For MPI test cases, if there is a failure it tells the process that failed</p>
 <div class="fragment"><div class="line">[doctest] doctest version is &quot;2.4.0&quot;</div>
@@ -199,16 +199,16 @@ MpiConsoleReporter</h3>
 <div class="line">[doctest] assertions on all processes:   1 |   1 passed |      0 failed |</div>
 <div class="line">[doctest] WARNING: Skipped 1 test requiring more than 2 MPI processes to run</div>
 <div class="line">===============================================================================</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md129"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md130"></a>
 MpiFileReporter</h3>
 <p>The <code>MpiFileReporter</code> will just print the result of each process in its own file, named <code>doctest_[rank].log</code>. Only use this reporter as a debug facility if you want to know what is going on exactly when a parallel test case is failing.</p>
-<h3><a class="anchor" id="autotoc_md130"></a>
+<h3><a class="anchor" id="autotoc_md131"></a>
 Other reporters</h3>
 <p>Other reporters (jUnit, XML) are not supported directly, which mean that you can always print the result of each process to its own file, but there is (currently) no equivalent of the <code>MpiConsoleReporter</code> that will aggregate the results of all processes.</p>
-<h2><a class="anchor" id="autotoc_md131"></a>
+<h2><a class="anchor" id="autotoc_md132"></a>
 Note</h2>
 <p>This feature is provided to unit-test mpi-distributed code. It is <b>not</b> a way to parallelize many unit tests over several processes (for that, see <a href="../../examples/range_based_execution.py"><b>the example python script</b></a>).</p>
-<h2><a class="anchor" id="autotoc_md132"></a>
+<h2><a class="anchor" id="autotoc_md133"></a>
 TODO</h2>
 <ul>
 <li>Pass <code>s</code> member variable of <code>ConsoleReporter</code> as an argument to member functions so we can use them with another object (would help to factorize <code>MPIConsoleReporter</code>)</li>

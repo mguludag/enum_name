@@ -86,8 +86,8 @@ $(function() {
   <div class="headertitle"><div class="title">Parameterized test cases</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md162"></a> Test cases can be parameterized easily by type and by value.</p>
-<h1><a class="anchor" id="autotoc_md163"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md163"></a> Test cases can be parameterized easily by type and by value.</p>
+<h1><a class="anchor" id="autotoc_md164"></a>
 Value-parameterized test cases</h1>
 <p>Value-parameterized tests are supported via the <code>GENERATE</code> macro in <code><a class="el" href="doctest_8h_source.html">doctest/doctest.h</a></code>.</p>
 <div class="fragment"><div class="line"> ++</div>
@@ -146,7 +146,7 @@ Value-parameterized test cases</h1>
 <li><code>GENERATE</code> must not appear inside control flow that varies between reruns independently of <code>SUBCASE</code> or earlier <code>GENERATE</code> choices (for example, mutable external state, randomness, or time-dependent conditions).</li>
 </ul>
 <p>See <a href="../../examples/all_features/generators.cpp"><code>examples/all_features/generators.cpp</code></a>.</p>
-<h1><a class="anchor" id="autotoc_md164"></a>
+<h1><a class="anchor" id="autotoc_md165"></a>
 Templated test cases - parameterized by type</h1>
 <p>Suppose you have multiple implementations of the same interface and want to make sure that all of them satisfy some common requirements. Or, you may have defined several types that are supposed to conform to the same "concept" and you want to verify it. In both cases, you want the same test logic repeated for different types.</p>
 <p>While you can write one <code>TEST_CASE</code> for each type you want to test (and you may even factor the test logic into a function template that you invoke from the test case), it's tedious and doesn't scale: if you want <code>M</code> tests over <code>N</code> types, you'll end up writing <code>M * N</code> tests.</p>

@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['pair_0',['pair',['../structmgutility_1_1pair.html',1,'mgutility']]],
-  ['pair_3c_20color_20_3e_1',['pair&lt; color &gt;',['../structmgutility_1_1pair.html',1,'mgutility']]],
-  ['pair_3c_20position_20_3e_2',['pair&lt; Position &gt;',['../structmgutility_1_1pair.html',1,'mgutility']]],
-  ['pair_3c_20status_20_3e_3',['pair&lt; status &gt;',['../structmgutility_1_1pair.html',1,'mgutility']]],
-  ['pair_3c_20t_20_3e_4',['pair&lt; T &gt;',['../structmgutility_1_1pair.html',1,'mgutility']]],
-  ['pair_3c_20weekday_20_3e_5',['pair&lt; weekday &gt;',['../structmgutility_1_1pair.html',1,'mgutility']]]
+  ['one_5fof_0',['one_of',['../structDOCTEST__GCC__SUPPRESS__WARNING__POP_1_1one__of.html',1,'DOCTEST_GCC_SUPPRESS_WARNING_POP']]],
+  ['optional_1',['optional',['../classmgutility_1_1optional.html',1,'mgutility']]],
+  ['oss_2',['oss',['../classdoctest_1_1detail_1_1oss.html',1,'doctest::detail']]]
 ];

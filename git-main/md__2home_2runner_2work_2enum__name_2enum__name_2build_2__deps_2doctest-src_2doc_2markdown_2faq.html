@@ -86,7 +86,7 @@ $(function() {
   <div class="headertitle"><div class="title">FAQ</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md134"></a></p><ul>
+<div class="textblock"><p><a class="anchor" id="autotoc_md135"></a></p><ul>
 <li>**How is doctest different from Catch?**</li>
 <li>**How is doctest different from Google Test?**</li>
 <li>**How to get the best compile-time performance with the framework?**</li>
@@ -101,7 +101,7 @@ $(function() {
 <li>**Why is doctest using macros?**</li>
 <li>**How to use with multiple files?**</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md135"></a>
+<h2><a class="anchor" id="autotoc_md136"></a>
 How is <b>doctest</b> different from Catch?</h2>
 <p>Pros of <b>doctest</b>:</p>
 <ul>
@@ -140,7 +140,7 @@ How is <b>doctest</b> different from Catch?</h2>
 <div class="line"><span class="comment">// catch exposes this by default outside of its namespace</span></div>
 <div class="line"><span class="keyword">using </span><a class="code hl_struct" href="structdoctest_1_1Approx.html">doctest::Approx</a>;</div>
 <div class="ttc" id="astructdoctest_1_1Approx_html"><div class="ttname"><a href="structdoctest_1_1Approx.html">doctest::Approx</a></div><div class="ttdef"><b>Definition</b> doctest.h:1313</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md136"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md137"></a>
 How is <b>doctest</b> different from Google Test?</h2>
 <p>Here are a couple of differences:</p>
 <ul>
@@ -157,7 +157,7 @@ How is <b>doctest</b> different from Google Test?</h2>
 <li>doctest has some integration with mocking libraries but Google Test works perfectly with Google Mock (although doctest should in theory work with it as well)</li>
 </ul>
 <p>The areas where doctest is behind are planned for improvement in the future. There are many other smaller differences - it would be impractical to cover them all.</p>
-<h2><a class="anchor" id="autotoc_md137"></a>
+<h2><a class="anchor" id="autotoc_md138"></a>
 How to get the best compile-time performance with the framework?</h2>
 <p>The <a href="configuration.md#doctest_config_super_fast_asserts">**<code>DOCTEST_CONFIG_SUPER_FAST_ASSERTS</code>**</a> config option yields the <a href="benchmarks.md#cost-of-an-assertion-macro"><b>fastest possible</b></a> compile times (up to 31-91%). Also the expression-decomposing template machinery can be skipped by using the <a href="assertions.md#binary-and-unary-asserts"><b>binary</b></a> asserts.</p>
 <p>There are only 2 tiny drawbacks of using this config option:</p>
@@ -166,11 +166,11 @@ How to get the best compile-time performance with the framework?</h2>
 <li>when an assert fails and a debugger is present - the framework will break inside a doctest function so the user will have to go 1 level up in the callstack to see where the actual assert is in the source code.</li>
 </ul>
 <p>These 2 things can be considered negligible and totally worth it if you are dealing mainly with expressions unlikely to throw exceptions and all the tests usually pass (you don't need to navigate often to a failing assert with a debugger attached).</p>
-<h2><a class="anchor" id="autotoc_md138"></a>
+<h2><a class="anchor" id="autotoc_md139"></a>
 Is doctest thread-aware?</h2>
 <p>Most macros/functionality is safe to use in a multithreaded context: <a class="el" href="md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2assertions.html"><b>assertion</b></a> and <a class="el" href="md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2logging.html"><b>logging</b></a> macros can be safely used from multiple threads spawned from a single test case. This however does not mean that multiple test cases can be run in parallel - test cases are still run serially. <a href="tutorial.md#test-cases-and-subcases"><b>Subcases</b></a> should also be used only from the test runner thread and all threads spawned in a subcase ought to be joined before the end of that subcase and no new subcases should be entered while other threads with doctest assertions in them are still running - not following these instructions will lead to crashes (example in <a href="../../examples/all_features/concurrency.cpp"><b>here</b></a>). Also note that logged context in one thread will not be used/printed when asserts from another thread fail - logged context is thread-local.</p>
 <p>There is also an option to run a <a class="el" href="md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2commandline.html"><b>range</b></a> of tests from an executable - so tests can be run in parallel by invoking the process multiple times with different ranges - see <a href="../../examples/range_based_execution.py"><b>the example python script</b></a>.</p>
-<h2><a class="anchor" id="autotoc_md139"></a>
+<h2><a class="anchor" id="autotoc_md140"></a>
 Is mocking supported?</h2>
 <p><b>doctest</b> doesn't support mocking but should be easy to integrate with third-party libraries such as:</p>
 <ul>
@@ -178,7 +178,7 @@ Is mocking supported?</h2>
 <li><a href="https://github.com/eranpeer/FakeIt">FakeIt</a> - integration might be similar to that of <a href="https://github.com/eranpeer/FakeIt/tree/master/config/catch">catch</a> but this has not been looked into</li>
 </ul>
 <p>by using the <a href="logging.md#messages-which-can-optionally-fail-test-cases"><b>logging</b></a> macros such as <code>ADD_FAIL_AT(file, line, message)</code></p>
-<h2><a class="anchor" id="autotoc_md140"></a>
+<h2><a class="anchor" id="autotoc_md141"></a>
 Why are my tests in a static library not getting registered?</h2>
 <p>This is a <a href="https://groups.google.com/forum/#!msg/catch-forum/FV0Qo62DvgY/jxEO6c9_q3kJ"><b>common problem among libraries with self-registering code</b></a> and it affects all modern compilers on all platforms.</p>
 <p>The problem is that when a static library is being linked to a binary (executable or dll) - only object files from the static library that define a symbol being required from the binary will get pulled in (this is a linker/dependency optimization).</p>
@@ -196,10 +196,10 @@ Why are my tests in a static library not getting registered?</h2>
 </ul>
 <p>You can also checkout this repository for a different solution: <a href="https://github.com/pthom/doctest_registerlibrary"><b>pthom/doctest_registerlibrary</b></a>.</p>
 <p>A compiler-specific solution for MSVC is to use the <a href="https://msdn.microsoft.com/en-us/library/bxwfs976.aspx"><code>/OPT:NOREF</code></a> linker flag (thanks to <a href="https://github.com/Lectem">lectem</a> for <a href="https://github.com/doctest/doctest/issues/106">reporting</a> it!). Another option is to look at <a href="https://docs.microsoft.com/en-us/cpp/build/reference/wholearchive-include-all-library-object-files?view=vs-2019"><code>/wholearchive</code></a> for MSVC.</p>
-<h2><a class="anchor" id="autotoc_md141"></a>
+<h2><a class="anchor" id="autotoc_md142"></a>
 Why is comparing C strings (<code>char*</code>) actually comparing pointers?</h2>
 <p><b>doctest</b> by default treats <code>char*</code> as normal pointers. Using the <a href="configuration.md#doctest_config_treat_char_star_as_string">**<code>DOCTEST_CONFIG_TREAT_CHAR_STAR_AS_STRING</code>**</a> changes that.</p>
-<h2><a class="anchor" id="autotoc_md142"></a>
+<h2><a class="anchor" id="autotoc_md143"></a>
 How to write tests in header-only libraries?</h2>
 <p>There are 2 options:</p>
 <ul>
@@ -207,19 +207,19 @@ How to write tests in header-only libraries?</h2>
 <li>don't include the doctest header and guard your test cases with <code>#ifdef DOCTEST_LIBRARY_INCLUDED</code> and <code>#endif</code> - that way your tests will be compiled and registered if the user includes the doctest header before your headers (and they will also have to implement the test runner somewhere).</li>
 </ul>
 <p>Also note that it would be a good idea to add a tag in your test case names (like this: <code>TEST_CASE("[the_lib] testing foo")</code>) so the user can easily filter them out with <code>--test-case-exclude=*the_lib*</code> if they wish to.</p>
-<h2><a class="anchor" id="autotoc_md143"></a>
+<h2><a class="anchor" id="autotoc_md144"></a>
 Does the framework use exceptions?</h2>
 <p>Yes - but they can be disabled - see the <a href="configuration.md#doctest_config_no_exceptions">**<code>DOCTEST_CONFIG_NO_EXCEPTIONS</code>**</a> config identifier.</p>
-<h2><a class="anchor" id="autotoc_md144"></a>
+<h2><a class="anchor" id="autotoc_md145"></a>
 Why do I get compiler errors in STL headers when including the doctest header?</h2>
 <p>Try using the <a href="configuration.md#doctest_config_use_std_headers">**<code>DOCTEST_CONFIG_USE_STD_HEADERS</code>**</a> configuration identifier.</p>
-<h2><a class="anchor" id="autotoc_md145"></a>
+<h2><a class="anchor" id="autotoc_md146"></a>
 Can different versions of the framework be used within the same binary (executable/dll)?</h2>
 <p>Currently no. Single header libraries like <a href="https://github.com/nothings/stb"><b>stb</b></a> have this as an option (everything gets declared static - making it with internal linkage) but it isn't very logical for <b>doctest</b> - the main point is to write tests in any source file of the project and have the test runner implemented in only one source file.</p>
-<h2><a class="anchor" id="autotoc_md146"></a>
+<h2><a class="anchor" id="autotoc_md147"></a>
 Why is doctest using macros?</h2>
 <p>Aren't they evil and not <em>modern</em>? - Check out the answer Phil Nash gives to this question <a href="http://accu.org/index.php/journals/2064"><b>here</b></a> (the creator of <a href="https://github.com/catchorg/Catch2"><b>Catch</b></a>).</p>
-<h2><a class="anchor" id="autotoc_md147"></a>
+<h2><a class="anchor" id="autotoc_md148"></a>
 How to use with multiple files?</h2>
 <p>All you need to do is define either <a href="configuration.md#doctest_config_implement_with_main">**<code>DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN</code>**</a> or <a href="configuration.md#doctest_config_implement">**<code>DOCTEST_CONFIG_IMPLEMENT</code>**</a> in only ONE of the source files just before including the doctest header - in all other source files you just include the header and use the framework. The difference between the two is that one of them provides a <code>main()</code> entry point - for more info on that please refer to <a class="el" href="md__2home_2runner_2work_2enum__name_2enum__name_2build_2__deps_2doctest-src_2doc_2markdown_2main.html"><code>The main() entry point</code></a>.</p>
 <hr  />

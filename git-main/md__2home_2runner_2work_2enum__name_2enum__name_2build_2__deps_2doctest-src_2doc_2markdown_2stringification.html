@@ -86,9 +86,9 @@ $(function() {
   <div class="headertitle"><div class="title">String conversions</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md170"></a> <b>doctest</b> needs to be able to convert types you use in assertions and logging expressions into strings (for logging and reporting purposes). Most built-in types are supported out of the box but there are three ways that you can tell <b>doctest</b> how to convert your own types (or other, third-party types) into strings.</p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md171"></a> <b>doctest</b> needs to be able to convert types you use in assertions and logging expressions into strings (for logging and reporting purposes). Most built-in types are supported out of the box but there are three ways that you can tell <b>doctest</b> how to convert your own types (or other, third-party types) into strings.</p>
 <p>For stringifying enums checkout <a href="https://github.com/doctest/doctest/issues/121">this issue</a>.</p>
-<h1><a class="anchor" id="autotoc_md171"></a>
+<h1><a class="anchor" id="autotoc_md172"></a>
 <code>operator&lt;&lt;</code> overload for <code>std::ostream</code></h1>
 <p>This is the standard way of providing string conversions in C++ - and the chances are you may already provide this for your own purposes. If you're not familiar with this idiom it involves writing a free function of the form:</p>
 <div class="fragment"><div class="line"> ++</div>
@@ -105,7 +105,7 @@ $(function() {
 <div class="line">    os &lt;&lt; convertMyTypeToString(*<span class="keyword">this</span>);</div>
 <div class="line">    <span class="keywordflow">return</span> os;</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md172"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md173"></a>
 <code>doctest::toString</code> overload</h1>
 <p>If you don't want to provide an <code>operator&lt;&lt;</code> overload, or you want to convert your type differently for testing purposes, you can provide an overload for <code>toString()</code> for your type which returns <code><a class="el" href="classdoctest_1_1String.html">doctest::String</a></code>.</p>
 <div class="fragment"><div class="line"> ++</div>
@@ -118,7 +118,7 @@ $(function() {
 <div class="line">} <span class="comment">// namespace user</span></div>
 <div class="ttc" id="aclassdoctest_1_1String_html"><div class="ttname"><a href="classdoctest_1_1String.html">doctest::String</a></div><div class="ttdef"><b>Definition</b> doctest.h:871</div></div>
 </div><!-- fragment --><p>Note that the function must be in the same namespace as your type. If the type is not in any namespace - then the overload should be in the global namespace as well. <code>convertMyTypeToString</code> is where you'll write whatever code is necessary to make your type printable.</p>
-<h1><a class="anchor" id="autotoc_md173"></a>
+<h1><a class="anchor" id="autotoc_md174"></a>
 <code>doctest::StringMaker&lt;T&gt;</code> specialisation</h1>
 <p>There are some cases where overloading <code>toString</code> does not work as expected. Specialising <code>StringMaker&lt;T&gt;</code> gives you more precise and reliable control - but at the cost of slightly more code and complexity:</p>
 <div class="fragment"><div class="line"> ++</div>
@@ -130,7 +130,7 @@ $(function() {
 <div class="line">    }</div>
 <div class="line">};</div>
 <div class="line">} <span class="comment">// namespace doctest</span></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md174"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md175"></a>
 Translating exceptions</h1>
 <p>By default all exceptions deriving from <code>std::exception</code> will be translated to strings by calling the <code>what()</code> method (also C strings). For exception types that do not derive from <code>std::exception</code> - or if <code>what()</code> does not return a suitable string - use <code>REGISTER_EXCEPTION_TRANSLATOR</code>. This defines a function that takes your exception type and returns a <code><a class="el" href="classdoctest_1_1String.html">doctest::String</a></code>. It can appear anywhere in the code - it doesn't have to be in the same translation unit. For example:</p>
 <div class="fragment"><div class="line"> ++</div>

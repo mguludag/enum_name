@@ -5,5 +5,6 @@ var searchData=
   ['basic_5fistream_2',['basic_istream',['../classstd_1_1basic__istream.html',1,'std']]],
   ['basic_5fostream_3',['basic_ostream',['../classstd_1_1basic__ostream.html',1,'std']]],
   ['basic_5fstring_4',['basic_string',['../classstd_1_1basic__string.html',1,'std']]],
-  ['basic_5fstring_5fview_5',['basic_string_view',['../classmgutility_1_1basic__string__view.html',1,'mgutility']]]
+  ['basic_5fstring_5fview_5',['basic_string_view',['../classmgutility_1_1basic__string__view.html',1,'mgutility']]],
+  ['benchmarkreporttests_6',['BenchmarkReportTests',['../classtest__run_1_1BenchmarkReportTests.html',1,'test_run']]]
 ];

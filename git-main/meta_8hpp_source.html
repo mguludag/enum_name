@@ -209,66 +209,85 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>};</div>
 </div>
 <div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, <span class="keywordtype">int</span> Min, <span class="keywordtype">int</span> Max&gt;</div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span><span class="keyword">using </span>make_enum_sequence = <span class="keyword">typename</span> <a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence__from__index.html">enum_sequence_from_index</a>&lt;</div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    Enum, Min,</div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    make_index_sequence&lt;static_cast&lt;std::size_t&gt;(Max - Min + 1)&gt;&gt;::type;</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>} <span class="comment">// namespace detail</span></div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span><span class="preprocessor">#if MGUTILITY_CPLUSPLUS &gt;= 201402L</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, <span class="keywordtype">int</span> Min, std::size_t... I&gt;</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span><span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1detail_1_1enum__sequence__from__index.html">enum_sequence_from_index</a>&lt;Enum, Min, std::<a class="code hl_struct" href="structmgutility_1_1detail_1_1index__sequence.html">index_sequence</a>&lt;I...&gt;&gt; {</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">int</span> offset(std::size_t i) {</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keywordflow">return</span> Min + <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(i);</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>  }</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span> </div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>  <span class="keyword">using </span>type = enum_sequence&lt;Enum, static_cast&lt;Enum&gt;(offset(I))...&gt;;</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>};</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span> </div>
-<div class="foldopen" id="foldopen00217" data-start="{" data-end="};">
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno"><a class="line" href="structmgutility_1_1enum__range.html">  217</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1enum__range.html">enum_range</a> {</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> min{MGUTILITY_ENUM_RANGE_MIN};</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> max{MGUTILITY_ENUM_RANGE_MAX};</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>};</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Enum, <span class="keywordtype">int</span> Min, <span class="keywordtype">int</span> Max&gt;</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span><span class="preprocessor">#if MGUTILITY_CPLUSPLUS &gt;= 201402L</span></div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span><span class="keyword">using </span>make_enum_sequence = <span class="keyword">typename</span> enum_sequence_from_index&lt;</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    Enum, Min,</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    std::make_index_sequence&lt;static_cast&lt;std::size_t&gt;(Max - Min + 1)&gt;&gt;::type;</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span><span class="keyword">using </span>make_enum_sequence = <span class="keyword">typename</span> enum_sequence_from_index&lt;</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    Enum, Min,</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    make_index_sequence&lt;static_cast&lt;std::size_t&gt;(Max - Min + 1)&gt;&gt;::type;</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>} <span class="comment">// namespace detail</span></div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span> </div>
+<div class="foldopen" id="foldopen00236" data-start="{" data-end="};">
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno"><a class="line" href="structmgutility_1_1enum__range.html">  236</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1enum__range.html">enum_range</a> {</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> min{MGUTILITY_ENUM_RANGE_MIN};</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> max{MGUTILITY_ENUM_RANGE_MAX};</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>};</div>
 </div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
-<div class="foldopen" id="foldopen00222" data-start="{" data-end="};">
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno"><a class="line" href="structmgutility_1_1pair.html">  222</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1pair.html">pair</a> {</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>  T first;</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>  U second;</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>};</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
+<div class="foldopen" id="foldopen00241" data-start="{" data-end="};">
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno"><a class="line" href="structmgutility_1_1pair.html">  241</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1pair.html">pair</a> {</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>  T first;</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>  U second;</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>};</div>
 </div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span><span class="preprocessor">#if MGUTILITY_CPLUSPLUS &gt;= 201402L || defined(__GNUC__) &amp;&amp; !defined(__clang__)</span></div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span><span class="keyword">using </span><a class="code hl_struct" href="structmgutility_1_1pair.html">flat_map</a> = std::initializer_list&lt;pair&lt;T, const char *&gt;&gt;;</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span><span class="preprocessor">#else</span></div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span><span class="comment">// NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]</span></div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span><span class="keyword">using </span><a class="code hl_struct" href="structmgutility_1_1pair.html">flat_map</a> = <a class="code hl_struct" href="structmgutility_1_1pair.html">pair&lt;T, const char *&gt;</a>[];</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span> </div>
-<div class="foldopen" id="foldopen00240" data-start="{" data-end="};">
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno"><a class="line" href="structmgutility_1_1custom__enum.html">  240</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1custom__enum.html">custom_enum</a> {</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>  <span class="comment">// #if MGUTILITY_CPLUSPLUS &gt; 201402L</span></div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>  <span class="keyword">static</span> MGUTILITY_INLINE <span class="keyword">constexpr</span> <a class="code hl_struct" href="structmgutility_1_1pair.html">flat_map&lt;T&gt;</a> map = {};</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>  <span class="comment">// #else</span></div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>  <span class="comment">//     static constexpr flat_map&lt;T&gt; map() noexcept {</span></div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>  <span class="comment">//         return {}; // default: empty map</span></div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>  <span class="comment">//     }</span></div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>  <span class="comment">// #endif</span></div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>};</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span><span class="preprocessor">#if MGUTILITY_CPLUSPLUS &gt;= 201402L || defined(__GNUC__) &amp;&amp; !defined(__clang__)</span></div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span><span class="keyword">using </span><a class="code hl_struct" href="structmgutility_1_1pair.html">flat_map</a> = std::initializer_list&lt;pair&lt;T, const char *&gt;&gt;;</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span><span class="comment">// NOLINTNEXTLINE [cppcoreguidelines-avoid-c-arrays]</span></div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span><span class="keyword">using </span><a class="code hl_struct" href="structmgutility_1_1pair.html">flat_map</a> = <a class="code hl_struct" href="structmgutility_1_1pair.html">pair&lt;T, const char *&gt;</a>[];</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span> </div>
+<div class="foldopen" id="foldopen00259" data-start="{" data-end="};">
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno"><a class="line" href="structmgutility_1_1custom__enum.html">  259</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1custom__enum.html">custom_enum</a> {</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>  <span class="comment">// #if MGUTILITY_CPLUSPLUS &gt; 201402L</span></div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>  <span class="keyword">static</span> MGUTILITY_INLINE <span class="keyword">constexpr</span> <a class="code hl_struct" href="structmgutility_1_1pair.html">flat_map&lt;T&gt;</a> map = {};</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>  <span class="comment">// #else</span></div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>  <span class="comment">//     static constexpr flat_map&lt;T&gt; map() noexcept {</span></div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>  <span class="comment">//         return {}; // default: empty map</span></div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>  <span class="comment">//     }</span></div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>  <span class="comment">// #endif</span></div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>};</div>
 </div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span> </div>
-<div class="foldopen" id="foldopen00255" data-start="{" data-end="};">
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno"><a class="line" href="structmgutility_1_1enum__name__buffer.html">  255</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1enum__name__buffer.html">enum_name_buffer</a> {</div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> size = MGUTILITY_ENUM_NAME_BUFFER_SIZE;</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>};</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span> </div>
+<div class="foldopen" id="foldopen00274" data-start="{" data-end="};">
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno"><a class="line" href="structmgutility_1_1enum__name__buffer.html">  274</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">struct </span><a class="code hl_struct" href="structmgutility_1_1enum__name__buffer.html">enum_name_buffer</a> {</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> size = MGUTILITY_ENUM_NAME_BUFFER_SIZE;</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>};</div>
 </div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span> </div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>} <span class="comment">// namespace mgutility</span></div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span> </div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span><span class="preprocessor">#endif </span><span class="comment">// DETAIL_META_HPP</span></div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span> </div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>} <span class="comment">// namespace mgutility</span></div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span> </div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span><span class="preprocessor">#endif </span><span class="comment">// DETAIL_META_HPP</span></div>
 <div class="ttc" id="anamespacemgutility_html"><div class="ttname"><a href="namespacemgutility.html">mgutility</a></div><div class="ttdoc">Checks for MSVC compiler version.</div><div class="ttdef"><b>Definition</b> enum_for_each.hpp:35</div></div>
-<div class="ttc" id="astructmgutility_1_1custom__enum_html"><div class="ttname"><a href="structmgutility_1_1custom__enum.html">mgutility::custom_enum</a></div><div class="ttdoc">Provides the custom names map for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:240</div></div>
+<div class="ttc" id="astructmgutility_1_1custom__enum_html"><div class="ttname"><a href="structmgutility_1_1custom__enum.html">mgutility::custom_enum</a></div><div class="ttdoc">Provides the custom names map for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:259</div></div>
 <div class="ttc" id="astructmgutility_1_1detail_1_1enum__sequence__from__index_html"><div class="ttname"><a href="structmgutility_1_1detail_1_1enum__sequence__from__index.html">mgutility::detail::enum_sequence_from_index</a></div><div class="ttdoc">Helper for creating enum sequences from index sequences.</div><div class="ttdef"><b>Definition</b> meta.hpp:178</div></div>
 <div class="ttc" id="astructmgutility_1_1detail_1_1enum__sequence_html"><div class="ttname"><a href="structmgutility_1_1detail_1_1enum__sequence.html">mgutility::detail::enum_sequence</a></div><div class="ttdoc">Represents a sequence of enumeration values.</div><div class="ttdef"><b>Definition</b> meta.hpp:169</div></div>
 <div class="ttc" id="astructmgutility_1_1detail_1_1has__bit__or_html"><div class="ttname"><a href="structmgutility_1_1detail_1_1has__bit__or.html">mgutility::detail::has_bit_or</a></div><div class="ttdoc">Trait to check if a type supports the bitwise OR operator.</div><div class="ttdef"><b>Definition</b> meta.hpp:110</div></div>
 <div class="ttc" id="astructmgutility_1_1detail_1_1index__sequence_html"><div class="ttname"><a href="structmgutility_1_1detail_1_1index__sequence.html">mgutility::detail::index_sequence</a></div><div class="ttdoc">Represents a compile-time sequence of indices.</div><div class="ttdef"><b>Definition</b> mgutility_enum_name.hpp:251</div></div>
 <div class="ttc" id="astructmgutility_1_1detail_1_1is__scoped__enum_html"><div class="ttname"><a href="structmgutility_1_1detail_1_1is__scoped__enum.html">mgutility::detail::is_scoped_enum</a></div><div class="ttdoc">Trait to check if a type is a scoped enumeration.</div><div class="ttdef"><b>Definition</b> meta.hpp:93</div></div>
 <div class="ttc" id="astructmgutility_1_1detail_1_1is__scoped__enum_html_a9d832ed49fdbc73243f31b8b138cfaf5"><div class="ttname"><a href="structmgutility_1_1detail_1_1is__scoped__enum.html#a9d832ed49fdbc73243f31b8b138cfaf5">mgutility::detail::is_scoped_enum::value</a></div><div class="ttdeci">static constexpr auto value</div><div class="ttdoc">Boolean value indicating if the type is a scoped enumeration.</div><div class="ttdef"><b>Definition</b> meta.hpp:97</div></div>
-<div class="ttc" id="astructmgutility_1_1enum__name__buffer_html"><div class="ttname"><a href="structmgutility_1_1enum__name__buffer.html">mgutility::enum_name_buffer</a></div><div class="ttdoc">Provides the name buffer size for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:255</div></div>
-<div class="ttc" id="astructmgutility_1_1enum__range_html"><div class="ttname"><a href="structmgutility_1_1enum__range.html">mgutility::enum_range</a></div><div class="ttdoc">Provides the range for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:217</div></div>
-<div class="ttc" id="astructmgutility_1_1pair_html"><div class="ttname"><a href="structmgutility_1_1pair.html">mgutility::pair</a></div><div class="ttdef"><b>Definition</b> meta.hpp:222</div></div>
+<div class="ttc" id="astructmgutility_1_1enum__name__buffer_html"><div class="ttname"><a href="structmgutility_1_1enum__name__buffer.html">mgutility::enum_name_buffer</a></div><div class="ttdoc">Provides the name buffer size for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:274</div></div>
+<div class="ttc" id="astructmgutility_1_1enum__range_html"><div class="ttname"><a href="structmgutility_1_1enum__range.html">mgutility::enum_range</a></div><div class="ttdoc">Provides the range for an enumeration type.</div><div class="ttdef"><b>Definition</b> meta.hpp:236</div></div>
+<div class="ttc" id="astructmgutility_1_1pair_html"><div class="ttname"><a href="structmgutility_1_1pair.html">mgutility::pair</a></div><div class="ttdef"><b>Definition</b> meta.hpp:241</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

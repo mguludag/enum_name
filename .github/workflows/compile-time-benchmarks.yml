@@ -1,0 +1,78 @@
+name: Compile-time benchmarks
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "benchmarks/**"
+      - ".github/workflows/compile-time-benchmarks.yml"
+      - "CMakeLists.txt"
+      - "include/mgutility/reflection/**"
+      - "mgutility"
+  pull_request:
+    paths:
+      - "benchmarks/**"
+      - ".github/workflows/compile-time-benchmarks.yml"
+      - "CMakeLists.txt"
+      - "include/mgutility/reflection/**"
+      - "mgutility"
+
+jobs:
+  benchmarks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: gcc
+            compiler: g++
+          - id: clang
+            compiler: clang++
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Install compilers
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ clang
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Run compile-time benchmarks
+        run: |
+          python3 benchmarks/run_benchmarks.py \
+            --compiler "${{ matrix.compiler }}" \
+            --standard 20 \
+            --ranges 256 1024 2048 \
+            --enum-count 200 \
+            --jobs 2 \
+            --timeout 1200 \
+            --build-dir "build/compile-time-benchmarks-${{ matrix.id }}"
+
+      - name: Publish benchmark report in run summary
+        if: always()
+        env:
+          REPORT_PATH: build/compile-time-benchmarks-${{ matrix.id }}/report.md
+        run: |
+          if [[ -f "$REPORT_PATH" ]]; then
+            cat "$REPORT_PATH" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Benchmark report was not generated." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload benchmark reports and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compile-time-benchmarks-${{ matrix.id }}
+          if-no-files-found: warn
+          path: |
+            build/compile-time-benchmarks-${{ matrix.id }}/report.md
+            build/compile-time-benchmarks-${{ matrix.id }}/logs/**

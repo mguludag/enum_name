@@ -121,17 +121,16 @@ using enum_name_array =
     std::array<mgutility::string_view, static_cast<std::size_t>(Max - Min)>;
 
 template <typename U, int Min, int Max>
-MGUTILITY_CNSTXPR auto
-make_enum_array_from_result(const enum_name_parse_result<U, Min, Max> &result)
-    noexcept -> enum_name_array<U, Min, Max> {
+MGUTILITY_CNSTXPR auto make_enum_array_from_result(
+    const enum_name_parse_result<U, Min, Max> &result) noexcept
+    -> enum_name_array<U, Min, Max> {
   enum_name_array<U, Min, Max> arr{};
 #if MGUTILITY_CPLUSPLUS > 201402L
   std::size_t offset = 0;
   for (std::size_t idx = 0; idx < result.name_lengths.size(); ++idx) {
     const auto length = static_cast<std::size_t>(result.name_lengths[idx]);
     if (length != 0) {
-      arr[idx] =
-          mgutility::string_view(result.strings.data() + offset, length);
+      arr[idx] = mgutility::string_view(result.strings.data() + offset, length);
       offset += length;
     }
   }
@@ -285,9 +284,9 @@ private:
       auto offset = result.strings.size();
       result.strings.append(enum_names.substr(token_begin, token_size));
 #if MGUTILITY_CPLUSPLUS > 201402L
-      result.name_lengths[range_index] =
-          static_cast<typename enum_name_parse_result<
-              U, Min, Max>::string_index_type>(result.strings.size() - offset);
+      result.name_lengths[range_index] = static_cast<
+          typename enum_name_parse_result<U, Min, Max>::string_index_type>(
+          result.strings.size() - offset);
 #else
       result.ranges[range_index] = {offset, token_size};
 #endif
@@ -296,10 +295,9 @@ private:
 
   template <typename Enum, int Min, int Max, std::size_t I>
   MGUTILITY_CNSTXPR static auto
-  parse_chunk(enum_name_parse_result<detail::underlying_type_t<Enum>, Min,
-                                     Max> &result) noexcept -> void {
-    constexpr auto chunk_min =
-        Min + static_cast<int>(I * parse_chunk_size);
+  parse_chunk(enum_name_parse_result<detail::underlying_type_t<Enum>, Min, Max>
+                  &result) noexcept -> void {
+    constexpr auto chunk_min = Min + static_cast<int>(I * parse_chunk_size);
     constexpr auto chunk_max =
         (Min + static_cast<int>((I + 1) * parse_chunk_size) < Max)
             ? Min + static_cast<int>((I + 1) * parse_chunk_size)
@@ -312,15 +310,14 @@ private:
   }
 
   template <typename Enum, int Min, int Max, std::size_t... I>
-  MGUTILITY_CNSTXPR static auto
-  parse_chunks(enum_name_parse_result<detail::underlying_type_t<Enum>, Min,
-                                      Max> &result,
-               detail::index_sequence<I...> /*unused*/) noexcept -> void {
+  MGUTILITY_CNSTXPR static auto parse_chunks(
+      enum_name_parse_result<detail::underlying_type_t<Enum>, Min, Max> &result,
+      detail::index_sequence<I...> /*unused*/) noexcept -> void {
 #if MGUTILITY_CPLUSPLUS >= 201703L
     (parse_chunk<Enum, Min, Max, I>(result), ...);
 #else
-    std::array<int, sizeof...(I) + 1> unused{{
-        0, (parse_chunk<Enum, Min, Max, I>(result), 0)...}};
+    std::array<int, sizeof...(I) + 1> unused{
+        {0, (parse_chunk<Enum, Min, Max, I>(result), 0)...}};
     static_cast<void>(unused);
 #endif
   }
@@ -338,11 +335,10 @@ private:
     using result_type = enum_name_parse_result<U, Min, Max>;
 
     result_type result{};
-    constexpr auto chunk_count =
-        static_cast<std::size_t>((Max - Min + parse_chunk_size - 1) /
-                                 parse_chunk_size);
-    parse_chunks<Enum, Min, Max>(
-        result, detail::make_index_sequence<chunk_count>{});
+    constexpr auto chunk_count = static_cast<std::size_t>(
+        (Max - Min + parse_chunk_size - 1) / parse_chunk_size);
+    parse_chunks<Enum, Min, Max>(result,
+                                 detail::make_index_sequence<chunk_count>{});
 
     return result;
   }
@@ -360,7 +356,6 @@ public:
       -> enum_name_parse_result<detail::underlying_type_t<Enum>, Min, Max> {
     return parse<Enum, Min, Max>();
   }
-
 };
 
 /**
@@ -418,8 +413,9 @@ template <typename Enum, int Min, int Max> struct enum_array_cache {
   }
 
 #if MGUTILITY_CPLUSPLUS > 201402L
-  static MGUTILITY_CNSTXPR_CLANG_WA auto
-  name(Enum enumValue, std::size_t index) noexcept -> mgutility::string_view {
+  static MGUTILITY_CNSTXPR_CLANG_WA auto name(Enum enumValue,
+                                              std::size_t index) noexcept
+      -> mgutility::string_view {
     constexpr auto &result = parse_result;
     for (const auto &pair : mgutility::custom_enum<Enum>::map) {
       if (pair.first == enumValue) {

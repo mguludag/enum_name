@@ -294,28 +294,35 @@ private:
     }
   }
 
+  template <typename Enum, int Min, int Max, std::size_t I>
+  MGUTILITY_CNSTXPR static auto
+  parse_chunk(enum_name_parse_result<detail::underlying_type_t<Enum>, Min,
+                                     Max> &result) noexcept -> void {
+    constexpr auto chunk_min =
+        Min + static_cast<int>(I * parse_chunk_size);
+    constexpr auto chunk_max =
+        (Min + static_cast<int>((I + 1) * parse_chunk_size) < Max)
+            ? Min + static_cast<int>((I + 1) * parse_chunk_size)
+            : Max;
+    parse_chunk_text(
+        result,
+        raw_name<Enum>(
+            detail::make_enum_sequence<Enum, chunk_min, chunk_max>{}),
+        chunk_min, chunk_max);
+  }
+
   template <typename Enum, int Min, int Max, std::size_t... I>
   MGUTILITY_CNSTXPR static auto
   parse_chunks(enum_name_parse_result<detail::underlying_type_t<Enum>, Min,
                                       Max> &result,
                detail::index_sequence<I...> /*unused*/) noexcept -> void {
+#if MGUTILITY_CPLUSPLUS >= 201703L
+    (parse_chunk<Enum, Min, Max, I>(result), ...);
+#else
     std::array<int, sizeof...(I) + 1> unused{{
-        0,
-        (parse_chunk_text(
-             result,
-             raw_name<Enum>(detail::make_enum_sequence<
-                            Enum, Min + static_cast<int>(I * parse_chunk_size),
-                            Min + static_cast<int>((I + 1) *
-                                                   parse_chunk_size) < Max
-                                ? Min + static_cast<int>(
-                                            (I + 1) * parse_chunk_size)
-                                : Max>{}),
-             Min + static_cast<int>(I * parse_chunk_size),
-             Min + static_cast<int>((I + 1) * parse_chunk_size) < Max
-                 ? Min + static_cast<int>((I + 1) * parse_chunk_size)
-                 : Max),
-         0)...}};
+        0, (parse_chunk<Enum, Min, Max, I>(result), 0)...}};
     static_cast<void>(unused);
+#endif
   }
 
   /**

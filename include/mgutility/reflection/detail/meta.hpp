@@ -196,6 +196,19 @@ public:
   using type = enum_sequence<Enum, static_cast<Enum>(offset(I))...>;
 };
 
+#if MGUTILITY_CPLUSPLUS >= 201402L
+template <typename Enum, int Min, std::size_t... I>
+struct enum_sequence_from_index<Enum, Min, std::index_sequence<I...>> {
+private:
+  static constexpr int offset(std::size_t i) {
+    return Min + static_cast<int>(i);
+  }
+
+public:
+  using type = enum_sequence<Enum, static_cast<Enum>(offset(I))...>;
+};
+#endif
+
 /**
  * @brief Alias for creating an enum sequence from a range.
  *
@@ -204,9 +217,15 @@ public:
  * @tparam Max The maximum value.
  */
 template <typename Enum, int Min, int Max>
+#if MGUTILITY_CPLUSPLUS >= 201402L
+using make_enum_sequence = typename enum_sequence_from_index<
+    Enum, Min,
+    std::make_index_sequence<static_cast<std::size_t>(Max - Min + 1)>>::type;
+#else
 using make_enum_sequence = typename enum_sequence_from_index<
     Enum, Min,
     make_index_sequence<static_cast<std::size_t>(Max - Min + 1)>>::type;
+#endif
 } // namespace detail
 
 /**

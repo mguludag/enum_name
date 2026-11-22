@@ -47,11 +47,9 @@ jobs:
 
       - name: Run compile-time benchmarks
         run: |
-          python3 benchmarks/run_benchmarks.py \
+          python3 benchmarks/run.py \
             --compiler "${{ matrix.compiler }}" \
             --standard 20 \
-            --ranges 256 1024 2048 \
-            --enum-count 200 \
             --jobs 2 \
             --timeout 1200 \
             --build-dir "build/compile-time-benchmarks-${{ matrix.id }}"
@@ -76,3 +74,4 @@ jobs:
           path: |
             build/compile-time-benchmarks-${{ matrix.id }}/report.md
             build/compile-time-benchmarks-${{ matrix.id }}/logs/**
+            build/compile-time-benchmarks-${{ matrix.id }}/generated/**

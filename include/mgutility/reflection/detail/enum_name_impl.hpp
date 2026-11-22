@@ -37,7 +37,9 @@ SOFTWARE.
 #include <algorithm>
 #include <array>
 #include <cstddef>
+#include <cstdint>
 #include <cstring>
+#include <initializer_list>
 
 /**
  * @brief Checks for MSVC compiler version.
@@ -103,12 +105,44 @@ namespace detail {
 template <typename U, int Min, int Max> struct enum_name_parse_result {
   static constexpr auto size = std::size_t{Max - Min};
   fixed_string<MGUTILITY_GLOBAL_ENUM_BLOB_SIZE> strings;
+#if MGUTILITY_CPLUSPLUS > 201402L
+  using string_index_type =
+      typename std::conditional<(MGUTILITY_GLOBAL_ENUM_BLOB_SIZE <= 65536),
+                                std::uint16_t, std::size_t>::type;
+  // Names stay contiguous; per-value lengths let lookups derive offsets.
+  std::array<string_index_type, size> name_lengths;
+#else
   std::array<pair<std::size_t, std::size_t>, size> ranges;
+#endif
 };
 
 template <typename T, int Min, int Max>
 using enum_name_array =
     std::array<mgutility::string_view, static_cast<std::size_t>(Max - Min)>;
+
+template <typename U, int Min, int Max>
+MGUTILITY_CNSTXPR auto
+make_enum_array_from_result(const enum_name_parse_result<U, Min, Max> &result)
+    noexcept -> enum_name_array<U, Min, Max> {
+  enum_name_array<U, Min, Max> arr{};
+#if MGUTILITY_CPLUSPLUS > 201402L
+  std::size_t offset = 0;
+  for (std::size_t idx = 0; idx < result.name_lengths.size(); ++idx) {
+    const auto length = static_cast<std::size_t>(result.name_lengths[idx]);
+    if (length != 0) {
+      arr[idx] =
+          mgutility::string_view(result.strings.data() + offset, length);
+      offset += length;
+    }
+  }
+#else
+  for (std::size_t idx = 0; idx < result.ranges.size(); ++idx) {
+    arr[idx] = result.strings.view().substr(result.ranges[idx].first,
+                                            result.ranges[idx].second);
+  }
+#endif
+  return arr;
+}
 
 /**
  * @brief Provides functionality to extract and parse enum names at
@@ -116,6 +150,9 @@ using enum_name_array =
  */
 struct enum_type {
 private:
+  // Bound the non-type template pack shown in each compiler signature.
+  static constexpr std::size_t parse_chunk_size = 64;
+
   /**
    * @brief Extracts raw name from compiler's __PRETTY_FUNCTION__.
    *
@@ -157,6 +194,130 @@ private:
                                       PREFIX + 1);
   }
 
+  template <typename U, int Min, int Max>
+  MGUTILITY_CNSTXPR static auto
+  parse_chunk_text(enum_name_parse_result<U, Min, Max> &result,
+                   mgutility::string_view str, int chunk_min,
+                   int chunk_max) noexcept -> void {
+#if defined(__clang__) || defined(__GNUC__)
+#if defined(__clang__)
+    auto end = str.rfind(']');
+#elif defined(__GNUC__) && !defined(__clang__)
+    auto end = str.rfind(';');
+#endif
+
+    auto enum_names = str.substr(0, end);
+
+#elif defined(_MSC_VER)
+    auto pos = str.find(',');
+    if (pos == mgutility::string_view::npos)
+      return;
+
+    ++pos;
+
+    auto end = str.rfind('>');
+    auto enum_names = str.substr(pos, end - pos);
+
+#else
+    return;
+#endif
+
+    if (enum_names.empty()) {
+      return;
+    }
+
+    std::size_t idx = 0;
+    std::size_t cursor = 0;
+    const auto chunk_size = static_cast<std::size_t>(chunk_max - chunk_min);
+    const auto range_offset = static_cast<std::size_t>(chunk_min - Min);
+
+    while (cursor < enum_names.size() && idx < chunk_size) {
+      auto token_begin = cursor;
+      auto comma = enum_names.find(',', cursor);
+      if (comma == mgutility::string_view::npos) {
+        break;
+      }
+
+      auto token_end = comma;
+      cursor = comma + 1;
+
+      while (token_begin < token_end && enum_names[token_begin] == ' ') {
+        ++token_begin;
+      }
+      while (token_begin < token_end && enum_names[token_end - 1] == ' ') {
+        --token_end;
+      }
+
+      bool is_numeric_value = false;
+#if defined(__clang__) || (defined(__GNUC__) && !defined(__clang__))
+      is_numeric_value =
+          token_begin < token_end && enum_names[token_begin] == '(';
+      if (idx == 0 && !is_numeric_value) {
+        for (auto scan = token_begin; scan < token_end; ++scan) {
+          if (enum_names[scan] == '(' || enum_names[scan] == ')') {
+            is_numeric_value = true;
+            break;
+          }
+        }
+      }
+#else
+      for (auto scan = token_begin; scan < token_end; ++scan) {
+        if (enum_names[scan] == '(' || enum_names[scan] == ')') {
+          is_numeric_value = true;
+          break;
+        }
+      }
+#endif
+
+      const auto range_index = range_offset + idx;
+      ++idx;
+      if (is_numeric_value) {
+        continue;
+      }
+
+      const auto scope_separator = enum_names.find(':', token_begin);
+      if (scope_separator < token_end) {
+        token_begin = scope_separator + 2;
+      }
+
+      const auto token_size = token_end - token_begin;
+      // Write into the fixed-size global buffer
+      auto offset = result.strings.size();
+      result.strings.append(enum_names.substr(token_begin, token_size));
+#if MGUTILITY_CPLUSPLUS > 201402L
+      result.name_lengths[range_index] =
+          static_cast<typename enum_name_parse_result<
+              U, Min, Max>::string_index_type>(result.strings.size() - offset);
+#else
+      result.ranges[range_index] = {offset, token_size};
+#endif
+    }
+  }
+
+  template <typename Enum, int Min, int Max, std::size_t... I>
+  MGUTILITY_CNSTXPR static auto
+  parse_chunks(enum_name_parse_result<detail::underlying_type_t<Enum>, Min,
+                                      Max> &result,
+               detail::index_sequence<I...> /*unused*/) noexcept -> void {
+    std::initializer_list<int> unused = {
+        0,
+        (parse_chunk_text(
+             result,
+             raw_name<Enum>(detail::make_enum_sequence<
+                            Enum, Min + static_cast<int>(I * parse_chunk_size),
+                            Min + static_cast<int>((I + 1) *
+                                                   parse_chunk_size) < Max
+                                ? Min + static_cast<int>(
+                                            (I + 1) * parse_chunk_size)
+                                : Max>{}),
+             Min + static_cast<int>(I * parse_chunk_size),
+             Min + static_cast<int>((I + 1) * parse_chunk_size) < Max
+                 ? Min + static_cast<int>((I + 1) * parse_chunk_size)
+                 : Max),
+         0)...};
+    static_cast<void>(unused);
+  }
+
   /**
    * @brief Parses the enum name from the raw string based on compiler.
    *
@@ -169,80 +330,12 @@ private:
     using U = detail::underlying_type_t<Enum>;
     using result_type = enum_name_parse_result<U, Min, Max>;
 
-    MGUTILITY_CNSTXPR auto str =
-        raw_name<Enum>(detail::make_enum_sequence<Enum, Min, Max>{});
-
-#if defined(__clang__) || defined(__GNUC__)
-#if defined(__clang__)
-    auto end = str.rfind(']');
-#elif defined(__GNUC__) && !defined(__clang__)
-    auto end = str.rfind(';');
-#endif
-
-    auto enum_names = str.substr(0, end);
-
-#elif defined(_MSC_VER)
-    // MSVC: different format
-    auto pos = str.find(',');
-    if (pos == mgutility::string_view::npos)
-      return {};
-
-    ++pos;
-
-    auto end = str.rfind('>');
-    auto enum_names = str.substr(pos, end - pos);
-
-#else
-    return {};
-#endif
-
-    if (enum_names.empty()) {
-      return {};
-    }
-
     result_type result{};
-
-    std::size_t idx = 0;
-
-    while (!enum_names.empty() && idx < result.ranges.size()) {
-      auto pos = enum_names.find(',');
-      if (pos != mgutility::string_view::npos) {
-        auto token = enum_names.substr(0, pos);
-
-        // remove whitespace
-        while (!token.empty() && token.front() == ' ') {
-          token = token.substr(1);
-        }
-
-        while (!token.empty() && token.back() == ' ') {
-          token = token.substr(0, token.size() - 1);
-        }
-
-        std::size_t begin = token.find('(');
-        std::size_t end = token.rfind(')');
-        if (begin != mgutility::string_view::npos ||
-            end != mgutility::string_view::npos) {
-          result.ranges[idx++] = {0, 0};
-          enum_names = enum_names.substr(pos + 1);
-          continue;
-        }
-
-        std::size_t start = 0;
-        if (token.find(':') != mgutility::string_view::npos) {
-          start = token.find(':') + 2;
-          token = token.substr(start);
-        }
-
-        // Write into the fixed-size global buffer
-        auto offset = result.strings.size();
-        result.strings.append(token);
-        result.ranges[idx++] = {offset, token.size()};
-
-        enum_names = enum_names.substr(pos + 1);
-        continue;
-      }
-      enum_names = {};
-    }
+    constexpr auto chunk_count =
+        static_cast<std::size_t>((Max - Min + parse_chunk_size - 1) /
+                                 parse_chunk_size);
+    parse_chunks<Enum, Min, Max>(
+        result, detail::make_index_sequence<chunk_count>{});
 
     return result;
   }
@@ -260,6 +353,7 @@ public:
       -> enum_name_parse_result<detail::underlying_type_t<Enum>, Min, Max> {
     return parse<Enum, Min, Max>();
   }
+
 };
 
 /**
@@ -278,14 +372,16 @@ template <typename Enum, int Min, int Max> struct enum_array_cache;
  */
 template <typename Enum, int Min, int Max> struct enum_array_cache {
   using underlying = detail::underlying_type_t<Enum>;
-  using parse_result_t = enum_name_parse_result<underlying, Min, Max>;
 
 #if MGUTILITY_CPLUSPLUS > 201402L
 
   static constexpr auto parse_result =
       enum_type::template name<Enum, Min, Max>();
+  using parse_result_t = decltype(parse_result);
 
 #else
+  using parse_result_t = enum_name_parse_result<underlying, Min, Max>;
+
   // C++11: lazy runtime array
   static parse_result_t &value() {
     static parse_result_t arr = enum_type::template name<Enum, Min, Max>();
@@ -297,12 +393,7 @@ template <typename Enum, int Min, int Max> struct enum_array_cache {
   static MGUTILITY_CNSTXPR auto
   apply_custom(const parse_result_t &result) noexcept
       -> enum_name_array<Enum, Min, Max> {
-    enum_name_array<Enum, Min, Max> arr{};
-
-    for (std::size_t idx = 0; idx < result.ranges.size(); ++idx) {
-      arr[idx] = result.strings.view().substr(result.ranges[idx].first,
-                                              result.ranges[idx].second);
-    }
+    auto arr = make_enum_array_from_result(result);
 
 #if MGUTILITY_CPLUSPLUS >= 201402L
     constexpr auto map = mgutility::custom_enum<Enum>::map;
@@ -318,6 +409,31 @@ template <typename Enum, int Min, int Max> struct enum_array_cache {
 
     return arr;
   }
+
+#if MGUTILITY_CPLUSPLUS > 201402L
+  static MGUTILITY_CNSTXPR_CLANG_WA auto
+  name(Enum enumValue, std::size_t index) noexcept -> mgutility::string_view {
+    constexpr auto &result = parse_result;
+    for (const auto &pair : mgutility::custom_enum<Enum>::map) {
+      if (pair.first == enumValue) {
+        return pair.second;
+      }
+    }
+
+    if (index >= result.name_lengths.size()) {
+      return mgutility::string_view{};
+    }
+    std::size_t offset = 0;
+    for (std::size_t i = 0; i < index; ++i) {
+      offset += result.name_lengths[i];
+    }
+    const auto length = static_cast<std::size_t>(result.name_lengths[index]);
+    if (length == 0) {
+      return mgutility::string_view{};
+    }
+    return mgutility::string_view(result.strings.data() + offset, length);
+  }
+#endif
 };
 
 /**
@@ -419,13 +535,18 @@ template <typename Enum, int Min, int Max,
           detail::enable_if_t<!detail::has_bit_or<Enum>::value, bool> = true>
 MGUTILITY_CNSTXPR auto enum_name_impl(Enum enumValue) noexcept
     -> mgutility::string_view {
-  MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
-  const auto index{(Min < 0 ? -Min : Min) + static_cast<int>(enumValue)};
-  if (index < Min || index > static_cast<int>(arr.size()) - 1) {
+  const auto index = static_cast<int>(enumValue) - Min;
+  if (index < 0 || index >= Max - Min) {
     return mgutility::string_view{};
   }
 
+#if MGUTILITY_CPLUSPLUS > 201402L
+  return enum_array_cache<Enum, Min, Max>::name(
+      enumValue, static_cast<std::size_t>(index));
+#else
+  MGUTILITY_CNSTXPR_CLANG_WA auto arr = get_enum_array<Enum, Min, Max>();
   return arr[static_cast<size_t>(index)];
+#endif
 }
 
 /**

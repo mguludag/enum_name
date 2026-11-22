@@ -20,6 +20,17 @@ Converting (scoped)enum values to/from string names written in C++>=11.
 - Supports bitmasked enums and auto detect them
 - Supports iterate over enum (names and values) with `mgutility::enum_for_each<T>()` class and it is compatible with standard ranges and views
 
+## Compile-time benchmarks
+
+The benchmark suite compares `enum_name` with
+[magic_enum](https://github.com/Neargye/magic_enum) and
+[Enchantum](https://github.com/ZXShady/enchantum), including compiler timing
+and generated object-file size. See the [benchmark overview](benchmarks/README.md)
+for workloads and usage. The latest GCC and Clang reports are published on the
+[benchmark reports branch](https://github.com/mguludag/enum_name/blob/benchmark-reports/latest.md);
+see the [workflow runs](https://github.com/mguludag/enum_name/actions/workflows/compile-time-benchmarks.yml)
+for run history and annotations.
+
 ## Limitations
 
 - Compiler [versions](#supported-compilers)

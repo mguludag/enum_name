@@ -265,6 +265,7 @@ template <> struct mgutility::enum_range<signed_values> {
 // ======================================================================
 TEST_CASE("color enum name serialization") {
   CHECK(mgutility::enum_name(color::blue) == "blue");
+  CHECK(mgutility::enum_name(color::light_coral) == "light_coral");
   CHECK(mgutility::enum_name(color::white_smoke) == "white_smoke");
   CHECK(mgutility::enum_name(color::yellow_green) == "yellow_green");
   CHECK(mgutility::enum_name(color::steel_blue) == "steel_blue");
@@ -408,6 +409,8 @@ TEST_CASE("signed_values enum name serialization") {
   CHECK(mgutility::enum_name(signed_values::zero) == "zero");
   CHECK(mgutility::enum_name(signed_values::pos_one) == "pos_one");
   CHECK(mgutility::enum_name(signed_values::pos_two) == "pos_two");
+  CHECK(mgutility::enum_name(static_cast<signed_values>(-3)).empty());
+  CHECK(mgutility::enum_name(static_cast<signed_values>(3)).empty());
 }
 
 TEST_CASE("signed_values enum name deserialization") {

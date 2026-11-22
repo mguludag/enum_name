@@ -48,6 +48,9 @@ without hitting the compiler's default evaluation ceiling. Each compile has a
 system memory and gives that compile a budget of 95% of available RAM divided
 by `--jobs`. If a process group exceeds its budget, it is stopped, marked as
 skipped for memory, and the next candidate runs.
+In GitHub Actions, each candidate also emits a notice annotation with its
+status and timing. Skipped targets are warnings; compile or report-parsing
+failures are errors.
 
 Use `--cases` to select cases and `--enum-count` to override their enum count:
 

@@ -334,13 +334,22 @@ def ensure_dependency(name, version, url, dependency_dir):
 
 
 CLANG_TIME_VALUE_PATTERN = re.compile(r"([0-9]+(?:\.[0-9]+)?)\s+\([^)]+\)")
+CLANG_TIME_REPORT_PATTERN = re.compile(
+    r"^\s*Clang(?: front-end)? time report\s*$", re.MULTILINE
+)
 
 
 def clang_time_report(output):
-    heading = re.search(r"^\s*Clang time report\s*$", output, re.MULTILINE)
-    if not heading:
+    headings = list(CLANG_TIME_REPORT_PATTERN.finditer(output))
+    if not headings:
         raise ValueError("Clang -ftime-report summary was not found.")
 
+    frontend_headings = [
+        heading
+        for heading in headings
+        if "front-end" in heading.group(0).lower()
+    ]
+    heading = (frontend_headings or headings)[-1]
     section = output[heading.start() :]
     table_header = re.search(
         r"^\s*---User Time---.*--- Name ---\s*$", section, re.MULTILINE
@@ -376,7 +385,14 @@ def clang_time_report(output):
     total = next((row for row in rows if row["name"] == "Total"), None)
     if total is None:
         raise ValueError("Clang -ftime-report total row was not recognized.")
-    frontend = next((row for row in rows if row["name"] == "Front end"), None)
+    frontend = next(
+        (
+            row
+            for row in rows
+            if "front end" in row["name"].lower().replace("-", " ")
+        ),
+        None,
+    )
     hotspots = sorted(
         (row for row in rows if row["name"] != "Total"),
         key=lambda row: row["wall"],
@@ -526,6 +542,35 @@ def compile_target(
 
 def format_number(value, suffix="", precision=3):
     return "n/a" if value is None else f"{value:.{precision}f}{suffix}"
+
+
+def github_annotation(result):
+    status = result["status"]
+    command = {
+        "ok": "notice",
+        "skipped (memory limit)": "warning",
+    }.get(status, "error")
+    details = [
+        f"{result['case']} / {result['library']}: {status}",
+        f"compiler={format_number(result.get('compiler_seconds'), 's')}",
+        f"frontend={format_number(result.get('frontend_seconds'), 's')}",
+    ]
+    if result.get("peak_rss_mib") is not None:
+        details.append(f"peak RSS={format_number(result['peak_rss_mib'], ' MiB')}")
+    message = "; ".join(details)
+    message = (
+        message.replace("%", "%25")
+        .replace("\r", "%0D")
+        .replace("\n", "%0A")
+    )
+    return f"::{command} title=Compile-time benchmark::{message}"
+
+
+def emit_github_annotations(results):
+    if os.environ.get("GITHUB_ACTIONS") != "true":
+        return
+    for result in results:
+        print(github_annotation(result), flush=True)
 
 
 def write_report(report_path, metadata, results, root):
@@ -805,6 +850,7 @@ def main():
         result["status"] not in ("ok", "skipped (memory limit)")
         for result in results
     )
+    emit_github_annotations(results)
     print(f"Report: {report_path}")
     return 1 if failed else 0
 

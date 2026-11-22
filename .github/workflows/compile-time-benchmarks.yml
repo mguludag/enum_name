@@ -45,6 +45,9 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Test benchmark report parsing
+        run: python3 -m unittest discover -s benchmarks -p "test_*.py"
+
       - name: Run compile-time benchmarks
         run: |
           python3 benchmarks/run.py \

@@ -299,7 +299,7 @@ private:
   parse_chunks(enum_name_parse_result<detail::underlying_type_t<Enum>, Min,
                                       Max> &result,
                detail::index_sequence<I...> /*unused*/) noexcept -> void {
-    std::initializer_list<int> unused = {
+    std::array<int, sizeof...(I) + 1> unused{{
         0,
         (parse_chunk_text(
              result,
@@ -314,7 +314,7 @@ private:
              Min + static_cast<int>((I + 1) * parse_chunk_size) < Max
                  ? Min + static_cast<int>((I + 1) * parse_chunk_size)
                  : Max),
-         0)...};
+         0)...}};
     static_cast<void>(unused);
   }
 

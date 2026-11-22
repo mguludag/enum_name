@@ -1,6 +1,8 @@
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
-from run import clang_time_report, github_annotation
+from run import clang_time_report, github_annotation, write_report
 
 
 class ClangTimeReportTests(unittest.TestCase):
@@ -45,6 +47,7 @@ class GithubAnnotationTests(unittest.TestCase):
                 "compiler_seconds": 1.25,
                 "frontend_seconds": 1.0,
                 "peak_rss_mib": 25.0,
+                "object_size_kib": 256.0,
             }
         )
 
@@ -52,7 +55,7 @@ class GithubAnnotationTests(unittest.TestCase):
             annotation,
             "::notice title=Compile-time benchmark::"
             "small_enums%0A / enum_name: ok; compiler=1.250s; "
-            "frontend=1.000s; peak RSS=25.000 MiB",
+            "frontend=1.000s; peak RSS=25.000 MiB; object=256.000 KiB",
         )
 
     def test_marks_skips_as_warnings_and_failures_as_errors(self):
@@ -68,6 +71,46 @@ class GithubAnnotationTests(unittest.TestCase):
 
         result["status"] = "compiler timing missing"
         self.assertTrue(github_annotation(result).startswith("::error "))
+
+
+class BenchmarkReportTests(unittest.TestCase):
+    def test_includes_object_file_size_column(self):
+        result = {
+            "case": "small_enums",
+            "enum_count": 2,
+            "value_count": 16,
+            "min_range": -128,
+            "max_range": 128,
+            "library": "enum_name",
+            "status": "ok",
+            "compiler_seconds": 1.0,
+            "frontend_seconds": 0.9,
+            "object_size_kib": 256.0,
+            "peak_rss_mib": 20.0,
+            "memory_limit_mib": 100.0,
+            "hotspots": [],
+        }
+        metadata = {
+            "generated": "2026-01-01T00:00:00+00:00",
+            "compiler": "clang++",
+            "compiler_version": "clang version 22",
+            "standard": 20,
+            "timing_source": "Clang -ftime-report",
+            "jobs": 1,
+            "cases": ["small_enums"],
+        }
+
+        with TemporaryDirectory() as directory:
+            report_path = Path(directory) / "report.md"
+            write_report(report_path, metadata, [result], Path(directory))
+            report = report_path.read_text(encoding="utf-8")
+
+        self.assertIn("Object file (KiB)", report)
+        self.assertIn(
+            "| [enum_name](https://github.com/mguludag/enum_name) | "
+            "ok | 1.000 | 0.900 | 256.00 |",
+            report,
+        )
 
 
 if __name__ == "__main__":

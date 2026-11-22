@@ -40,7 +40,8 @@ directory, compiles each generated source independently with `-O3`, and
 produces `report.md` and compiler logs. Both Clang and GCC use `-ftime-report`;
 the runner extracts compiler and frontend timings from Clang's text summary and
 includes the raw report for each candidate in a collapsed section after the
-results table. No external wall-clock compile times are reported. GNU `time`
+results table. The table also includes each successful compile's object-file
+size in KiB. No external wall-clock compile times are reported. GNU `time`
 is used only for peak RSS when available. Clang is given a 10,000,000-step
 constexpr limit for all candidates so large search ranges can be compared
 without hitting the compiler's default evaluation ceiling. Each compile has a

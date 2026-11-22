@@ -18,6 +18,11 @@ from gen import LIBRARIES, TEST_CASES, generate_sources
 
 MAGIC_ENUM_VERSION = "v0.9.7"
 ENCHANTUM_VERSION = "0.5.0"
+LIBRARY_REPOSITORIES = {
+    "enum_name": "https://github.com/mguludag/enum_name",
+    "magic_enum": "https://github.com/Neargye/magic_enum",
+    "enchantum": "https://github.com/ZXShady/enchantum",
+}
 RSS_PATTERN = re.compile(r"BENCHMARK_MAX_RSS_KB=(\d+)")
 MEMORY_LIMIT_PERCENT = 95
 GCC_TOTAL_PATTERN = re.compile(r"^\s*TOTAL\s*:\s*(.*)$", re.MULTILINE)
@@ -514,6 +519,7 @@ def compile_target(
         "peak_rss_mib": peak_rss_mib,
         "available_memory_mib": available_memory / (1024 * 1024),
         "memory_limit_mib": memory_limit / (1024 * 1024),
+        "object_size_kib": None,
         "log_path": log_path,
         "hotspots": [],
     }
@@ -533,7 +539,11 @@ def compile_target(
         result["error"] = f"Compiler exited with status {code}."
     else:
         try:
+            result["object_size_kib"] = object_path.stat().st_size / 1024
             result.update(compiler_metrics(family, output))
+        except FileNotFoundError:
+            result["status"] = "object file missing"
+            result["error"] = f"Compiler succeeded but did not produce {object_path}."
         except (OSError, ValueError, KeyError) as error:
             result["status"] = "compiler timing missing"
             result["error"] = f"Could not parse compiler timing: {error}"
@@ -557,6 +567,10 @@ def github_annotation(result):
     ]
     if result.get("peak_rss_mib") is not None:
         details.append(f"peak RSS={format_number(result['peak_rss_mib'], ' MiB')}")
+    if result.get("object_size_kib") is not None:
+        details.append(
+            f"object={format_number(result['object_size_kib'], ' KiB')}"
+        )
     message = "; ".join(details)
     message = (
         message.replace("%", "%25")
@@ -594,8 +608,8 @@ def write_report(report_path, metadata, results, root):
         "configured parallel job count. A compile exceeding its budget is",
         "stopped and the next candidate runs.",
         "",
-        "| Test case | Enums | Values/enum | Search range | Library | Status | Compiler time (s) | Frontend time (s) | Peak RSS (MiB) | Memory budget (MiB) | Compiler hotspots (s) |",
-        "| --- | ---: | ---: | ---: | --- | --- | ---: | ---: | ---: | ---: | --- |",
+        "| Test case | Enums | Values/enum | Search range | Library | Status | Compiler time (s) | Frontend time (s) | Object file (KiB) | Peak RSS (MiB) | Memory budget (MiB) | Compiler hotspots (s) |",
+        "| --- | ---: | ---: | ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |",
     ]
     for result in results:
         hotspots = ", ".join(
@@ -605,15 +619,21 @@ def write_report(report_path, metadata, results, root):
         lines.append(
             "| {case} | {enum_count} | {value_count} | {value_range} | "
             "{library} | {status} | {compiler_time} | {frontend_time} | "
-            "{rss} | {memory_limit} | {hotspots} |".format(
+            "{object_size} | {rss} | {memory_limit} | {hotspots} |".format(
                 case=result["case"],
                 enum_count=result["enum_count"],
                 value_count=result["value_count"],
                 value_range=f"{result['min_range']}..{result['max_range']}",
-                library=result["library"],
+                library="[{}]({})".format(
+                    result["library"],
+                    LIBRARY_REPOSITORIES[result["library"]],
+                ),
                 status=result["status"],
                 compiler_time=format_number(result.get("compiler_seconds")),
                 frontend_time=format_number(result.get("frontend_seconds")),
+                object_size=format_number(
+                    result.get("object_size_kib"), precision=2
+                ),
                 rss=format_number(result.get("peak_rss_mib"), precision=2),
                 memory_limit=format_number(
                     result.get("memory_limit_mib"), precision=2

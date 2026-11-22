@@ -9,12 +9,12 @@ are in this directory.
 
 The four workloads match Enchantum's generator:
 
-| Test case | Enums | Values per enum | Search range |
-| --- | ---: | ---: | ---: |
-| `small_enums` | 200 | 16 | -128..128 |
-| `big_enums` | 32 | 200 | -256..256 |
-| `small_enums_large_range` | 200 | 16 | -1024..1024 |
-| `ideal_range` | 100 | 50 | 0..50 |
+| Test case                 | Enums | Values per enum | Search range |
+| ------------------------- | ----: | --------------: | -----------: |
+| `small_enums`             |   200 |              16 |    -128..128 |
+| `big_enums`               |    32 |             200 |    -256..256 |
+| `small_enums_large_range` |   200 |              16 |  -1024..1024 |
+| `ideal_range`             |   100 |              50 |        0..50 |
 
 As in the upstream benchmark, each generated translation unit calls the
 library's name-conversion function once for each enum. This intentionally

@@ -70,5 +70,8 @@ python3 benchmarks/run.py \
 ```
 
 The GitHub Actions workflow runs the full matrix with GCC and Clang and
-publishes each Markdown report in the run summary as well as an artifact.
+publishes each Markdown report in the run summary and as an artifact. Runs on
+`main` also update `latest.md`, `gcc.md`, and `clang.md` on the
+`benchmark-reports` branch. The stable report index is available at
+[`benchmark-reports/latest.md`](https://github.com/mguludag/enum_name/blob/benchmark-reports/latest.md).
 Compare compiler timings only across the same compiler version and machine.

@@ -26,8 +26,10 @@ The benchmark suite compares `enum_name` with
 [magic_enum](https://github.com/Neargye/magic_enum) and
 [Enchantum](https://github.com/ZXShady/enchantum), including compiler timing
 and generated object-file size. See the [benchmark overview](benchmarks/README.md)
-for workloads and usage. The latest results are published in the
-[GitHub Actions benchmark summary](https://github.com/mguludag/enum_name/actions/workflows/compile-time-benchmarks.yml).
+for workloads and usage. The latest GCC and Clang reports are published on the
+[benchmark reports branch](https://github.com/mguludag/enum_name/blob/benchmark-reports/latest.md);
+see the [workflow runs](https://github.com/mguludag/enum_name/actions/workflows/compile-time-benchmarks.yml)
+for run history and annotations.
 
 ## Limitations
 

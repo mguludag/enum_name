@@ -18,6 +18,9 @@ on:
       - "include/mgutility/reflection/**"
       - "mgutility"
 
+permissions:
+  contents: read
+
 jobs:
   benchmarks:
     runs-on: ubuntu-24.04
@@ -78,3 +81,77 @@ jobs:
             build/compile-time-benchmarks-${{ matrix.id }}/report.md
             build/compile-time-benchmarks-${{ matrix.id }}/logs/**
             build/compile-time-benchmarks-${{ matrix.id }}/generated/**
+
+  publish-latest:
+    if: >-
+      always() &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name != 'pull_request' &&
+      needs.benchmarks.result != 'cancelled'
+    needs: benchmarks
+    runs-on: ubuntu-24.04
+    concurrency:
+      group: publish-latest-benchmark-reports
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Download benchmark reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: compile-time-benchmarks-*
+          path: ${{ runner.temp }}/benchmark-reports
+
+      - name: Publish latest reports
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_SERVER_URL: ${{ github.server_url }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+        run: |
+          set -euo pipefail
+          source_dir="$RUNNER_TEMP/benchmark-reports"
+          publish_dir="$RUNNER_TEMP/benchmark-publish"
+          mkdir -p "$publish_dir"
+
+          for compiler in gcc clang; do
+            report="$source_dir/compile-time-benchmarks-$compiler/report.md"
+            if [[ ! -f "$report" ]]; then
+              echo "Missing $compiler benchmark report: $report" >&2
+              exit 1
+            fi
+            cp "$report" "$publish_dir/$compiler.md"
+          done
+
+          cat > "$publish_dir/latest.md" <<EOF
+          # Latest compile-time benchmark reports
+
+          <!-- benchmark-run-id: ${GITHUB_RUN_ID} -->
+
+          Updated by [${GITHUB_WORKFLOW} run ${GITHUB_RUN_ID}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}).
+
+          - [GCC report](gcc.md)
+          - [Clang report](clang.md)
+          EOF
+
+          git -C "$publish_dir" init --initial-branch=benchmark-reports
+          git -C "$publish_dir" config user.name "github-actions[bot]"
+          git -C "$publish_dir" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "$publish_dir" remote add origin \
+            "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          if git -C "$publish_dir" fetch origin benchmark-reports; then
+            current_run_id="$(git -C "$publish_dir" show FETCH_HEAD:latest.md \
+              | sed -n 's/.*<!-- benchmark-run-id: \([0-9][0-9]*\) -->.*/\1/p')"
+            if [[ "$current_run_id" =~ ^[0-9]+$ ]] &&
+              (( current_run_id > GITHUB_RUN_ID )); then
+              echo "A newer benchmark run is already published; keeping it."
+              exit 0
+            fi
+          fi
+
+          git -C "$publish_dir" add latest.md gcc.md clang.md
+          git -C "$publish_dir" commit -m "Update latest benchmark reports"
+          git -C "$publish_dir" push --force origin HEAD:benchmark-reports
